@@ -22,6 +22,11 @@ import {
   AlertTriangle,
   XCircle,
   ArrowRight,
+  Sliders,
+  Sparkles,
+  ChevronRight,
+  Flame,
+  Info,
 } from "lucide-react";
 import { INDIAN_CITIES } from "@/lib/constants";
 import { simulateAqi, calculateBreathScore } from "@/lib/utils";
@@ -60,14 +65,27 @@ export default function BreathePage() {
   const [targetScore, setTargetScore] = useState(0);
   const [forecast, setForecast] = useState<any[]>([]);
 
+  // Interactive activity modifier
+  const [selectedActivity, setSelectedActivity] = useState<"rest" | "commute" | "walk" | "cardio">("walk");
+  const activityMultipliers = {
+    rest: { label: "Indoor Rest", factor: 1.0, icon: "🪑" },
+    commute: { label: "Vehicle Transit", factor: 1.5, icon: "🚗" },
+    walk: { label: "Brisk Walk", factor: 2.2, icon: "🚶" },
+    cardio: { label: "Intense Cardio / Run", factor: 4.2, icon: "🏃" },
+  };
+
+  // Mask status
+  const [hasMask, setHasMask] = useState(true);
+
   useEffect(() => {
-    const aqi = simulateAqi(city);
-    const calculatedScore = calculateBreathScore
-      ? calculateBreathScore(aqi)
-      : Math.max(0, 100 - aqi / 5);
-    setTargetScore(Math.round(calculatedScore));
-    setForecast(generateForecast(aqi));
-  }, [city]);
+    const baseAqi = simulateAqi(city);
+    const multiplier = activityMultipliers[selectedActivity].factor;
+    const effectiveAqi = hasMask ? baseAqi * 0.25 * multiplier : baseAqi * multiplier;
+    const calculatedScore = Math.max(8, Math.min(98, Math.round(100 - effectiveAqi / 2.8)));
+
+    setTargetScore(calculatedScore);
+    setForecast(generateForecast(baseAqi));
+  }, [city, selectedActivity, hasMask]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -80,7 +98,7 @@ export default function BreathePage() {
     return () => clearInterval(interval);
   }, [targetScore]);
 
-  const radius = 100;
+  const radius = 95;
   const strokeWidth = 14;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (score / 100) * circumference;
@@ -89,30 +107,30 @@ export default function BreathePage() {
   const scoreLabel = getBreathScoreLabel(score);
 
   return (
-    <div className="min-h-screen bg-[#fafafa] text-[#09090b] font-sans pb-24">
+    <div className="min-h-screen bg-[#fbfbf9] text-[#111110] font-sans pb-24">
       <Navbar />
 
       <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-10">
         {/* Header Breadcrumb & Title */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between pb-8 mb-8 border-b border-neutral-200/70 gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between pb-8 mb-8 border-b border-[#e5e5e0] gap-4">
           <div>
-            <div className="text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-1">
-              Exposure Engine
+            <div className="text-xs font-mono font-semibold uppercase tracking-wider text-[#73736c] mb-1">
+              BIOLOGICAL EXPOSURE ENGINE
             </div>
-            <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-neutral-900">
+            <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#111110]">
               Personal Breath Score™
             </h1>
-            <p className="text-sm text-neutral-500 mt-1">
-              Real-time physiological dose computation based on localized atmospheric density.
+            <p className="text-sm text-[#575752] mt-1">
+              Physiological aerosol deposition tracking based on physical exertion and particulate density.
             </p>
           </div>
 
-          <div className="flex items-center gap-2 bg-white border border-neutral-200 rounded-full px-3 py-1.5 shadow-2xs">
-            <MapPin className="text-neutral-500 w-4 h-4" />
+          <div className="flex items-center gap-2 bg-white border border-[#e2e2dc] rounded-full px-3.5 py-1.5 shadow-2xs">
+            <MapPin className="text-[#73736c] w-4 h-4" />
             <select
               value={city}
               onChange={(e) => setCity(e.target.value)}
-              className="bg-transparent border-none outline-none text-xs font-medium text-neutral-800 cursor-pointer pr-2"
+              className="bg-transparent border-none outline-none text-xs font-semibold text-[#111110] cursor-pointer pr-2"
             >
               {(INDIAN_CITIES || [{ key: "delhi", name: "Delhi" }]).map((c) => (
                 <option key={c.key} value={c.key}>
@@ -123,23 +141,63 @@ export default function BreathePage() {
           </div>
         </div>
 
+        {/* Top Activity & Protection Selector Bar (Cal.com segmented style) */}
+        <div className="bg-white border border-[#e5e5e0] rounded-2xl p-4 sm:p-5 mb-8 shadow-xs flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2 w-full md:w-auto">
+            <span className="text-xs font-semibold text-[#73736c] whitespace-nowrap">Exertion Profile:</span>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 w-full bg-[#f4f4f2] p-1 rounded-xl border border-[#e5e5e0]">
+              {(["rest", "commute", "walk", "cardio"] as const).map((act) => (
+                <button
+                  key={act}
+                  onClick={() => setSelectedActivity(act)}
+                  className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-all flex items-center justify-center gap-1.5 ${
+                    selectedActivity === act
+                      ? "bg-white text-[#111110] shadow-xs font-semibold"
+                      : "text-[#73736c] hover:text-[#111110]"
+                  }`}
+                >
+                  <span>{activityMultipliers[act].icon}</span>
+                  <span>{activityMultipliers[act].label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 w-full md:w-auto justify-end">
+            <span className="text-xs font-semibold text-[#73736c]">N95 Respirator:</span>
+            <button
+              onClick={() => setHasMask(!hasMask)}
+              className={`px-4 py-1.5 text-xs font-semibold rounded-full border transition-all ${
+                hasMask
+                  ? "bg-[#111110] text-white border-[#111110]"
+                  : "bg-white text-[#73736c] border-[#e2e2dc] hover:bg-[#f4f4f2]"
+              }`}
+            >
+              {hasMask ? "Equipped (95% Filtration)" : "Unmasked (0% Filtration)"}
+            </button>
+          </div>
+        </div>
+
         {/* Top Section: Score Circular Gauge + 4 Metric Cards */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-10">
-          {/* Circular Gauge Card */}
-          <div className="lg:col-span-5 bg-white border border-neutral-200 rounded-2xl p-8 flex flex-col items-center justify-center text-center shadow-xs">
-            <div className="relative w-[240px] h-[240px] flex items-center justify-center mb-4">
-              <svg className="w-full h-full transform -rotate-90" viewBox="0 0 260 260">
+          {/* Circular Gauge Card with Concentric Orbit */}
+          <div className="lg:col-span-5 bg-white border border-[#e5e5e0] rounded-2xl p-8 flex flex-col items-center justify-center text-center shadow-xs relative overflow-hidden">
+            <div className="relative w-[230px] h-[230px] flex items-center justify-center mb-4">
+              {/* Rotating outer orbit indicator */}
+              <div className="absolute inset-0 rounded-full border border-dashed border-[#e2e2dc] animate-orbit pointer-events-none" />
+
+              <svg className="w-full h-full transform -rotate-90" viewBox="0 0 250 250">
                 <circle
-                  cx="130"
-                  cy="130"
+                  cx="125"
+                  cy="125"
                   r={radius}
-                  stroke="#f4f4f5"
+                  stroke="#f4f4f2"
                   strokeWidth={strokeWidth}
                   fill="none"
                 />
                 <motion.circle
-                  cx="130"
-                  cy="130"
+                  cx="125"
+                  cy="125"
                   r={radius}
                   stroke={scoreColor}
                   strokeWidth={strokeWidth}
@@ -151,48 +209,68 @@ export default function BreathePage() {
                 />
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-5xl font-mono font-bold text-neutral-900">
+                <span className="text-5xl font-mono font-bold text-[#111110]">
                   {score}
                 </span>
-                <span className="text-[11px] font-mono text-neutral-400 uppercase tracking-widest mt-1">
-                  Scale / 100
+                <span className="text-[10px] font-mono text-[#a3a399] uppercase tracking-widest mt-1">
+                  Index / 100
                 </span>
               </div>
             </div>
 
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-neutral-100 text-neutral-800 border border-neutral-200">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#f4f4f2] text-[#111110] border border-[#e2e2dc]">
               <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: scoreColor }} />
               {scoreLabel}
             </div>
-            <p className="text-xs text-neutral-500 mt-2 max-w-xs">
-              Based on ambient particulate levels in {city.toUpperCase()}. Safe reserve for light exertion.
+            <p className="text-xs text-[#73736c] mt-2 max-w-xs leading-relaxed">
+              Calculated for {activityMultipliers[selectedActivity].label} in {city.toUpperCase()} with {hasMask ? "N95 mask" : "no mask"}.
             </p>
           </div>
 
-          {/* 4 Metric Cards */}
+          {/* 4 Metric Cards (Cal.com Living style) */}
           <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
             {[
-              { title: "Time Outdoors Today", value: "2.4 hrs", sub: "Accumulated daily exposure", icon: Clock },
-              { title: "Micro-Particulates Inhaled", value: "42.8 µg", sub: "Below biological warning trigger", icon: Wind },
-              { title: "N95 Mask Filtration", value: "95.4%", sub: "Efficiency against fine PM2.5", icon: Shield },
-              { title: "Safe Outdoor Window Left", value: "3.8 hrs", sub: "Before respiratory strain", icon: Activity },
+              {
+                title: "Inhalation Rate",
+                value: `${(12 * activityMultipliers[selectedActivity].factor).toFixed(0)} L/min`,
+                sub: "Minute respiratory volume",
+                icon: Wind,
+              },
+              {
+                title: "Deposited Particulate",
+                value: hasMask ? "8.4 µg" : `${(38.2 * activityMultipliers[selectedActivity].factor).toFixed(1)} µg`,
+                sub: hasMask ? "Filtered via certified electro-spun mesh" : "Direct alveolar penetration risk",
+                icon: Activity,
+              },
+              {
+                title: "Mask Defense Efficiency",
+                value: hasMask ? "95.4%" : "0.0%",
+                sub: hasMask ? "N95 active seal compliant" : "Raw atmospheric intake",
+                icon: Shield,
+              },
+              {
+                title: "Safe Remaining Window",
+                value: hasMask ? "4.5 hrs" : "1.2 hrs",
+                sub: "Before reaching biological trigger",
+                icon: Clock,
+              },
             ].map((metric, idx) => (
               <div
                 key={idx}
-                className="bg-white border border-neutral-200 rounded-2xl p-5 flex flex-col justify-between shadow-xs hover:border-neutral-300 transition-colors"
+                className="bg-white border border-[#e5e5e0] rounded-2xl p-5 flex flex-col justify-between shadow-xs hover:border-[#d1d1c7] transition-colors"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-medium text-neutral-500">{metric.title}</span>
-                  <div className="w-7 h-7 rounded-lg bg-neutral-100 flex items-center justify-center text-neutral-700">
+                  <span className="text-xs font-medium text-[#73736c]">{metric.title}</span>
+                  <div className="w-7 h-7 rounded-lg bg-[#f4f4f2] flex items-center justify-center text-[#111110]">
                     <metric.icon className="w-3.5 h-3.5" />
                   </div>
                 </div>
                 <div className="my-3">
-                  <div className="text-2xl font-mono font-bold text-neutral-900">{metric.value}</div>
-                  <div className="text-[11px] text-neutral-400 mt-0.5">{metric.sub}</div>
+                  <div className="text-2xl font-mono font-bold text-[#111110]">{metric.value}</div>
+                  <div className="text-[11px] text-[#73736c] mt-0.5">{metric.sub}</div>
                 </div>
-                <div className="w-full bg-neutral-100 rounded-full h-1.5 overflow-hidden">
-                  <div className="bg-neutral-900 h-1.5 rounded-full" style={{ width: `${60 + idx * 10}%` }} />
+                <div className="w-full bg-[#f4f4f2] rounded-full h-1.5 overflow-hidden">
+                  <div className="bg-[#111110] h-1.5 rounded-full" style={{ width: `${65 + idx * 8}%` }} />
                 </div>
               </div>
             ))}
@@ -202,13 +280,13 @@ export default function BreathePage() {
         {/* Bottom Section: 24h AreaChart & Daily Action Schedule */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Forecast Chart */}
-          <div className="lg:col-span-7 bg-white border border-neutral-200 rounded-2xl p-6 shadow-xs">
-            <div className="flex items-center justify-between mb-6 pb-3 border-b border-neutral-100">
+          <div className="lg:col-span-7 bg-white border border-[#e5e5e0] rounded-2xl p-6 shadow-xs">
+            <div className="flex items-center justify-between mb-6 pb-3 border-b border-[#f0f0eb]">
               <div>
-                <h3 className="text-sm font-semibold text-neutral-900">24-Hour Predictive Curve</h3>
-                <p className="text-xs text-neutral-500">Hourly particulate variance model</p>
+                <h3 className="text-sm font-semibold text-[#111110]">24-Hour Diurnal Particulate Trajectory</h3>
+                <p className="text-xs text-[#73736c]">Hourly surface boundary concentration</p>
               </div>
-              <span className="text-xs font-mono text-neutral-500 bg-neutral-100 px-2.5 py-1 rounded-md">
+              <span className="text-xs font-mono text-[#73736c] bg-[#f4f4f2] px-2.5 py-1 rounded-md">
                 Diurnal Model
               </span>
             </div>
@@ -218,16 +296,16 @@ export default function BreathePage() {
                 <AreaChart data={forecast}>
                   <defs>
                     <linearGradient id="cleanAqiGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#18181b" stopOpacity={0.15} />
-                      <stop offset="95%" stopColor="#18181b" stopOpacity={0} />
+                      <stop offset="5%" stopColor="#111110" stopOpacity={0.15} />
+                      <stop offset="95%" stopColor="#111110" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="2 2" stroke="#f4f4f5" vertical={false} />
-                  <XAxis dataKey="time" stroke="#a1a1aa" fontSize={11} tickLine={false} axisLine={false} />
-                  <YAxis stroke="#a1a1aa" fontSize={11} tickLine={false} axisLine={false} />
+                  <CartesianGrid strokeDasharray="2 2" stroke="#f0f0eb" vertical={false} />
+                  <XAxis dataKey="time" stroke="#a3a399" fontSize={11} tickLine={false} axisLine={false} />
+                  <YAxis stroke="#a3a399" fontSize={11} tickLine={false} axisLine={false} />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: "#09090b",
+                      backgroundColor: "#111110",
                       border: "none",
                       borderRadius: "8px",
                       color: "#fff",
@@ -238,7 +316,7 @@ export default function BreathePage() {
                   <Area
                     type="monotone"
                     dataKey="aqi"
-                    stroke="#18181b"
+                    stroke="#111110"
                     fill="url(#cleanAqiGrad)"
                     strokeWidth={2}
                   />
@@ -248,10 +326,12 @@ export default function BreathePage() {
           </div>
 
           {/* Daily Schedule Timeline */}
-          <div className="lg:col-span-5 bg-white border border-neutral-200 rounded-2xl p-6 shadow-xs">
-            <div className="flex items-center justify-between mb-4 pb-3 border-b border-neutral-100">
-              <h3 className="text-sm font-semibold text-neutral-900">Recommended Day Windows</h3>
-              <span className="text-xs text-emerald-600 font-medium">Optimal Window at 02:00 PM</span>
+          <div className="lg:col-span-5 bg-white border border-[#e5e5e0] rounded-2xl p-6 shadow-xs">
+            <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#f0f0eb]">
+              <h3 className="text-sm font-semibold text-[#111110]">Recommended Day Windows</h3>
+              <span className="text-xs text-emerald-700 font-medium bg-emerald-50 px-2 py-0.5 rounded">
+                Optimal at 02:00 PM
+              </span>
             </div>
 
             <div className="space-y-3">
@@ -263,14 +343,14 @@ export default function BreathePage() {
               ].map((item, idx) => (
                 <div
                   key={idx}
-                  className="p-3 rounded-xl border border-neutral-100 bg-neutral-50/50 flex items-center justify-between"
+                  className="p-3 rounded-xl border border-[#f0f0eb] bg-[#fbfbf9] flex items-center justify-between"
                 >
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-mono text-neutral-400">{item.time}</span>
-                      <span className="text-xs font-semibold text-neutral-900">{item.title}</span>
+                      <span className="text-xs font-mono text-[#a3a399]">{item.time}</span>
+                      <span className="text-xs font-semibold text-[#111110]">{item.title}</span>
                     </div>
-                    <div className="text-[11px] text-neutral-500 mt-0.5">{item.note}</div>
+                    <div className="text-[11px] text-[#73736c] mt-0.5">{item.note}</div>
                   </div>
                   <span
                     className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${

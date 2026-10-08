@@ -14,6 +14,10 @@ import {
   Calendar,
   Shield,
   ArrowRight,
+  Bell,
+  MessageSquare,
+  Smartphone,
+  ExternalLink,
 } from "lucide-react";
 import { INDIAN_CITIES } from "@/lib/constants";
 import { simulateAqi, getAqiLevel } from "@/lib/utils";
@@ -21,6 +25,7 @@ import { simulateAqi, getAqiLevel } from "@/lib/utils";
 export default function SchoolsPage() {
   const [city, setCity] = useState(INDIAN_CITIES?.[0]?.key || "delhi");
   const [aqi, setAqi] = useState(168);
+  const [smsSent, setSmsSent] = useState(false);
 
   useEffect(() => {
     setAqi(simulateAqi(city));
@@ -59,30 +64,30 @@ export default function SchoolsPage() {
   const level = getAqiLevel(aqi);
 
   return (
-    <div className="min-h-screen bg-[#fafafa] text-[#09090b] font-sans pb-24">
+    <div className="min-h-screen bg-[#fbfbf9] text-[#111110] font-sans pb-24">
       <Navbar />
 
       <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-10">
         {/* Header Breadcrumb & City Selector */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between pb-8 mb-8 border-b border-neutral-200/70 gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between pb-8 mb-8 border-b border-[#e5e5e0] gap-4">
           <div>
-            <div className="text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-1">
-              Campus Sentinel
+            <div className="text-xs font-mono font-semibold uppercase tracking-wider text-[#73736c] mb-1">
+              CAMPUS SENTINEL
             </div>
-            <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-neutral-900">
+            <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#111110]">
               School Safety Engine
             </h1>
-            <p className="text-sm text-neutral-500 mt-1">
+            <p className="text-sm text-[#575752] mt-1">
               Actionable protocols for principals, athletic directors, and parents based on live CPCB standards.
             </p>
           </div>
 
-          <div className="flex items-center gap-2 bg-white border border-neutral-200 rounded-full px-3 py-1.5 shadow-2xs">
-            <School className="text-neutral-500 w-4 h-4" />
+          <div className="flex items-center gap-2 bg-white border border-[#e2e2dc] rounded-full px-3.5 py-1.5 shadow-2xs">
+            <School className="text-[#73736c] w-4 h-4" />
             <select
               value={city}
               onChange={(e) => setCity(e.target.value)}
-              className="bg-transparent border-none outline-none text-xs font-medium text-neutral-800 cursor-pointer pr-2"
+              className="bg-transparent border-none outline-none text-xs font-semibold text-[#111110] cursor-pointer pr-2"
             >
               {(INDIAN_CITIES || [{ key: "delhi", name: "Delhi" }]).map((c) => (
                 <option key={c.key} value={c.key}>
@@ -93,35 +98,35 @@ export default function SchoolsPage() {
           </div>
         </div>
 
-        {/* Primary Status Banner (Clean Beside Style) */}
-        <div className="bg-white border border-neutral-200 rounded-2xl p-6 sm:p-8 mb-8 shadow-xs">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-6 border-b border-neutral-100">
+        {/* Primary Status Banner (Clean Cal.com Style) */}
+        <div className="bg-white border border-[#e5e5e0] rounded-2xl p-6 sm:p-8 mb-8 shadow-xs">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-6 border-b border-[#f0f0eb]">
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <span className={`w-2.5 h-2.5 rounded-full ${safety.indicator}`} />
-                <span className="text-xs font-bold uppercase tracking-wider text-neutral-500">
-                  Daily Outdoor Protocol
+                <span className="text-xs font-bold uppercase tracking-wider text-[#73736c]">
+                  Daily Outdoor Protocol &bull; 05:45 AM CPCB Directive
                 </span>
               </div>
-              <h2 className="text-3xl sm:text-4xl font-bold font-mono tracking-tight text-neutral-900">
-                {safety.status} — {safety.sub}
+              <h2 className="text-3xl sm:text-4xl font-bold font-mono tracking-tight text-[#111110]">
+                {safety.status} &mdash; {safety.sub}
               </h2>
             </div>
 
             <div className="sm:text-right">
-              <span className="text-xs text-neutral-400">Station AQI Ingested</span>
-              <div className="text-2xl font-mono font-bold text-neutral-900">{aqi} AQI</div>
-              <span className="text-[11px] text-neutral-500 uppercase">{level.label}</span>
+              <span className="text-xs text-[#a3a399]">Station AQI Ingested</span>
+              <div className="text-3xl font-mono font-bold text-[#111110]">{aqi} AQI</div>
+              <span className="text-[11px] text-[#73736c] uppercase font-medium">{level.label}</span>
             </div>
           </div>
 
-          <div className="pt-6 grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-neutral-600">
+          <div className="pt-6 grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-[#575752]">
             <div>
-              <span className="font-semibold text-neutral-900 block mb-1">Clinical Context:</span>
+              <span className="font-semibold text-[#111110] block mb-1">Clinical Context:</span>
               <p className="leading-relaxed">{safety.message}</p>
             </div>
             <div>
-              <span className="font-semibold text-neutral-900 block mb-1">Immediate Campus Action:</span>
+              <span className="font-semibold text-[#111110] block mb-1">Immediate Campus Action:</span>
               <p className="leading-relaxed">{safety.action}</p>
             </div>
           </div>
@@ -157,52 +162,96 @@ export default function SchoolsPage() {
           ].map((item, idx) => (
             <div
               key={idx}
-              className="bg-white border border-neutral-200 rounded-xl p-5 flex flex-col justify-between shadow-xs"
+              className="bg-white border border-[#e5e5e0] rounded-xl p-5 flex flex-col justify-between shadow-xs hover:border-[#d1d1c7] transition-colors"
             >
               <div>
-                <span className="text-xs font-medium text-neutral-400">{item.role}</span>
-                <div className="text-base font-semibold text-neutral-900 mt-1 mb-2">{item.recommendation}</div>
-                <p className="text-xs text-neutral-500 leading-relaxed">{item.note}</p>
+                <span className="text-xs font-medium text-[#73736c]">{item.role}</span>
+                <div className="text-base font-semibold text-[#111110] mt-1 mb-2">{item.recommendation}</div>
+                <p className="text-xs text-[#575752] leading-relaxed">{item.note}</p>
               </div>
-              <div className="mt-4 pt-3 border-t border-neutral-100 flex items-center gap-1.5 text-[11px]">
+              <div className="mt-4 pt-3 border-t border-[#f0f0eb] flex items-center gap-1.5 text-[11px]">
                 <span className={`w-1.5 h-1.5 rounded-full ${item.cleared ? "bg-emerald-500" : "bg-rose-500"}`} />
-                <span className="text-neutral-600 font-medium">{item.cleared ? "Compliant" : "Mandatory Directive"}</span>
+                <span className="text-[#575752] font-medium">{item.cleared ? "Compliant" : "Mandatory Directive"}</span>
               </div>
             </div>
           ))}
         </div>
 
-        {/* 5-Day Forward Planning Schedule */}
-        <div className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-xs">
-          <div className="flex items-center justify-between pb-3 mb-4 border-b border-neutral-100">
-            <h3 className="text-sm font-semibold text-neutral-900">5-Day Planning Forecast</h3>
-            <span className="text-xs text-neutral-400 font-mono">CPCB Forecast Ingestion</span>
+        {/* Cal.com style Notification Card: Parent SMS Alert Simulator */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mb-8">
+          <div className="md:col-span-6 bg-white border border-[#e5e5e0] rounded-2xl p-6 shadow-xs flex flex-col justify-between">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <Smartphone className="w-4 h-4 text-[#73736c]" />
+                <h3 className="text-sm font-semibold text-[#111110]">Automated Parent SMS Broadcast</h3>
+              </div>
+              <p className="text-xs text-[#575752] mb-4">
+                Pre-formatted SMS notification triggered to 2,400 registered parents when local AQI triggers caution threshold.
+              </p>
+            </div>
+
+            <div className="p-4 bg-[#fbfbf9] border border-[#e5e5e0] rounded-xl space-y-2">
+              <div className="flex items-center justify-between text-[11px] text-[#73736c] font-mono pb-1 border-b border-[#e5e5e0]">
+                <span>SMS GATEWAY: VAYU-CAMPUS</span>
+                <span>06:02 AM</span>
+              </div>
+              <p className="text-xs text-[#111110] font-sans leading-relaxed">
+                "Dear Parent, local AQI at Delhi campus is {aqi} (Unhealthy). In accordance with CPCB Rule 4, all outdoor assemblies and sports have been moved indoors to HEPA-purified halls today. Please equip student with N95 mask for transit."
+              </p>
+            </div>
+
+            <div className="mt-4 pt-3 border-t border-[#f0f0eb] flex items-center justify-between text-xs">
+              <span className="text-[#73736c]">Twilio / AWS SNS Delivery</span>
+              <button
+                onClick={() => setSmsSent(true)}
+                className="text-xs font-semibold text-[#111110] hover:underline"
+              >
+                {smsSent ? "Test Dispatch Triggered" : "Test Parent Broadcast"}
+              </button>
+            </div>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-            {[
-              { day: "Mon", aqi: 154, rec: "Caution" },
-              { day: "Tue", aqi: 182, rec: "Restricted" },
-              { day: "Wed", aqi: 135, rec: "Caution" },
-              { day: "Thu", aqi: 92, rec: "Cleared" },
-              { day: "Fri", aqi: 88, rec: "Cleared" },
-            ].map((d, i) => (
-              <div key={i} className="p-3.5 rounded-xl border border-neutral-100 bg-neutral-50/50 text-center">
-                <span className="text-xs font-semibold text-neutral-900 block">{d.day}</span>
-                <div className="text-lg font-mono font-bold my-1 text-neutral-900">{d.aqi}</div>
-                <span
-                  className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
-                    d.rec === "Cleared"
-                      ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                      : d.rec === "Caution"
-                      ? "bg-amber-50 text-amber-700 border border-amber-200"
-                      : "bg-rose-50 text-rose-700 border border-rose-200"
-                  }`}
-                >
-                  {d.rec}
-                </span>
+          {/* 5-Day Forward Planning Schedule */}
+          <div className="md:col-span-6 bg-white border border-[#e5e5e0] rounded-2xl p-6 shadow-xs flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between pb-3 mb-4 border-b border-[#f0f0eb]">
+                <h3 className="text-sm font-semibold text-[#111110]">5-Day Campus Planning Forecast</h3>
+                <span className="text-xs text-[#73736c] font-mono">CPCB Forecast</span>
               </div>
-            ))}
+              <p className="text-xs text-[#575752] mb-4">
+                Forward projection of surface boundary layer ventilation to plan sports matches and athletic meets.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-5 gap-2 text-center">
+              {[
+                { day: "Mon", aqi: 154, rec: "Caution" },
+                { day: "Tue", aqi: 182, rec: "Restricted" },
+                { day: "Wed", aqi: 135, rec: "Caution" },
+                { day: "Thu", aqi: 92, rec: "Cleared" },
+                { day: "Fri", aqi: 88, rec: "Cleared" },
+              ].map((d, i) => (
+                <div key={i} className="p-3 rounded-xl border border-[#f0f0eb] bg-[#fbfbf9]">
+                  <span className="text-xs font-semibold text-[#111110] block">{d.day}</span>
+                  <div className="text-base font-mono font-bold my-1 text-[#111110]">{d.aqi}</div>
+                  <span
+                    className={`text-[9px] font-semibold px-1.5 py-0.5 rounded-full inline-block ${
+                      d.rec === "Cleared"
+                        ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                        : d.rec === "Caution"
+                        ? "bg-amber-50 text-amber-700 border border-amber-200"
+                        : "bg-rose-50 text-rose-700 border border-rose-200"
+                    }`}
+                  >
+                    {d.rec}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-4 pt-3 border-t border-[#f0f0eb] text-right text-xs text-[#73736c]">
+              Next revision: 12:00 PM
+            </div>
           </div>
         </div>
       </main>

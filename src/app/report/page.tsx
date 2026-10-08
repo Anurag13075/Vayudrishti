@@ -16,6 +16,8 @@ import {
   Trash2,
   AlertOctagon,
   Check,
+  Building,
+  Bell,
 } from "lucide-react";
 import { INDIAN_CITIES } from "@/lib/constants";
 
@@ -43,6 +45,7 @@ const SAMPLE_REPORTS = [
     time: "12m ago",
     desc: "Uncovered excavation site blowing heavy dust into residential blocks. No water suppression active.",
     upvotes: 28,
+    status: "Inspection Order Issued",
   },
   {
     id: 2,
@@ -52,6 +55,7 @@ const SAMPLE_REPORTS = [
     time: "45m ago",
     desc: "Open landfill plastic incineration near transit line. Heavy acrid odor.",
     upvotes: 14,
+    status: "Under Review",
   },
   {
     id: 3,
@@ -61,6 +65,7 @@ const SAMPLE_REPORTS = [
     time: "2h ago",
     desc: "Multi-acre field burn visible along state highway corridor.",
     upvotes: 94,
+    status: "MODIS Satellite Matched",
   },
   {
     id: 4,
@@ -70,6 +75,7 @@ const SAMPLE_REPORTS = [
     time: "3h ago",
     desc: "Dark particulate smoke discharging during unpermitted morning hours.",
     upvotes: 42,
+    status: "Notice Dispatched",
   },
 ];
 
@@ -101,6 +107,7 @@ export default function ReportPage() {
         time: "Just now",
         desc: formState.description || "Reported environmental hazard verified by citizen sensor.",
         upvotes: 1,
+        status: "Ingested into DynamoDB",
       };
 
       setReports([newReport, ...reports]);
@@ -123,40 +130,40 @@ export default function ReportPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fafafa] text-[#09090b] font-sans pb-24">
+    <div className="min-h-screen bg-[#fbfbf9] text-[#111110] font-sans pb-24">
       <Navbar />
 
       <main className="max-w-6xl mx-auto px-4 sm:px-6 pt-10">
         {/* Header Breadcrumb & Title */}
-        <div className="pb-8 mb-8 border-b border-neutral-200/70">
-          <div className="text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-1">
-            Community Watch
+        <div className="pb-8 mb-8 border-b border-[#e5e5e0]">
+          <div className="text-xs font-mono font-semibold uppercase tracking-wider text-[#73736c] mb-1">
+            COMMUNITY DEFENSE
           </div>
-          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-neutral-900">
+          <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#111110]">
             Citizen Pollution Registry
           </h1>
-          <p className="text-sm text-neutral-500 mt-1">
-            Crowdsource and geotag unpermitted emission sources to trigger localized inspection protocols.
+          <p className="text-sm text-[#575752] mt-1">
+            Crowdsource and geotag unpermitted emission sources to trigger localized municipal inspection orders.
           </p>
         </div>
 
-        {/* Aggregate Ticker */}
-        <div className="grid grid-cols-3 gap-3 mb-8">
+        {/* Aggregate Ticker (Cal.com proof cards) */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-8">
           {[
             { label: "Reports Logged This Week", val: "1,248" },
             { label: "Active Municipal Inquiries", val: "89 Hotspots" },
             { label: "Remediation Directives Issued", val: "34 Actions" },
           ].map((stat, i) => (
-            <div key={i} className="p-4 bg-white border border-neutral-200 rounded-xl">
-              <span className="text-xs text-neutral-400">{stat.label}</span>
-              <div className="text-lg font-mono font-bold text-neutral-900 mt-1">{stat.val}</div>
+            <div key={i} className="p-4 bg-white border border-[#e5e5e0] rounded-xl shadow-2xs">
+              <span className="text-xs text-[#73736c]">{stat.label}</span>
+              <div className="text-xl font-mono font-bold text-[#111110] mt-1">{stat.val}</div>
             </div>
           ))}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left Column: Filing Form */}
-          <div className="lg:col-span-6 bg-white border border-neutral-200 rounded-2xl p-6 shadow-xs relative">
+          <div className="lg:col-span-6 bg-white border border-[#e5e5e0] rounded-2xl p-6 shadow-xs relative">
             <AnimatePresence>
               {showSuccess && (
                 <motion.div
@@ -174,7 +181,7 @@ export default function ReportPage() {
             <form onSubmit={handleSubmit} className="space-y-5">
               {/* Incident Category */}
               <div>
-                <label className="block text-xs font-medium text-neutral-500 mb-2">Category of Incident</label>
+                <label className="block text-xs font-medium text-[#73736c] mb-2">Category of Incident</label>
                 <div className="grid grid-cols-3 gap-2">
                   {REPORT_TYPES.map((t) => (
                     <button
@@ -183,8 +190,8 @@ export default function ReportPage() {
                       onClick={() => setFormState({ ...formState, type: t.id })}
                       className={`p-2.5 rounded-xl border text-left text-xs font-medium flex items-center gap-2 transition-all ${
                         formState.type === t.id
-                          ? "bg-neutral-900 text-white border-neutral-900"
-                          : "bg-white text-neutral-700 border-neutral-200 hover:bg-neutral-50"
+                          ? "bg-[#111110] text-white border-[#111110] font-semibold"
+                          : "bg-white text-[#575752] border-[#e2e2dc] hover:bg-[#f4f4f2]"
                       }`}
                     >
                       <t.icon className="w-3.5 h-3.5 shrink-0" />
@@ -196,7 +203,7 @@ export default function ReportPage() {
 
               {/* Severity */}
               <div>
-                <label className="block text-xs font-medium text-neutral-500 mb-2">Observed Severity</label>
+                <label className="block text-xs font-medium text-[#73736c] mb-2">Observed Severity</label>
                 <div className="grid grid-cols-3 gap-2">
                   {SEVERITIES.map((s) => (
                     <button
@@ -205,8 +212,8 @@ export default function ReportPage() {
                       onClick={() => setFormState({ ...formState, severity: s.id })}
                       className={`py-2 text-xs font-medium rounded-lg border transition-all ${
                         formState.severity === s.id
-                          ? "bg-neutral-900 text-white border-neutral-900"
-                          : "bg-white text-neutral-600 border-neutral-200 hover:bg-neutral-50"
+                          ? "bg-[#111110] text-white border-[#111110] font-semibold"
+                          : "bg-white text-[#575752] border-[#e2e2dc] hover:bg-[#f4f4f2]"
                       }`}
                     >
                       {s.label}
@@ -218,11 +225,11 @@ export default function ReportPage() {
               {/* City & Address */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-neutral-500 mb-1.5">City Region</label>
+                  <label className="block text-xs font-medium text-[#73736c] mb-1.5">City Region</label>
                   <select
                     value={formState.city}
                     onChange={(e) => setFormState({ ...formState, city: e.target.value })}
-                    className="w-full bg-white border border-neutral-200 rounded-lg py-2 px-3 text-xs text-neutral-900 focus:outline-none focus:border-neutral-900"
+                    className="w-full bg-white border border-[#e2e2dc] rounded-lg py-2 px-3 text-xs text-[#111110] focus:outline-none focus:border-[#111110]"
                   >
                     {(INDIAN_CITIES || [{ key: "delhi", name: "Delhi" }]).map((c) => (
                       <option key={c.key} value={c.key}>
@@ -233,26 +240,26 @@ export default function ReportPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-neutral-500 mb-1.5">Specific Landmark</label>
+                  <label className="block text-xs font-medium text-[#73736c] mb-1.5">Specific Landmark</label>
                   <input
                     type="text"
                     placeholder="e.g. Sector 14, Main Road"
                     value={formState.address}
                     onChange={(e) => setFormState({ ...formState, address: e.target.value })}
-                    className="w-full bg-white border border-neutral-200 rounded-lg py-2 px-3 text-xs text-neutral-900 focus:outline-none focus:border-neutral-900 placeholder:text-neutral-300"
+                    className="w-full bg-white border border-[#e2e2dc] rounded-lg py-2 px-3 text-xs text-[#111110] focus:outline-none focus:border-[#111110] placeholder:text-[#a3a399]"
                   />
                 </div>
               </div>
 
               {/* Description */}
               <div>
-                <label className="block text-xs font-medium text-neutral-500 mb-1.5">Observations</label>
+                <label className="block text-xs font-medium text-[#73736c] mb-1.5">Observations</label>
                 <textarea
                   rows={3}
                   placeholder="Detail visible smoke, absence of water sprinklers, or unpermitted burning..."
                   value={formState.description}
                   onChange={(e) => setFormState({ ...formState, description: e.target.value })}
-                  className="w-full bg-white border border-neutral-200 rounded-lg p-3 text-xs text-neutral-900 focus:outline-none focus:border-neutral-900 placeholder:text-neutral-300 resize-none"
+                  className="w-full bg-white border border-[#e2e2dc] rounded-lg p-3 text-xs text-[#111110] focus:outline-none focus:border-[#111110] placeholder:text-[#a3a399] resize-none"
                 />
               </div>
 
@@ -260,7 +267,7 @@ export default function ReportPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-2.5 px-4 rounded-full bg-neutral-900 hover:bg-neutral-800 text-white text-xs font-medium flex items-center justify-center gap-2 transition-all"
+                className="w-full py-3 px-4 rounded-full bg-[#111110] hover:bg-[#2b2b27] text-white text-xs font-medium flex items-center justify-center gap-2 transition-all shadow-xs"
               >
                 {isSubmitting ? (
                   <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -277,10 +284,10 @@ export default function ReportPage() {
           {/* Right Column: Live Community Feed */}
           <div className="lg:col-span-6 space-y-3">
             <div className="flex items-center justify-between pb-2">
-              <span className="text-xs font-semibold uppercase tracking-wider text-neutral-400">
+              <span className="text-xs font-semibold uppercase tracking-wider text-[#73736c]">
                 Verified Incident Feed
               </span>
-              <span className="text-[11px] text-neutral-500 font-mono">DynamoDB Synced</span>
+              <span className="text-[11px] text-[#73736c] font-mono">DynamoDB Synced</span>
             </div>
 
             {reports.map((report) => {
@@ -288,36 +295,41 @@ export default function ReportPage() {
               return (
                 <div
                   key={report.id}
-                  className="p-4 bg-white border border-neutral-200 rounded-xl shadow-xs transition-colors hover:border-neutral-300"
+                  className="p-4 bg-white border border-[#e5e5e0] rounded-xl shadow-xs transition-colors hover:border-[#d1d1c7]"
                 >
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-md bg-neutral-100 flex items-center justify-center text-neutral-700">
+                      <div className="w-6 h-6 rounded-md bg-[#f4f4f2] flex items-center justify-center text-[#111110]">
                         <typeObj.icon className="w-3.5 h-3.5" />
                       </div>
-                      <span className="text-xs font-semibold text-neutral-900">{typeObj.label}</span>
-                      <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded-full bg-neutral-100 text-neutral-600 border border-neutral-200">
+                      <span className="text-xs font-semibold text-[#111110]">{typeObj.label}</span>
+                      <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded-full bg-[#f4f4f2] text-[#575752] border border-[#e2e2dc]">
                         {report.severity}
                       </span>
                     </div>
-                    <span className="text-[11px] font-mono text-neutral-400">{report.time}</span>
+                    <span className="text-[11px] font-mono text-[#a3a399]">{report.time}</span>
                   </div>
 
-                  <p className="text-xs text-neutral-600 leading-relaxed mb-3">{report.desc}</p>
+                  <p className="text-xs text-[#575752] leading-relaxed mb-3">{report.desc}</p>
 
-                  <div className="flex items-center justify-between pt-2 border-t border-neutral-100 text-xs text-neutral-500">
+                  <div className="flex items-center justify-between pt-2 border-t border-[#f0f0eb] text-xs text-[#73736c]">
                     <div className="flex items-center gap-1 text-[11px]">
-                      <MapPin className="w-3 h-3 text-neutral-400" />
+                      <MapPin className="w-3 h-3 text-[#a3a399]" />
                       <span>{report.location}</span>
                     </div>
 
-                    <button
-                      onClick={() => handleUpvote(report.id)}
-                      className="inline-flex items-center gap-1.5 text-[11px] font-medium text-neutral-700 hover:text-neutral-900 bg-neutral-50 hover:bg-neutral-100 px-2.5 py-1 rounded-md border border-neutral-200 transition-colors"
-                    >
-                      <ThumbsUp className="w-3 h-3" />
-                      <span>{report.upvotes}</span>
-                    </button>
+                    <div className="flex items-center gap-3">
+                      <span className="text-[10px] font-mono font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
+                        {report.status}
+                      </span>
+                      <button
+                        onClick={() => handleUpvote(report.id)}
+                        className="inline-flex items-center gap-1.5 text-[11px] font-medium text-[#575752] hover:text-[#111110] bg-[#fbfbf9] hover:bg-[#f4f4f2] px-2.5 py-1 rounded-md border border-[#e2e2dc] transition-colors"
+                      >
+                        <ThumbsUp className="w-3 h-3" />
+                        <span>{report.upvotes}</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
               );

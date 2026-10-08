@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, MapPin, Wind, ArrowLeft, Activity, Info } from "lucide-react";
+import { Search, MapPin, Wind, ArrowLeft, Activity, Info, ExternalLink } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import { INDIAN_CITIES, AQI_LEVELS } from "@/lib/constants";
 import { simulateAqi, getAqiLevel, getAqiColor, generateForecast } from "@/lib/utils";
@@ -76,26 +76,26 @@ export default function InteractiveMapPage() {
   const filters = ["All", "Good", "Moderate", "Unhealthy", "Hazardous"];
 
   return (
-    <div className="min-h-screen bg-[#fafafa] flex flex-col overflow-hidden text-neutral-900 font-sans">
+    <div className="min-h-screen bg-[#fbfbf9] flex flex-col overflow-hidden text-[#111110] font-sans">
       <Navbar />
 
       <div className="flex-1 flex flex-col md:flex-row h-[calc(100vh-64px)] relative">
-        {/* Beside-style Clean Sidebar */}
+        {/* Cal.com style Clean Sidebar */}
         <div
-          className={`w-full md:w-96 bg-white border-r border-neutral-200 flex flex-col h-full z-10 ${
+          className={`w-full md:w-96 bg-white border-r border-[#e5e5e0] flex flex-col h-full z-10 ${
             selectedCity ? "hidden md:flex" : "flex"
           }`}
         >
           {/* Search & Filters */}
-          <div className="p-4 border-b border-neutral-100">
+          <div className="p-4 border-b border-[#f0f0eb]">
             <div className="relative mb-3">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400 w-4 h-4" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a3a399] w-4 h-4" />
               <input
                 type="text"
                 placeholder="Search monitoring station..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-neutral-50 border border-neutral-200 rounded-lg py-2 pl-9 pr-3 text-xs text-neutral-900 placeholder:text-neutral-400 focus:outline-none focus:border-neutral-900"
+                className="w-full bg-[#f4f4f2] border border-[#e5e5e0] rounded-xl py-2 pl-9 pr-3 text-xs text-[#111110] placeholder:text-[#a3a399] focus:outline-none focus:border-[#111110]"
               />
             </div>
 
@@ -104,10 +104,10 @@ export default function InteractiveMapPage() {
                 <button
                   key={f}
                   onClick={() => setActiveFilter(f)}
-                  className={`px-2.5 py-1 text-[11px] font-medium rounded-full border transition-all ${
+                  className={`px-3 py-1 text-[11px] font-medium rounded-full border transition-all ${
                     activeFilter === f
-                      ? "bg-neutral-900 text-white border-neutral-900"
-                      : "bg-white border-neutral-200 text-neutral-600 hover:bg-neutral-50"
+                      ? "bg-[#111110] text-white border-[#111110] shadow-2xs font-semibold"
+                      : "bg-white border-[#e2e2dc] text-[#575752] hover:bg-[#f4f4f2]"
                   }`}
                 >
                   {f}
@@ -117,36 +117,36 @@ export default function InteractiveMapPage() {
           </div>
 
           {/* City Station List */}
-          <div className="flex-1 overflow-y-auto p-2 divide-y divide-neutral-100">
+          <div className="flex-1 overflow-y-auto p-2 divide-y divide-[#f0f0eb]">
             {filteredCities.map((city) => (
               <div
                 key={city.name}
                 onClick={() => setSelectedCity(city)}
-                className="p-3 hover:bg-neutral-50 cursor-pointer rounded-lg transition-colors flex items-center justify-between"
+                className="p-3 hover:bg-[#fbfbf9] cursor-pointer rounded-xl transition-colors flex items-center justify-between"
               >
                 <div>
-                  <div className="text-xs font-semibold text-neutral-900">{city.name}</div>
-                  <div className="text-[11px] text-neutral-400 flex items-center mt-0.5">
-                    <MapPin className="w-3 h-3 mr-1 text-neutral-300" /> {city.state}
+                  <div className="text-xs font-semibold text-[#111110]">{city.name}</div>
+                  <div className="text-[11px] text-[#73736c] flex items-center mt-0.5">
+                    <MapPin className="w-3 h-3 mr-1 text-[#a3a399]" /> {city.state}
                   </div>
                 </div>
 
                 <div className="text-right">
-                  <div className="text-sm font-mono font-bold" style={{ color: city.color }}>
+                  <div className="text-sm font-mono font-bold text-[#111110]">
                     {city.aqi} AQI
                   </div>
-                  <div className="text-[10px] uppercase font-medium text-neutral-400">{city.level.label}</div>
+                  <div className="text-[10px] uppercase font-medium text-[#73736c]">{city.level.label}</div>
                 </div>
               </div>
             ))}
 
             {filteredCities.length === 0 && (
-              <div className="text-center py-12 text-neutral-400 text-xs">No matching stations found</div>
+              <div className="text-center py-12 text-[#a3a399] text-xs">No matching stations found</div>
             )}
           </div>
 
-          <div className="p-3 border-t border-neutral-100 text-[11px] text-center text-neutral-400 font-mono">
-            Telemetry refreshed: {lastUpdated.toLocaleTimeString()}
+          <div className="p-3 border-t border-[#f0f0eb] text-[11px] text-center text-[#73736c] font-mono">
+            CPCB telemetry synced: {lastUpdated.toLocaleTimeString()}
           </div>
         </div>
 
@@ -158,41 +158,41 @@ export default function InteractiveMapPage() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 220 }}
-              className="absolute md:relative inset-0 md:inset-auto z-20 md:w-96 bg-white border-l border-neutral-200 flex flex-col h-full shadow-lg md:shadow-none"
+              className="absolute md:relative inset-0 md:inset-auto z-20 md:w-96 bg-white border-l border-[#e5e5e0] flex flex-col h-full shadow-lg md:shadow-none"
             >
-              <div className="p-4 border-b border-neutral-100 flex items-center justify-between">
+              <div className="p-4 border-b border-[#f0f0eb] flex items-center justify-between">
                 <button
                   onClick={() => setSelectedCity(null)}
-                  className="text-xs font-medium text-neutral-600 hover:text-neutral-900 flex items-center gap-1.5"
+                  className="text-xs font-medium text-[#575752] hover:text-[#111110] flex items-center gap-1.5"
                 >
                   <ArrowLeft className="w-4 h-4" /> Back to Stations
                 </button>
-                <span className="text-xs font-semibold text-neutral-900">{selectedCityData.name}</span>
+                <span className="text-xs font-semibold text-[#111110]">{selectedCityData.name}</span>
               </div>
 
               <div className="flex-1 overflow-y-auto p-5 space-y-5">
-                <div className="text-center pb-4 border-b border-neutral-100">
-                  <div className="text-5xl font-mono font-bold mb-1" style={{ color: selectedCityData.color }}>
+                <div className="text-center pb-4 border-b border-[#f0f0eb]">
+                  <div className="text-5xl font-mono font-bold mb-1 text-[#111110]">
                     {selectedCityData.aqi}
                   </div>
-                  <div className="text-xs font-semibold uppercase tracking-wider text-neutral-700">
+                  <div className="text-xs font-semibold uppercase tracking-wider text-[#73736c]">
                     {selectedCityData.level.label}
                   </div>
-                  <p className="text-xs text-neutral-500 mt-2 px-2 leading-relaxed">
+                  <p className="text-xs text-[#575752] mt-2 px-2 leading-relaxed">
                     {selectedCityData.level.description}
                   </p>
                 </div>
 
                 {/* Mini AreaChart */}
-                <div className="p-4 bg-neutral-50 border border-neutral-200/70 rounded-xl">
-                  <div className="text-xs font-semibold text-neutral-900 mb-2">24h Station Trajectory</div>
+                <div className="p-4 bg-[#fbfbf9] border border-[#e5e5e0] rounded-xl shadow-2xs">
+                  <div className="text-xs font-semibold text-[#111110] mb-2">24h Station Trajectory</div>
                   <div className="h-28">
                     <ResponsiveContainer width="100%" height="100%">
                       <AreaChart data={selectedCityData.forecast}>
                         <XAxis dataKey="hour" hide />
                         <Tooltip
                           contentStyle={{
-                            backgroundColor: "#09090b",
+                            backgroundColor: "#111110",
                             border: "none",
                             borderRadius: "6px",
                             fontSize: "11px",
@@ -202,9 +202,9 @@ export default function InteractiveMapPage() {
                         <Area
                           type="monotone"
                           dataKey="aqi"
-                          stroke={selectedCityData.color}
-                          fill={selectedCityData.color}
-                          fillOpacity={0.15}
+                          stroke="#111110"
+                          fill="#111110"
+                          fillOpacity={0.12}
                           strokeWidth={2}
                         />
                       </AreaChart>
@@ -214,20 +214,19 @@ export default function InteractiveMapPage() {
 
                 {/* Pollutant Breakdown */}
                 <div>
-                  <div className="text-xs font-semibold text-neutral-900 mb-3">Chemical Particulate Ingestion</div>
+                  <div className="text-xs font-semibold text-[#111110] mb-3">Chemical Particulate Ingestion</div>
                   <div className="space-y-2">
                     {Object.entries(selectedCityData.pollutants).map(([key, val]: [string, any]) => (
                       <div key={key}>
                         <div className="flex justify-between text-[11px] mb-1">
-                          <span className="text-neutral-500">{key}</span>
-                          <span className="font-mono font-medium text-neutral-900">{val} µg/m³</span>
+                          <span className="text-[#73736c]">{key}</span>
+                          <span className="font-mono font-medium text-[#111110]">{val} µg/m³</span>
                         </div>
-                        <div className="h-1.5 w-full bg-neutral-100 rounded-full overflow-hidden">
+                        <div className="h-1.5 w-full bg-[#f4f4f2] rounded-full overflow-hidden">
                           <div
-                            className="h-full rounded-full"
+                            className="h-full rounded-full bg-[#111110]"
                             style={{
                               width: `${Math.min((val / 200) * 100, 100)}%`,
-                              backgroundColor: selectedCityData.color,
                             }}
                           />
                         </div>
@@ -237,8 +236,8 @@ export default function InteractiveMapPage() {
                 </div>
 
                 {/* Health Advice */}
-                <div className="p-3.5 bg-neutral-50 border border-neutral-200/70 rounded-xl text-xs text-neutral-600 leading-relaxed">
-                  <span className="font-semibold text-neutral-900 block mb-1">Operational Protocol:</span>
+                <div className="p-3.5 bg-[#fbfbf9] border border-[#e5e5e0] rounded-xl text-xs text-[#575752] leading-relaxed">
+                  <span className="font-semibold text-[#111110] block mb-1">Operational Protocol:</span>
                   {selectedCityData.level.advice}
                 </div>
               </div>
@@ -247,7 +246,7 @@ export default function InteractiveMapPage() {
         </AnimatePresence>
 
         {/* Map Area */}
-        <div className="flex-1 relative bg-neutral-100">
+        <div className="flex-1 relative bg-[#f4f4f2]">
           <MapContainer
             center={[22.5, 78.5]}
             zoom={5}
@@ -279,11 +278,11 @@ export default function InteractiveMapPage() {
               >
                 <Popup>
                   <div className="text-center p-1">
-                    <div className="font-bold text-xs text-neutral-900">{city.name}</div>
+                    <div className="font-bold text-xs text-[#111110]">{city.name}</div>
                     <div className="text-base font-bold font-mono" style={{ color: city.color }}>
                       {city.aqi} AQI
                     </div>
-                    <div className="text-[10px] text-neutral-500">{city.level.label}</div>
+                    <div className="text-[10px] text-[#73736c]">{city.level.label}</div>
                   </div>
                 </Popup>
               </CircleMarker>
@@ -291,18 +290,18 @@ export default function InteractiveMapPage() {
           </MapContainer>
 
           {/* Scale Legend */}
-          <div className="absolute bottom-5 right-5 z-10 bg-white/95 backdrop-blur-md p-3 rounded-xl border border-neutral-200 shadow-sm hidden sm:block">
-            <div className="text-[11px] font-semibold text-neutral-700 mb-2 uppercase tracking-wider">
+          <div className="absolute bottom-5 right-5 z-10 bg-white/95 backdrop-blur-md p-3.5 rounded-xl border border-[#e5e5e0] shadow-sm hidden sm:block">
+            <div className="text-[11px] font-semibold text-[#111110] mb-2 uppercase tracking-wider">
               AQI Scale Bands
             </div>
             <div className="flex flex-col gap-1.5">
               {AQI_LEVELS.map((level) => (
                 <div key={level.label} className="flex items-center text-[11px]">
                   <div className="w-2.5 h-2.5 rounded-full mr-2" style={{ backgroundColor: level.color }} />
-                  <span className="text-neutral-400 w-14 font-mono">
+                  <span className="text-[#73736c] w-14 font-mono">
                     {level.range[0]}-{level.range[1]}
                   </span>
-                  <span className="text-neutral-700 font-medium">{level.label}</span>
+                  <span className="text-[#111110] font-medium">{level.label}</span>
                 </div>
               ))}
             </div>
