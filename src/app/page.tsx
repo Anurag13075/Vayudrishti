@@ -27,15 +27,12 @@ import {
   Bell,
   CheckCircle2,
   Share2,
-  Users,
-  GraduationCap,
   Building,
-  HeartPulse,
-  Flame,
-  Award,
+  Layers,
+  Terminal,
+  Zap,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
-import { INDIAN_CITIES } from "@/lib/constants";
 
 export default function Home() {
   // =========================================================================
@@ -53,7 +50,7 @@ export default function Home() {
   };
 
   // =========================================================================
-  // CARD 02 AVAILABILITY TOGGLES (Cal.com Step 2 Widget)
+  // CARD 02 AVAILABILITY TOGGLES (Cal.com Step 2 Widget - User Liked This)
   // =========================================================================
   const [scheduleToggles, setScheduleToggles] = useState({
     mon: true,
@@ -62,7 +59,7 @@ export default function Home() {
   });
 
   // =========================================================================
-  // CARD 03 DEFENSE TOGGLES (Cal.com Video Meet Style)
+  // CARD 03 DEFENSE TOGGLES (Cal.com Video Meet Style - User Liked This)
   // =========================================================================
   const [defenseToggles, setDefenseToggles] = useState({
     mask: true,
@@ -153,13 +150,6 @@ export const handler = async (event) => {
   };
 
   // =========================================================================
-  // INTERACTIVE CAMPUS CALCULATOR
-  // =========================================================================
-  const [studentCount, setStudentCount] = useState<number>(1200);
-  const [hoursOutdoors, setHoursOutdoors] = useState<number>(4);
-  const particulatePreventedKg = ((studentCount * hoursOutdoors * 3.8 * 14) / 1000).toFixed(1);
-
-  // =========================================================================
   // FAQ ACCORDION STATE
   // =========================================================================
   const [openFaq, setOpenFaq] = useState<number | null>(0);
@@ -187,16 +177,40 @@ export const handler = async (event) => {
     },
   ];
 
+  // Moving Stack Items (Matches Image 3)
+  const stackItems = [
+    "Amazon Bedrock",
+    "AWS Lambda",
+    "Amazon DynamoDB",
+    "AWS Step Functions",
+    "Amazon EventBridge",
+    "Amazon CloudWatch",
+    "AWS Amplify",
+    "Amazon S3",
+    "Amazon SNS",
+    "Amazon CloudFront",
+    "Amazon ECS",
+    "Amazon Route 53",
+  ];
+
   return (
     <div className="min-h-screen bg-[#fbfbf9] text-[#111110] font-sans selection:bg-[#111110] selection:text-white">
-      {/* Top Announcement Bar (Wispr Flow style) */}
-      <div className="bg-[#111110] text-white text-[12px] font-medium py-2 px-4 text-center">
-        <div className="max-w-6xl mx-auto flex items-center justify-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          <span>VayuDrishti v2.0 is live on AWS — Hyperlocal sensor streaming across 1,000+ Indian stations.</span>
-          <Link href="/map" className="underline font-semibold ml-1 hover:text-emerald-300 transition-colors">
-            Explore live map &rarr;
-          </Link>
+      {/* Top Status Ribbon (Matches Beacon in Image 3) */}
+      <div className="bg-[#111110] text-[#f4f4f2] text-xs border-b border-[#2b2b27] py-2 px-4">
+        <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-3 font-mono text-[11px]">
+          <div className="flex items-center gap-3">
+            <span className="flex items-center gap-1.5 text-emerald-400 font-semibold">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              LIVE TELEMETRY
+            </span>
+            <span className="text-[#73736c] hidden sm:inline">&bull;</span>
+            <span className="text-[#a3a399] hidden sm:inline">ap-south-1 &bull; 1,024 CPCB Stations Ingesting</span>
+          </div>
+
+          <div className="flex items-center gap-4 text-[#a3a399]">
+            <span>AWS Bedrock Claude 3.5 Sonnet</span>
+            <span className="text-white bg-[#27272a] px-2 py-0.5 rounded text-[10px]">v2.4.0</span>
+          </div>
         </div>
       </div>
 
@@ -205,7 +219,7 @@ export const handler = async (event) => {
       {/* =========================================================================
           HERO SECTION: Pure Cal.com / Wispr Flow Layout
           ========================================================================= */}
-      <section className="pt-12 pb-20 md:pt-20 md:pb-28 border-b border-[#e5e5e0]">
+      <section className="pt-12 pb-16 md:pt-16 md:pb-20 border-b border-[#e5e5e0]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             {/* Left Hero Narrative */}
@@ -213,12 +227,13 @@ export const handler = async (event) => {
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#e2e2dc] shadow-2xs text-xs font-medium text-[#575752]">
                 <span className="font-semibold text-[#111110]">VayuDrishti v2.0</span>
                 <span className="text-[#a3a399]">&bull;</span>
-                <span className="text-emerald-600 font-medium">Built with AWS Cloud</span>
+                <span className="text-emerald-700 font-medium">Track 01: Air</span>
                 <ChevronRight className="w-3.5 h-3.5 text-[#73736c]" />
               </div>
 
-              <h1 className="text-5xl sm:text-7xl font-bold tracking-tight text-[#111110] leading-[1.05]">
-                The better way to breathe in India.
+              <h1 className="text-5xl sm:text-7xl font-bold tracking-tight text-[#111110] leading-[1.04]">
+                The better way to <br />
+                <span className="font-serif italic font-normal text-[#40403c]">breathe in India.</span>
               </h1>
 
               <p className="text-lg sm:text-xl text-[#575752] font-normal leading-relaxed max-w-xl">
@@ -243,19 +258,9 @@ export const handler = async (event) => {
                 </Link>
               </div>
 
-              <div className="pt-4 flex items-center gap-3 text-xs text-[#73736c]">
-                <div className="flex -space-x-1.5">
-                  <div className="w-6 h-6 rounded-full bg-emerald-100 border border-white flex items-center justify-center text-[10px] font-bold text-emerald-800">
-                    D
-                  </div>
-                  <div className="w-6 h-6 rounded-full bg-blue-100 border border-white flex items-center justify-center text-[10px] font-bold text-blue-800">
-                    M
-                  </div>
-                  <div className="w-6 h-6 rounded-full bg-purple-100 border border-white flex items-center justify-center text-[10px] font-bold text-purple-800">
-                    B
-                  </div>
-                </div>
-                <span>Active telemetry across Delhi NCR, Mumbai, Bengaluru & 20+ metro regions.</span>
+              <div className="pt-2 flex items-center gap-3 text-xs text-[#73736c]">
+                <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                <span>Zero guesswork. Automated school closures, cumulative dose scoring & clinical AI guidance.</span>
               </div>
             </div>
 
@@ -359,7 +364,6 @@ export const handler = async (event) => {
                       <span className="text-[11px] font-mono text-[#73736c]">UTC+5:30</span>
                     </div>
 
-                    {/* Weekday headers */}
                     <div className="grid grid-cols-7 gap-1 text-center text-[10px] font-medium text-[#a3a399] mb-1">
                       <span>S</span>
                       <span>M</span>
@@ -370,7 +374,6 @@ export const handler = async (event) => {
                       <span>S</span>
                     </div>
 
-                    {/* Calendar days with clickable date state */}
                     <div className="grid grid-cols-7 gap-1 text-center text-xs">
                       {[
                         null, null, null, 1, 2, 3, 4,
@@ -420,35 +423,34 @@ export const handler = async (event) => {
       </section>
 
       {/* =========================================================================
-          SECTION: LOGO PROOF CLOUD (Cal.com / Wispr Flow Proof Bar)
+          SECTION: MOVING TECH STACK MARQUEE RIBBON (Matches Beacon in Image 3!)
+          Infinite horizontal moving animation of the AWS build stack
           ========================================================================= */}
-      <section className="py-10 border-b border-[#e5e5e0] bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="text-center text-xs font-mono uppercase tracking-wider text-[#73736c] mb-6">
-            CONNECTED WITH NATIONAL TELEMETRY & CLOUD INFRASTRUCTURE
+      <section className="bg-[#111110] text-white py-3.5 border-b border-[#2b2b27] overflow-hidden">
+        <div className="flex items-center">
+          {/* Fixed "BUILT ON" Badge on Left */}
+          <div className="px-5 py-1 bg-[#111110] z-10 shrink-0 border-r border-[#2b2b27] flex items-center gap-2">
+            <span className="text-[10px] font-mono tracking-widest uppercase text-emerald-400 font-bold">
+              BUILT ON
+            </span>
           </div>
-          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16 opacity-70 grayscale hover:grayscale-0 transition-all">
-            <div className="flex items-center gap-2 text-xs font-semibold text-[#111110]">
-              <Building className="w-4 h-4 text-[#73736c]" /> CPCB National Network
-            </div>
-            <div className="flex items-center gap-2 text-xs font-semibold text-[#111110]">
-              <Cloud className="w-4 h-4 text-orange-600" /> Amazon Web Services
-            </div>
-            <div className="flex items-center gap-2 text-xs font-semibold text-[#111110]">
-              <Activity className="w-4 h-4 text-emerald-600" /> SAFAR India Telemetry
-            </div>
-            <div className="flex items-center gap-2 text-xs font-semibold text-[#111110]">
-              <Cpu className="w-4 h-4 text-purple-600" /> Amazon Bedrock AI
-            </div>
-            <div className="flex items-center gap-2 text-xs font-semibold text-[#111110]">
-              <Award className="w-4 h-4 text-blue-600" /> OpenAQ Global Standards
+
+          {/* Infinite Scrolling Track */}
+          <div className="overflow-hidden whitespace-nowrap flex flex-1">
+            <div className="animate-marquee flex items-center gap-10 font-mono text-xs text-[#d1d1c7] tracking-wider uppercase font-medium">
+              {[...stackItems, ...stackItems].map((item, idx) => (
+                <span key={idx} className="flex items-center gap-4 hover:text-white transition-colors cursor-default">
+                  <span>{item}</span>
+                  <span className="text-[#575752] font-normal">&bull;</span>
+                </span>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
       {/* =========================================================================
-          SECTION: THE 3-STEP LIVING CARDS (Exact match to Cal.com Image 1)
+          SECTION: THE 3-STEP LIVING CARDS (Exact match to Cal.com Image 1 / Image 2)
           01 Connect your sensor | 02 Set your availability | 03 Choose your defense
           ========================================================================= */}
       <section className="py-24 border-b border-[#e5e5e0] bg-[#fbfbf9]">
@@ -644,7 +646,6 @@ export const handler = async (event) => {
 
       {/* =========================================================================
           SECTION: INTERACTIVE DIURNAL HOUR SCRUBBER (Live Time Scrub Tool)
-          Drag the hour to see how Delhi / Indian winter air changes in real time
           ========================================================================= */}
       <section className="py-24 border-b border-[#e5e5e0] bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -727,7 +728,7 @@ export const handler = async (event) => {
 
       {/* =========================================================================
           SECTION: WISPR FLOW INSPIRED EDITORIAL (Circular rotating SVG text path)
-          "Don't choke, just breathe."
+          "Don't guess. Know what you inhale."
           ========================================================================= */}
       <section className="py-24 border-b border-[#e5e5e0] bg-[#fbfbf9] overflow-hidden">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -735,7 +736,6 @@ export const handler = async (event) => {
             {/* Left Column: Wispr Flow style rotating text SVG badge */}
             <div className="lg:col-span-5 flex flex-col items-center justify-center text-center">
               <div className="relative w-64 h-64 flex items-center justify-center">
-                {/* Rotating Circular SVG Text */}
                 <svg viewBox="0 0 200 200" className="w-full h-full animate-text-spin">
                   <path
                     id="circlePath"
@@ -749,7 +749,6 @@ export const handler = async (event) => {
                   </text>
                 </svg>
 
-                {/* Central Particle Badge */}
                 <div className="absolute w-20 h-20 rounded-full bg-white border border-[#e2e2dc] flex items-center justify-center shadow-inner">
                   <Wind className="w-8 h-8 text-[#111110] animate-pulse" />
                 </div>
@@ -767,7 +766,7 @@ export const handler = async (event) => {
               <h2 className="text-4xl sm:text-6xl font-bold tracking-tight text-[#111110]">
                 Don't guess.
                 <br />
-                <span className="italic font-normal font-serif text-[#575752]">Know what you inhale.</span>
+                <span className="font-serif italic font-normal text-[#575752]">Know what you inhale.</span>
               </h2>
 
               <p className="text-base sm:text-lg text-[#575752] leading-relaxed max-w-xl">
@@ -946,82 +945,9 @@ export const handler = async (event) => {
       </section>
 
       {/* =========================================================================
-          SECTION: INTERACTIVE CAMPUS EXPOSURE IMPACT CALCULATOR
-          Sliders to calculate school protection volume
+          SECTION: INTERACTIVE DEVELOPER & AWS ARCHITECTURE CODE EXPLORER
           ========================================================================= */}
       <section className="py-24 border-b border-[#e5e5e0] bg-[#fbfbf9]">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            <div className="lg:col-span-5 space-y-4">
-              <span className="text-xs font-mono font-semibold uppercase tracking-wider text-[#73736c]">
-                CAMPUS IMPACT CALCULATOR
-              </span>
-              <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#111110]">
-                Measure the biological savings.
-              </h2>
-              <p className="text-[#575752] text-sm leading-relaxed">
-                See how automated schedule shifting prevents toxic particulate deposition in developing young lungs across an academic semester.
-              </p>
-            </div>
-
-            <div className="lg:col-span-7 bg-white border border-[#e5e5e0] rounded-2xl p-6 sm:p-8 shadow-xs space-y-6">
-              {/* Slider 1: Student Count */}
-              <div>
-                <div className="flex items-center justify-between text-xs font-medium mb-2">
-                  <span className="text-[#575752]">Total Enrolled Students</span>
-                  <span className="font-mono font-bold text-[#111110] text-sm">{studentCount.toLocaleString()}</span>
-                </div>
-                <input
-                  type="range"
-                  min="200"
-                  max="5000"
-                  step="100"
-                  value={studentCount}
-                  onChange={(e) => setStudentCount(Number(e.target.value))}
-                  className="w-full accent-[#111110] cursor-pointer"
-                />
-              </div>
-
-              {/* Slider 2: Average Outdoor Hours */}
-              <div>
-                <div className="flex items-center justify-between text-xs font-medium mb-2">
-                  <span className="text-[#575752]">Average Outdoor Assembly & Sports Hours / Week</span>
-                  <span className="font-mono font-bold text-[#111110] text-sm">{hoursOutdoors} hrs/week</span>
-                </div>
-                <input
-                  type="range"
-                  min="1"
-                  max="12"
-                  step="1"
-                  value={hoursOutdoors}
-                  onChange={(e) => setHoursOutdoors(Number(e.target.value))}
-                  className="w-full accent-[#111110] cursor-pointer"
-                />
-              </div>
-
-              {/* Calculated Results Box */}
-              <div className="p-5 bg-[#fbfbf9] border border-[#e5e5e0] rounded-xl grid grid-cols-2 gap-4 text-center">
-                <div>
-                  <span className="text-[11px] font-mono text-[#73736c] uppercase block">Particulate Dose Prevented</span>
-                  <span className="text-3xl font-mono font-bold text-emerald-700">{particulatePreventedKg} kg</span>
-                  <span className="text-[11px] text-[#73736c] block mt-0.5">PM2.5 blocked per semester</span>
-                </div>
-
-                <div className="border-l border-[#e5e5e0]">
-                  <span className="text-[11px] font-mono text-[#73736c] uppercase block">Est. Absenteeism Cut</span>
-                  <span className="text-3xl font-mono font-bold text-[#111110]">~38%</span>
-                  <span className="text-[11px] text-[#73736c] block mt-0.5">Respiratory symptom drop</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================================
-          SECTION: INTERACTIVE DEVELOPER & AWS ARCHITECTURE CODE EXPLORER (Cal.com API style)
-          ========================================================================= */}
-      <section className="py-24 border-b border-[#e5e5e0] bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="max-w-2xl mb-10">
             <span className="text-xs font-mono font-semibold uppercase tracking-wider text-[#73736c]">
@@ -1037,7 +963,6 @@ export const handler = async (event) => {
 
           {/* Interactive Code Window */}
           <div className="bg-[#111110] text-[#f4f4f2] rounded-2xl border border-[#2b2b27] shadow-xl overflow-hidden">
-            {/* Header with tabs and copy button */}
             <div className="px-4 py-3 bg-[#181817] border-b border-[#2b2b27] flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="flex items-center gap-1.5 mr-4">
@@ -1070,7 +995,6 @@ export const handler = async (event) => {
               </button>
             </div>
 
-            {/* Code Body */}
             <pre className="p-6 font-mono text-xs overflow-x-auto leading-relaxed text-[#d1d1c7]">
               <code>{codeSnippets[activeCodeTab]}</code>
             </pre>
@@ -1079,77 +1003,13 @@ export const handler = async (event) => {
       </section>
 
       {/* =========================================================================
-          SECTION: WALL OF REVIEWS / TESTIMONIALS (Editorial Clean)
-          ========================================================================= */}
-      <section className="py-24 border-b border-[#e5e5e0] bg-[#fbfbf9]">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="text-center max-w-xl mx-auto mb-14">
-            <span className="text-xs font-mono font-semibold uppercase tracking-wider text-[#73736c]">
-              PROVEN ON GROUND
-            </span>
-            <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#111110] mt-2 mb-3">
-              Trusted during winter haze.
-            </h2>
-            <p className="text-[#575752] text-sm">
-              From clinical pulmonology wards to campus grounds across northern India.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              {
-                quote:
-                  "Raw AQI numbers are useless to an asthmatic patient. VayuDrishti's personal dose computation gives them exact safe windows to step out without precipitating an emergency room visit.",
-                author: "Dr. Radhika Sharma",
-                role: "Pulmonology Consultant, AIIMS New Delhi",
-                tag: "Clinical Care",
-              },
-              {
-                quote:
-                  "Having an automated 05:45 AM directive on morning assembly safety saves our school administration hours of uncertainty every winter morning. It protects 2,400 students every single day.",
-                author: "Vikram Mehta",
-                role: "Principal, St. Xavier's Senior Secondary School",
-                tag: "Campus Safety",
-              },
-              {
-                quote:
-                  "Instead of keeping my kids locked indoors all weekend out of fear, I check the 24-hour diurnal curve to find the cleanest afternoon hours for them to play safely in the park.",
-                author: "Priya Sundaram",
-                role: "Mother of two, Indirapuram, Ghaziabad",
-                tag: "Parent Defense",
-              },
-            ].map((card, i) => (
-              <div key={i} className="cal-card p-7 flex flex-col justify-between">
-                <div>
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-[#73736c] bg-[#f4f4f2] px-2 py-0.5 rounded-full inline-block mb-4">
-                    {card.tag}
-                  </span>
-                  <p className="text-sm text-[#111110] leading-relaxed mb-6">"{card.quote}"</p>
-                </div>
-
-                <div className="pt-4 border-t border-[#f0f0eb] flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-[#111110] text-white flex items-center justify-center font-bold text-xs">
-                    {card.author[0]}
-                  </div>
-                  <div>
-                    <div className="text-xs font-semibold text-[#111110]">{card.author}</div>
-                    <div className="text-[11px] text-[#73736c]">{card.role}</div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================================
-          SECTION: INTERACTIVE FAQ ACCORDION (Cal.com / Wispr Flow style)
+          SECTION: INTERACTIVE FAQ ACCORDION
           ========================================================================= */}
       <section className="py-24 border-b border-[#e5e5e0] bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
             <span className="text-xs font-mono font-semibold uppercase tracking-wider text-[#73736c]">
-              QUESTIONS & DETAILS
+              QUESTIONS & ARCHITECTURE
             </span>
             <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#111110] mt-2 mb-3">
               Frequently asked questions.
@@ -1194,7 +1054,7 @@ export const handler = async (event) => {
       </section>
 
       {/* =========================================================================
-          FINAL CALL TO ACTION (Cal.com Style with Embedded Station Search)
+          FINAL CALL TO ACTION
           ========================================================================= */}
       <section className="py-24 bg-[#111110] text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center space-y-6">

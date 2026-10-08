@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Space_Grotesk } from "next/font/google";
+import { Inter, Space_Grotesk, Newsreader } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -14,10 +14,17 @@ const spaceGrotesk = Space_Grotesk({
   display: "swap",
 });
 
+const newsreader = Newsreader({
+  subsets: ["latin"],
+  variable: "--font-newsreader",
+  style: ["normal", "italic"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
-  title: "VayuDrishti — See What You're Breathing | AI-Powered Air Quality Intelligence",
+  title: "VayuDrishti — AI-Powered Hyperlocal Air Quality Intelligence",
   description:
-    "India's first personal air quality companion. Track your pollution exposure, get AI-powered health advice, and protect your family with real-time AQI intelligence from 1000+ monitoring stations.",
+    "India's first personal respiratory defense platform. Track cumulative toxic dose, get AWS Bedrock clinical guidance, and protect schools with real-time CPCB sensor intelligence.",
   keywords: [
     "air quality",
     "AQI",
@@ -27,11 +34,11 @@ export const metadata: Metadata = {
     "breath score",
     "Delhi air",
     "PM2.5",
-    "air pollution tracker",
+    "AWS Bedrock",
   ],
   openGraph: {
-    title: "VayuDrishti — See What You're Breathing",
-    description: "India's first personal air quality companion. Track pollution exposure. Protect your family.",
+    title: "VayuDrishti — Hyperlocal Air Quality Intelligence",
+    description: "Real-time personal respiratory defense platform powered by AWS Cloud.",
     type: "website",
   },
 };
@@ -42,7 +49,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
+    <html
+      lang="en"
+      className={`${inter.variable} ${spaceGrotesk.variable} ${newsreader.variable}`}
+    >
       <head>
         <link
           rel="stylesheet"
