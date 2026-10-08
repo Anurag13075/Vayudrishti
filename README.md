@@ -120,6 +120,19 @@ VayuDrishti is designed to scale across India using AWS serverless and AI infras
 
 ---
 
+## 🚀 1-Click Deployment on AWS Amplify
+
+VayuDrishti includes a production-ready [`amplify.yml`](file:///c:/Users/DELL%205400/Desktop/hackthon/amplify.yml) build configuration.
+
+1. Push this repository to GitHub or GitLab.
+2. In the **AWS Amplify Console** (AWS Free Tier eligible):
+   - Choose **Host web app** -> Connect your Git repository.
+   - Amplify will automatically detect the Next.js 14 App Router and load [`amplify.yml`](file:///c:/Users/DELL%205400/Desktop/hackthon/amplify.yml).
+   - Click **Save and Deploy**.
+3. Your live public URL is provisioned with global CDN acceleration and SSL in under 3 minutes!
+
+---
+
 ## ⚡ Getting Started Locally
 
 ```bash

@@ -1,0 +1,25 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        # Use Node.js 18 or 20 for Next.js 14 compatibility
+        - nvm use 20 || nvm use 18 || true
+        - node -v
+        # Fast resilient install
+        - npm ci --cache .npm --prefer-offline || npm install
+    build:
+      commands:
+        # Export NEXT_PUBLIC environment variables to build environment
+        - env | grep -e NEXT_PUBLIC_ >> .env.production || true
+        # Build Next.js application
+        - npm run build
+  artifacts:
+    baseDirectory: .next
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - .next/cache/**/*
+      - .npm/**/*
+      - node_modules/**/*
