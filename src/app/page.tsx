@@ -101,53 +101,85 @@ export default function Home() {
   }, [sampleText.length]);
 
   // =========================================================================
-  // ARCHITECTURE CODE VIEWER TAB (Cal.com Developer Tab)
+  // INTERACTIVE WORKFLOW AUTOMATION ENGINE STATE (Cal.com Workflows Style)
   // =========================================================================
-  const [activeCodeTab, setActiveCodeTab] = useState<"bedrock" | "lambda" | "dynamo">("bedrock");
-  const [copiedCode, setCopiedCode] = useState(false);
+  const [workflowTab, setWorkflowTab] = useState<"school" | "patient" | "hvac">("school");
+  const [workflowThreshold, setWorkflowThreshold] = useState<number>(140);
+  const [isSimulatingDispatch, setIsSimulatingDispatch] = useState<boolean>(false);
+  const [dispatchConfirmed, setDispatchConfirmed] = useState<boolean>(false);
 
-  const handleCopy = (code: string) => {
-    navigator.clipboard.writeText(code);
-    setCopiedCode(true);
-    setTimeout(() => setCopiedCode(false), 2000);
+  const handleSimulateDispatch = () => {
+    setIsSimulatingDispatch(true);
+    setTimeout(() => {
+      setIsSimulatingDispatch(false);
+      setDispatchConfirmed(true);
+      setTimeout(() => setDispatchConfirmed(false), 3500);
+    }, 600);
   };
 
-  const codeSnippets = {
-    bedrock: `// AWS Bedrock Claude 3.5 Sonnet Clinical Invocation
-const payload = {
-  modelId: "anthropic.claude-3-5-sonnet-20240620-v1:0",
-  contentType: "application/json",
-  body: JSON.stringify({
-    anthropic_version: "bedrock-2023-05-31",
-    max_tokens: 300,
-    messages: [{
-      role: "user",
-      content: "Demographic: Child (Asthma). Sensor: Lodhi Road PM2.5=164ug/m3. Advise recess."
-    }]
-  })
-};
-const response = await bedrockRuntime.invokeModel(payload);`,
-    lambda: `// AWS Lambda Stream Ingestion Handler (/api/aqi)
-export const handler = async (event) => {
-  const { city } = event.queryStringParameters;
-  const rawTelemetry = await fetchStationCPCB(city);
-  const doseMetrics = calculateBreathDose(rawTelemetry.pm25);
-  
-  await dynamoClient.putItem({
-    TableName: "VayuDrishti_Telemetry",
-    Item: { city, timestamp: Date.now(), doseMetrics }
-  });
-  return { statusCode: 200, body: JSON.stringify(doseMetrics) };
-};`,
-    dynamo: `// Amazon DynamoDB Geospatial Schema
-{
-  "stationId": "DEL_LODHI_04",
-  "partitionKey": "2026-10-08",
-  "pm25_hourly": [182, 194, 215, 178, 142, 92, 110],
-  "schoolDirectivesIssued": 42,
-  "lastIngestEpoch": 1791470296
-}`,
+  const workflowPresets = {
+    school: {
+      title: "School Morning Assembly & Recess Protocol",
+      trigger: "Cron: Every Morning at 05:45 AM IST",
+      condition: "Lodhi Road CPCB Inversion Sensor AQI > Threshold",
+      primaryAction: "Dispatch emergency SMS to 2,400 parents via Amazon SNS",
+      secondaryAction: "Lock outdoor sports grounds; route assembly to auditorium",
+      tertiaryAction: "Spin up classroom HEPA filtration bank (99.97% CADR)",
+      institutions: "48 Campuses Active",
+      lastFired: "Today at 05:45 AM (Threshold Breached at 168 AQI)",
+    },
+    patient: {
+      title: "Chronic Asthmatic & Elderly Personal Sentinel",
+      trigger: "EventBridge: Hyperlocal PM2.5 Micro-Spike (>120 µg/m³)",
+      condition: "Patient Profile: Severe Bronchial Hyperreactivity",
+      primaryAction: "Push high-priority alert: Inhale prophylactic bronchodilator",
+      secondaryAction: "Suggest rescheduling commute to 02:00 PM clean window",
+      tertiaryAction: "Log particulate dose into AWS DynamoDB Health Ledger",
+      institutions: "1,420 Patients Guarded",
+      lastFired: "Yesterday at 08:15 AM (Pre-emptive alert delivered)",
+    },
+    hvac: {
+      title: "Enterprise Commercial Building Damper Lockout",
+      trigger: "Continuous 60s Telemetry Ingest from 1,024 Stations",
+      condition: "Boundary Layer Mixing Depth < 250m & Ambient PM2.5 > Threshold",
+      primaryAction: "Send BACnet / Modbus command to close fresh-air intake dampers",
+      secondaryAction: "Recirculate 100% conditioned air through MERV-13 pre-filters",
+      tertiaryAction: "Generate hourly compliance report in Amazon S3 bucket",
+      institutions: "16 Commercial Towers",
+      lastFired: "06:00 AM - 08:30 AM (Inversion window auto-sealed)",
+    },
   };
+
+  // =========================================================================
+  // INTERACTIVE BIOMETRIC EXPOSURE ENGINE (Wispr Flow Bio-Mechanics Style)
+  // =========================================================================
+  const [bioActivity, setBioActivity] = useState<"rest" | "walk" | "run" | "cycle">("walk");
+  const [bioMask, setBioMask] = useState<"none" | "cloth" | "surgical" | "n95">("n95");
+  const [bioMinutes, setBioMinutes] = useState<number>(30);
+
+  // Ventilation rates in liters per minute (clinical pulmonology standards)
+  const ventilationRates = {
+    rest: 6,
+    walk: 18,
+    run: 42,
+    cycle: 55,
+  };
+
+  // Filtration efficiency percentages
+  const maskEfficiencies = {
+    none: 0,
+    cloth: 0.20,
+    surgical: 0.50,
+    n95: 0.95,
+  };
+
+  const totalVolumeLiters = ventilationRates[bioActivity] * bioMinutes;
+  const totalVolumeM3 = totalVolumeLiters / 1000;
+  const unshieldedDoseUg = totalVolumeM3 * 168;
+  const filterEff = maskEfficiencies[bioMask];
+  const depositedDoseUg = unshieldedDoseUg * (1 - filterEff);
+  const dosePreventedUg = unshieldedDoseUg - depositedDoseUg;
+  const dosePercentSaved = Math.round(filterEff * 100);
 
   // =========================================================================
   // FAQ ACCORDION STATE
@@ -215,6 +247,34 @@ export const handler = async (event) => {
       </div>
 
       <Navbar />
+
+      {/* =========================================================================
+          MOVING TECH STACK MARQUEE RIBBON (Top of Landing Page - Beacon Style)
+          Infinite horizontal moving animation of the AWS build stack
+          ========================================================================= */}
+      <div className="bg-[#111110] text-white py-2.5 border-b border-[#2b2b27] overflow-hidden">
+        <div className="flex items-center">
+          {/* Fixed "BUILT ON" Badge on Left */}
+          <div className="px-4 py-0.5 bg-[#111110] z-10 shrink-0 border-r border-[#2b2b27] flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-[10px] font-mono tracking-widest uppercase text-emerald-400 font-bold">
+              BUILT ON AWS
+            </span>
+          </div>
+
+          {/* Infinite Scrolling Track */}
+          <div className="overflow-hidden whitespace-nowrap flex flex-1">
+            <div className="animate-marquee flex items-center gap-10 font-mono text-xs text-[#d1d1c7] tracking-wider uppercase font-medium">
+              {[...stackItems, ...stackItems, ...stackItems].map((item, idx) => (
+                <span key={idx} className="flex items-center gap-4 hover:text-white transition-colors cursor-default">
+                  <span>{item}</span>
+                  <span className="text-[#575752] font-normal">&bull;</span>
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* =========================================================================
           HERO SECTION: Pure Cal.com / Wispr Flow Layout
@@ -417,33 +477,6 @@ export const handler = async (event) => {
                   </Link>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================================
-          SECTION: MOVING TECH STACK MARQUEE RIBBON (Matches Beacon in Image 3!)
-          Infinite horizontal moving animation of the AWS build stack
-          ========================================================================= */}
-      <section className="bg-[#111110] text-white py-3.5 border-b border-[#2b2b27] overflow-hidden">
-        <div className="flex items-center">
-          {/* Fixed "BUILT ON" Badge on Left */}
-          <div className="px-5 py-1 bg-[#111110] z-10 shrink-0 border-r border-[#2b2b27] flex items-center gap-2">
-            <span className="text-[10px] font-mono tracking-widest uppercase text-emerald-400 font-bold">
-              BUILT ON
-            </span>
-          </div>
-
-          {/* Infinite Scrolling Track */}
-          <div className="overflow-hidden whitespace-nowrap flex flex-1">
-            <div className="animate-marquee flex items-center gap-10 font-mono text-xs text-[#d1d1c7] tracking-wider uppercase font-medium">
-              {[...stackItems, ...stackItems].map((item, idx) => (
-                <span key={idx} className="flex items-center gap-4 hover:text-white transition-colors cursor-default">
-                  <span>{item}</span>
-                  <span className="text-[#575752] font-normal">&bull;</span>
-                </span>
-              ))}
             </div>
           </div>
         </div>
@@ -791,213 +824,469 @@ export const handler = async (event) => {
       </section>
 
       {/* =========================================================================
-          SECTION: FEATURE GRID (Cal.com Image 3 & 4 4-Card Layout)
-          Notice & buffers | Custom booking link | Overlay calendar | Automated reminders
+          SECTION: CAL.COM WORKFLOWS ENGINE (Atmospheric Automation Platform)
+          Replaces generic 4-box feature grid with Cal.com Workflows builder
           ========================================================================= */}
-      <section className="py-24 border-b border-[#e5e5e0] bg-white">
+      <section className="py-24 border-b border-[#e5e5e0] bg-[#fbfbf9]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="max-w-xl mb-14">
+          <div className="max-w-2xl mb-14">
             <span className="text-xs font-mono font-semibold uppercase tracking-wider text-[#73736c]">
-              PRECISION DEFENSE
+              AUTOMATED WORKFLOWS
             </span>
             <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#111110] mt-2 mb-3">
-              Automated safeguards built in.
+              Automate every atmospheric protocol.
             </h2>
-            <p className="text-[#575752] text-sm leading-relaxed">
-              Engineered like enterprise software so you never miss a hazardous atmospheric shift.
+            <p className="text-[#575752] text-sm sm:text-base leading-relaxed">
+              Connect raw CPCB sensor streams directly to parent SMS alerts, campus air dampers, and clinical warnings without human delay.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* GRID CARD 1: AVOID MEETING OVERLOAD (Cal.com Notice & Buffers) */}
-            <div className="cal-card p-8 flex flex-col justify-between">
-              <div>
-                <h3 className="text-xl font-bold text-[#111110] mb-2">Avoid toxic exposure overload</h3>
-                <p className="text-sm text-[#575752] leading-relaxed mb-6">
-                  Only exercise when atmospheric dispersion is high. Set daily limits and add buffers around peak rush hours.
-                </p>
+          {/* Workflow Workbench Container */}
+          <div className="bg-white border border-[#e5e5e0] rounded-2xl shadow-sm overflow-hidden">
+            {/* Top Workflow Tab Selector (Cal.com pill style) */}
+            <div className="p-4 sm:p-5 bg-[#fafafa] border-b border-[#e5e5e0] flex flex-wrap items-center justify-between gap-3">
+              <div className="flex flex-wrap items-center gap-2">
+                {[
+                  { id: "school" as const, label: "School Morning Assembly", icon: "🏫" },
+                  { id: "patient" as const, label: "Asthmatic Sentinel", icon: "🫁" },
+                  { id: "hvac" as const, label: "Enterprise HVAC Damper", icon: "🏢" },
+                ].map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setWorkflowTab(tab.id)}
+                    className={`px-3.5 py-1.5 rounded-full text-xs font-semibold flex items-center gap-2 transition-all ${
+                      workflowTab === tab.id
+                        ? "bg-[#111110] text-white shadow-xs"
+                        : "bg-white text-[#575752] border border-[#e5e5e0] hover:bg-[#f0f0eb]"
+                    }`}
+                  >
+                    <span>{tab.icon}</span>
+                    <span>{tab.label}</span>
+                  </button>
+                ))}
               </div>
 
-              {/* LIVING WIDGET: Dropdown Settings Box */}
-              <div className="bg-[#fbfbf9] border border-[#e5e5e0] rounded-xl p-5 shadow-2xs space-y-3">
-                <div className="text-xs font-semibold text-[#111110]">Notice & Exposure Buffers</div>
-
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between text-xs p-2 bg-white border border-[#e5e5e0] rounded-lg">
-                    <span className="text-[#575752]">Minimum notice before outdoor transit</span>
-                    <span className="font-semibold text-[#111110] font-mono">3 hours</span>
-                  </div>
-
-                  <div className="flex items-center justify-between text-xs p-2 bg-white border border-[#e5e5e0] rounded-lg">
-                    <span className="text-[#575752]">HEPA Purifier pre-activation buffer</span>
-                    <span className="font-semibold text-[#111110] font-mono">20 mins</span>
-                  </div>
-
-                  <div className="flex items-center justify-between text-xs p-2 bg-white border border-[#e5e5e0] rounded-lg">
-                    <span className="text-[#575752]">Diurnal high-risk window lock</span>
-                    <span className="font-semibold text-rose-700 font-mono">06:00 - 08:30 AM</span>
-                  </div>
-                </div>
+              <div className="flex items-center gap-2 text-[11px] font-mono text-[#73736c]">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span>AWS Step Functions Engine Active</span>
               </div>
             </div>
 
-            {/* GRID CARD 2: STAND OUT WITH A CUSTOM LINK (Cal.com Booking Link Style) */}
-            <div className="cal-card p-8 flex flex-col justify-between">
-              <div>
-                <h3 className="text-xl font-bold text-[#111110] mb-2">Stand out with a verified clean-air link</h3>
-                <p className="text-sm text-[#575752] leading-relaxed mb-6">
-                  Customize your campus link so it's transparent and trusted by parents. Clean, verified, unforgeable.
-                </p>
-              </div>
-
-              {/* LIVING WIDGET: Custom link pill floating on card */}
-              <div className="relative pt-6">
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10 px-4 py-1.5 rounded-full bg-[#111110] text-white text-xs font-mono font-medium shadow-md flex items-center gap-2">
-                  <span>vayudrishti.in/dps-rk-puram</span>
-                  <ExternalLink className="w-3 h-3 text-[#a3a399]" />
+            {/* Workflow Canvas */}
+            <div className="p-6 sm:p-8 space-y-8">
+              {/* Pipeline Nodes Flow */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                {/* NODE 1: TRIGGER */}
+                <div className="lg:col-span-4 p-5 rounded-xl bg-[#fbfbf9] border border-[#e5e5e0] space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#73736c] bg-white px-2 py-0.5 rounded border border-[#e5e5e0]">
+                      STEP 01 &bull; TRIGGER
+                    </span>
+                    <Clock className="w-3.5 h-3.5 text-[#73736c]" />
+                  </div>
+                  <div>
+                    <div className="text-sm font-bold text-[#111110]">
+                      {workflowPresets[workflowTab].trigger}
+                    </div>
+                    <div className="text-xs text-[#575752] mt-1">
+                      Continuous telemetry stream via AWS EventBridge
+                    </div>
+                  </div>
+                  <div className="pt-2 border-t border-[#e5e5e0] flex items-center justify-between text-[11px] font-mono text-[#73736c]">
+                    <span>Current Sensor:</span>
+                    <span className="font-bold text-[#111110]">Lodhi Rd (168 AQI)</span>
+                  </div>
                 </div>
 
-                <div className="bg-[#fbfbf9] border border-[#e5e5e0] rounded-xl p-5 shadow-2xs space-y-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center font-bold text-emerald-800 text-xs">
-                      DPS
+                {/* ARROW 1 */}
+                <div className="hidden lg:flex lg:col-span-1 items-center justify-center text-[#a3a399]">
+                  <ArrowRight className="w-5 h-5" />
+                </div>
+
+                {/* NODE 2: LOGIC THRESHOLD GATE */}
+                <div className="lg:col-span-7 p-5 rounded-xl bg-[#fbfbf9] border border-[#e5e5e0] space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#73736c] bg-white px-2 py-0.5 rounded border border-[#e5e5e0]">
+                      STEP 02 &bull; LOGIC RULE
+                    </span>
+                    <Sliders className="w-3.5 h-3.5 text-[#73736c]" />
+                  </div>
+
+                  <div>
+                    <div className="flex items-center justify-between text-xs mb-2">
+                      <span className="font-semibold text-[#111110]">AQI Dispatch Threshold</span>
+                      <span className="font-mono font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">
+                        &gt; {workflowThreshold} AQI
+                      </span>
                     </div>
-                    <div>
-                      <div className="text-xs font-semibold text-[#111110]">DPS R.K. Puram Sentinel</div>
-                      <div className="text-[11px] text-emerald-700">Verified Clean Campus Protocol</div>
+
+                    <input
+                      type="range"
+                      min={100}
+                      max={220}
+                      step={5}
+                      value={workflowThreshold}
+                      onChange={(e) => setWorkflowThreshold(Number(e.target.value))}
+                      className="w-full accent-[#111110] cursor-pointer"
+                    />
+
+                    <div className="flex items-center justify-between text-[10px] font-mono text-[#73736c] mt-1">
+                      <span>100 AQI (Sensitive)</span>
+                      <span>160 AQI (Moderate)</span>
+                      <span>220 AQI (Hazardous)</span>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 text-xs pt-1 border-t border-[#e5e5e0]">
-                    <span className="text-[#73736c]">Indoor Classroom Air:</span>
-                    <span className="font-mono font-bold text-emerald-700">32 AQI (HEPA Active)</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* GRID CARD 3: STREAMLINE YOUR BOOKERS' EXPERIENCE (Cal.com Overlay) */}
-            <div className="cal-card p-8 flex flex-col justify-between">
-              <div>
-                <h3 className="text-xl font-bold text-[#111110] mb-2">Streamline campus & school directives</h3>
-                <p className="text-sm text-[#575752] leading-relaxed mb-6">
-                  Overlay live particulate curves, receive automated morning alerts, and reschedule outdoor sports with ease.
-                </p>
-              </div>
-
-              {/* LIVING WIDGET: Day Schedule Overlay */}
-              <div className="bg-[#fbfbf9] border border-[#e5e5e0] rounded-xl p-4 shadow-2xs">
-                <div className="flex items-center justify-between text-xs pb-2 border-b border-[#e5e5e0] mb-2">
-                  <span className="font-semibold text-[#111110]">Automated Morning Directive</span>
-                  <span className="text-[11px] font-mono text-emerald-600">Generated 05:45 AM</span>
-                </div>
-
-                <div className="grid grid-cols-4 gap-1.5 text-center text-xs">
-                  {[
-                    { slot: "Assembly", safe: false, label: "Indoor" },
-                    { slot: "Recess", safe: true, label: "Cleared" },
-                    { slot: "Athletics", safe: false, label: "Reschedule" },
-                    { slot: "Commute", safe: true, label: "N95 Bus" },
-                  ].map((s, idx) => (
-                    <div
-                      key={idx}
-                      className={`p-2 rounded-lg border ${
-                        s.safe
-                          ? "bg-emerald-50/70 border-emerald-200 text-emerald-800"
-                          : "bg-amber-50/70 border-amber-200 text-amber-800"
+                  <div className="flex items-center justify-between pt-2 border-t border-[#e5e5e0]">
+                    <span className="text-xs text-[#575752]">Rule Evaluation:</span>
+                    <span
+                      className={`text-xs font-semibold px-2.5 py-0.5 rounded-full border ${
+                        168 >= workflowThreshold
+                          ? "bg-rose-50 text-rose-800 border-rose-200"
+                          : "bg-emerald-50 text-emerald-800 border-emerald-200"
                       }`}
                     >
-                      <div className="text-[10px] text-[#73736c]">{s.slot}</div>
-                      <div className="font-semibold text-[11px] mt-0.5">{s.label}</div>
+                      {168 >= workflowThreshold
+                        ? "🚨 THRESHOLD BREACHED (ACTION ACTIVE)"
+                        : "✅ WITHIN TOLERANCE (STANDBY)"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* NODE 3: DISPATCHED ACTIONS GRID */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#73736c]">
+                    STEP 03 &bull; DISPATCHED ACTIONS (PARALLEL EXECUTION)
+                  </span>
+
+                  <button
+                    onClick={handleSimulateDispatch}
+                    disabled={isSimulatingDispatch}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#111110] hover:bg-[#2b2b27] text-white text-xs font-medium transition-all shadow-xs"
+                  >
+                    <Zap className="w-3.5 h-3.5 text-amber-400" />
+                    <span>{isSimulatingDispatch ? "Simulating..." : "Test Dispatch Rule"}</span>
+                  </button>
+                </div>
+
+                {/* Dispatch Toast Confirmation */}
+                <AnimatePresence>
+                  {dispatchConfirmed && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-900 flex items-center justify-between"
+                    >
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                        <span>
+                          <strong>AWS Step Functions Executed:</strong> Dispatched 2,400 emergency SMS via Amazon SNS in 24ms (Region: ap-south-1).
+                        </span>
+                      </div>
+                      <span className="font-mono text-[10px] text-emerald-700">HTTP 200 OK</span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {/* Action 1 */}
+                  <div className="p-4 rounded-xl bg-white border border-[#e5e5e0] shadow-2xs space-y-2">
+                    <div className="flex items-center gap-2 text-xs font-bold text-[#111110]">
+                      <Bell className="w-3.5 h-3.5 text-blue-600" />
+                      <span>{workflowPresets[workflowTab].primaryAction}</span>
                     </div>
-                  ))}
+                    <p className="text-xs text-[#575752] leading-relaxed">
+                      Instant multi-carrier SMS gateway broadcast with sub-second delivery confirmation.
+                    </p>
+                    <div className="pt-2 flex items-center justify-between text-[10px] font-mono text-[#73736c] border-t border-[#f0f0eb]">
+                      <span>Service:</span>
+                      <span className="font-semibold text-[#111110]">Amazon SNS</span>
+                    </div>
+                  </div>
+
+                  {/* Action 2 */}
+                  <div className="p-4 rounded-xl bg-white border border-[#e5e5e0] shadow-2xs space-y-2">
+                    <div className="flex items-center gap-2 text-xs font-bold text-[#111110]">
+                      <Shield className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>{workflowPresets[workflowTab].secondaryAction}</span>
+                    </div>
+                    <p className="text-xs text-[#575752] leading-relaxed">
+                      Automated campus calendar reallocation & physical gate access notification.
+                    </p>
+                    <div className="pt-2 flex items-center justify-between text-[10px] font-mono text-[#73736c] border-t border-[#f0f0eb]">
+                      <span>Latency:</span>
+                      <span className="font-semibold text-emerald-700">&lt; 15ms</span>
+                    </div>
+                  </div>
+
+                  {/* Action 3 */}
+                  <div className="p-4 rounded-xl bg-white border border-[#e5e5e0] shadow-2xs space-y-2">
+                    <div className="flex items-center gap-2 text-xs font-bold text-[#111110]">
+                      <Wind className="w-3.5 h-3.5 text-purple-600" />
+                      <span>{workflowPresets[workflowTab].tertiaryAction}</span>
+                    </div>
+                    <p className="text-xs text-[#575752] leading-relaxed">
+                      Building automation protocol triggering high-CADR HEPA pre-activation.
+                    </p>
+                    <div className="pt-2 flex items-center justify-between text-[10px] font-mono text-[#73736c] border-t border-[#f0f0eb]">
+                      <span>Audit Trail:</span>
+                      <span className="font-semibold text-[#111110]">Amazon S3</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
 
-            {/* GRID CARD 4: REDUCE NO-SHOWS (Cal.com Toast Alert Notification Style) */}
-            <div className="cal-card p-8 flex flex-col justify-between">
-              <div>
-                <h3 className="text-xl font-bold text-[#111110] mb-2">Reduce health emergencies with instant alerts</h3>
-                <p className="text-sm text-[#575752] leading-relaxed mb-6">
-                  Easily send SMS or push alerts about air spikes, and trigger immediate classroom ventilation protocols.
-                </p>
+            {/* Workbench Footer */}
+            <div className="px-6 py-4 bg-[#fbfbf9] border-t border-[#e5e5e0] flex flex-wrap items-center justify-between gap-3 text-xs">
+              <div className="flex items-center gap-2 text-[#575752]">
+                <Building className="w-3.5 h-3.5 text-[#73736c]" />
+                <span>{workflowPresets[workflowTab].institutions} &bull; {workflowPresets[workflowTab].lastFired}</span>
               </div>
 
-              {/* LIVING WIDGET: Sliding Toast Notification Widget */}
-              <div className="bg-[#fbfbf9] p-4 rounded-xl border border-[#e5e5e0] flex items-center justify-center">
-                <div className="bg-white border border-[#e5e5e0] rounded-xl p-3.5 shadow-md flex items-center gap-3 w-full animate-float-subtle">
-                  <div className="w-8 h-8 rounded-lg bg-rose-100 flex items-center justify-center text-rose-700 shrink-0">
-                    <Bell className="w-4 h-4 animate-bounce" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="text-xs font-semibold text-[#111110]">Spike Alert Dispatched</div>
-                    <div className="text-[11px] text-[#575752]">
-                      Anand Vihar surged to 284 AQI &bull; Directives sent to 42 schools
-                    </div>
-                  </div>
-                  <span className="text-[10px] font-mono text-[#a3a399]">Just now</span>
-                </div>
-              </div>
+              <Link
+                href="/schools"
+                className="font-semibold text-[#111110] hover:underline flex items-center gap-1"
+              >
+                <span>Deploy to Your Campus</span>
+                <ChevronRight className="w-3.5 h-3.5 text-[#73736c]" />
+              </Link>
             </div>
           </div>
         </div>
       </section>
 
       {/* =========================================================================
-          SECTION: INTERACTIVE DEVELOPER & AWS ARCHITECTURE CODE EXPLORER
+          SECTION: WISPR FLOW BIOMETRIC PULMONARY DEPOSITION ENGINE
+          High-craft bio-mechanic simulator replacing the black code terminal
           ========================================================================= */}
-      <section className="py-24 border-b border-[#e5e5e0] bg-[#fbfbf9]">
+      <section className="py-24 border-b border-[#e5e5e0] bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="max-w-2xl mb-10">
+          <div className="max-w-2xl mb-14">
             <span className="text-xs font-mono font-semibold uppercase tracking-wider text-[#73736c]">
-              DEVELOPER & JUDGE SPECIFICATION
+              BIOMETRIC PULMONARY DEPOSITION
             </span>
             <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#111110] mt-2 mb-3">
-              Production AWS primitives.
+              Your lungs aren't an air filter.
             </h2>
-            <p className="text-[#575752] text-sm leading-relaxed">
-              Explore the exact serverless code and payloads connecting AWS Bedrock, Lambda, and DynamoDB.
+            <p className="text-[#575752] text-sm sm:text-base leading-relaxed">
+              Raw AQI tells you what is in the ambient sky. VayuDrishti calculates the microscopic particulate mass deposited into your bronchial alveoli based on your physiological minute ventilation and mask barrier.
             </p>
           </div>
 
-          {/* Interactive Code Window */}
-          <div className="bg-[#111110] text-[#f4f4f2] rounded-2xl border border-[#2b2b27] shadow-xl overflow-hidden">
-            <div className="px-4 py-3 bg-[#181817] border-b border-[#2b2b27] flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1.5 mr-4">
-                  <div className="w-2.5 h-2.5 rounded-full bg-[#40403c]" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-[#40403c]" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-[#40403c]" />
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+            {/* LEFT COLUMN: INTERACTIVE BIOMETRIC CONTROLS */}
+            <div className="lg:col-span-5 bg-[#fbfbf9] border border-[#e5e5e0] rounded-2xl p-6 sm:p-7 space-y-6 flex flex-col justify-between">
+              <div className="space-y-6">
+                {/* Parameter 1: Activity Exertion */}
+                <div>
+                  <div className="flex items-center justify-between text-xs mb-2.5">
+                    <span className="font-semibold text-[#111110]">Physical Exertion Level</span>
+                    <span className="font-mono text-[#73736c]">
+                      {ventilationRates[bioActivity]} L/min ventilation
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    {[
+                      { id: "rest" as const, label: "Resting", rate: "6 L/min" },
+                      { id: "walk" as const, label: "Brisk Walk", rate: "18 L/min" },
+                      { id: "run" as const, label: "Cardio Run", rate: "42 L/min" },
+                      { id: "cycle" as const, label: "Fast Cycling", rate: "55 L/min" },
+                    ].map((item) => (
+                      <button
+                        key={item.id}
+                        onClick={() => setBioActivity(item.id)}
+                        className={`p-2.5 rounded-xl text-left border transition-all ${
+                          bioActivity === item.id
+                            ? "bg-[#111110] text-white border-[#111110] shadow-xs"
+                            : "bg-white text-[#575752] border-[#e2e2dc] hover:bg-[#f4f4f2]"
+                        }`}
+                      >
+                        <div className="text-xs font-bold">{item.label}</div>
+                        <div className={`text-[10px] font-mono ${bioActivity === item.id ? "text-[#a3a399]" : "text-[#73736c]"}`}>
+                          {item.rate}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
                 </div>
 
-                {(["bedrock", "lambda", "dynamo"] as const).map((tab) => (
-                  <button
-                    key={tab}
-                    onClick={() => setActiveCodeTab(tab)}
-                    className={`px-3 py-1 rounded-md text-xs font-mono transition-colors ${
-                      activeCodeTab === tab
-                        ? "bg-[#2b2b27] text-white font-semibold"
-                        : "text-[#a3a399] hover:text-white"
-                    }`}
-                  >
-                    {tab === "bedrock" ? "bedrock-invoke.ts" : tab === "lambda" ? "telemetry-lambda.ts" : "dynamo-schema.json"}
-                  </button>
-                ))}
+                {/* Parameter 2: Respiratory Barrier */}
+                <div>
+                  <div className="flex items-center justify-between text-xs mb-2.5">
+                    <span className="font-semibold text-[#111110]">Respiratory Protection</span>
+                    <span className="font-mono text-emerald-700 font-bold">
+                      {Math.round(maskEfficiencies[bioMask] * 100)}% filtration
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    {[
+                      { id: "none" as const, label: "Unshielded", eff: "0% Filter" },
+                      { id: "cloth" as const, label: "Cloth Mask", eff: "20% Filter" },
+                      { id: "surgical" as const, label: "Surgical Mask", eff: "50% Filter" },
+                      { id: "n95" as const, label: "N95 Respirator", eff: "95% Filter" },
+                    ].map((m) => (
+                      <button
+                        key={m.id}
+                        onClick={() => setBioMask(m.id)}
+                        className={`p-2.5 rounded-xl text-left border transition-all ${
+                          bioMask === m.id
+                            ? "bg-[#111110] text-white border-[#111110] shadow-xs"
+                            : "bg-white text-[#575752] border-[#e2e2dc] hover:bg-[#f4f4f2]"
+                        }`}
+                      >
+                        <div className="text-xs font-bold">{m.label}</div>
+                        <div className={`text-[10px] font-mono ${bioMask === m.id ? "text-emerald-400" : "text-[#73736c]"}`}>
+                          {m.eff}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Parameter 3: Exposure Duration */}
+                <div>
+                  <div className="flex items-center justify-between text-xs mb-2.5">
+                    <span className="font-semibold text-[#111110]">Exposure Duration</span>
+                    <span className="font-mono text-[#73736c]">{bioMinutes} minutes</span>
+                  </div>
+
+                  <div className="grid grid-cols-4 gap-2">
+                    {[15, 30, 45, 60].map((mins) => (
+                      <button
+                        key={mins}
+                        onClick={() => setBioMinutes(mins)}
+                        className={`py-2 text-xs font-semibold rounded-lg border transition-all ${
+                          bioMinutes === mins
+                            ? "bg-[#111110] text-white border-[#111110]"
+                            : "bg-white text-[#575752] border-[#e2e2dc] hover:bg-[#f4f4f2]"
+                        }`}
+                      >
+                        {mins}m
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
 
-              <button
-                onClick={() => handleCopy(codeSnippets[activeCodeTab])}
-                className="inline-flex items-center gap-1.5 text-xs text-[#a3a399] hover:text-white px-2.5 py-1 rounded border border-[#40403c] transition-colors"
-              >
-                {copiedCode ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                <span>{copiedCode ? "Copied" : "Copy"}</span>
-              </button>
+              {/* Volume summary badge */}
+              <div className="pt-4 border-t border-[#e5e5e0] flex items-center justify-between text-xs text-[#73736c]">
+                <span>Tidal Ventilation Volume:</span>
+                <span className="font-mono font-bold text-[#111110]">
+                  {totalVolumeLiters} Liters ({totalVolumeM3.toFixed(2)} m³)
+                </span>
+              </div>
             </div>
 
-            <pre className="p-6 font-mono text-xs overflow-x-auto leading-relaxed text-[#d1d1c7]">
-              <code>{codeSnippets[activeCodeTab]}</code>
-            </pre>
+            {/* RIGHT COLUMN: HIGH-PRECISION DEPOSITION READOUT & PARTICLE INTERCEPTOR */}
+            <div className="lg:col-span-7 bg-[#fbfbf9] border border-[#e5e5e0] rounded-2xl p-6 sm:p-8 flex flex-col justify-between space-y-6">
+              {/* Big Metric Card */}
+              <div>
+                <span className="text-xs font-mono uppercase tracking-wider text-[#73736c]">
+                  ESTIMATED ALVEOLAR PARTICULATE DEPOSITION
+                </span>
+
+                <div className="mt-3 flex flex-wrap items-baseline gap-4">
+                  <span className="text-6xl sm:text-7xl font-mono font-bold text-[#111110] tracking-tight">
+                    {depositedDoseUg.toFixed(1)}
+                  </span>
+                  <div>
+                    <span className="text-xl font-mono font-bold text-[#111110]">µg PM2.5</span>
+                    <span className="block text-xs text-[#73736c]">
+                      deposited in deep lung tissue (ambient: 168 µg/m³)
+                    </span>
+                  </div>
+                </div>
+
+                <div className="mt-4 p-3 bg-white border border-[#e5e5e0] rounded-xl flex items-center justify-between text-xs">
+                  <span className="text-[#575752]">Without Barrier:</span>
+                  <span className="font-mono line-through text-[#a3a399] font-medium">
+                    {unshieldedDoseUg.toFixed(1)} µg PM2.5
+                  </span>
+                  <span className="font-mono font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
+                    -{dosePreventedUg.toFixed(1)} µg blocked
+                  </span>
+                </div>
+              </div>
+
+              {/* Filtration Efficiency Progress Bar */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-semibold text-[#111110]">Particulate Interception Rate</span>
+                  <span className="font-mono font-bold text-emerald-700">{dosePercentSaved}%</span>
+                </div>
+
+                <div className="w-full h-3 bg-[#e5e5e0] rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-emerald-600 rounded-full transition-all duration-500 ease-out"
+                    style={{ width: `${dosePercentSaved}%` }}
+                  />
+                </div>
+              </div>
+
+              {/* LIVING PARTICLE DEFLECTION VISUALIZER */}
+              <div className="relative h-28 bg-white border border-[#e5e5e0] rounded-xl p-3 overflow-hidden flex items-center justify-between">
+                <div className="text-xs space-y-1 z-10">
+                  <div className="font-semibold text-[#111110] flex items-center gap-1.5">
+                    <Activity className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>Electrostatic Fiber Mesh Simulation</span>
+                  </div>
+                  <div className="text-[11px] text-[#73736c]">
+                    {bioMask === "n95"
+                      ? "Melt-blown polypropylene fibers trapping 0.3µm aerosol particles"
+                      : bioMask === "none"
+                      ? "Zero barrier — direct mucosal and capillary penetration"
+                      : "Partial inertial impaction on woven fabric threads"}
+                  </div>
+                </div>
+
+                {/* Animated Particles SVG */}
+                <div className="w-40 h-full relative shrink-0">
+                  {/* Central filter barrier line */}
+                  <div
+                    className={`absolute top-0 bottom-0 left-1/2 w-1 -translate-x-1/2 ${
+                      bioMask === "n95"
+                        ? "bg-emerald-500"
+                        : bioMask === "none"
+                        ? "bg-transparent border-r border-dashed border-[#d1d1c7]"
+                        : "bg-amber-400"
+                    }`}
+                  />
+
+                  {/* Flowing simulated particle dots */}
+                  <div className="absolute inset-0 flex items-center justify-around pointer-events-none">
+                    <div className="w-2 h-2 rounded-full bg-rose-500 animate-ping opacity-60" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-neutral-400 animate-pulse" />
+                    <div
+                      className={`w-2 h-2 rounded-full transition-colors ${
+                        bioMask === "n95" ? "bg-emerald-500" : "bg-rose-500"
+                      }`}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* AWS Bedrock Clinical Guidance Box */}
+              <div className="p-4 bg-white border border-[#e5e5e0] rounded-xl text-xs space-y-1.5">
+                <div className="flex items-center gap-2 font-mono text-[11px] text-[#73736c]">
+                  <Bot className="w-3.5 h-3.5 text-purple-600" />
+                  <span className="font-bold text-[#111110]">AWS Bedrock Clinical Evaluation</span>
+                  <span className="text-emerald-700 font-semibold ml-auto">Claude 3.5 Sonnet</span>
+                </div>
+                <p className="text-[#575752] leading-relaxed">
+                  {bioMask === "n95"
+                    ? `Optimal airway defense. With 95% particulate filtration, your deposited dose (${depositedDoseUg.toFixed(1)} µg) remains safely under the 25 µg/day inflammation threshold, making this ${bioActivity} session clinically safe.`
+                    : bioMask === "none"
+                    ? `Critical exposure alert: Without protection during ${bioActivity}, you will inhale ${unshieldedDoseUg.toFixed(1)} µg of toxic particulate. We strongly recommend equipping an N95 respirator or postponing activity.`
+                    : `Moderate filtration: Your barrier blocks ${dosePercentSaved}% of aerosols, but ${depositedDoseUg.toFixed(1)} µg still enters pulmonary circulation. Consider upgrading to an N95 respirator for rigorous cardio.`}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
