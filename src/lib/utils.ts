@@ -141,7 +141,7 @@ export async function fetchAqiData(city: string): Promise<number | null> {
     const token = process.env.NEXT_PUBLIC_WAQI_TOKEN || "demo";
     const response = await fetch(
       `https://api.waqi.info/feed/${city}/?token=${token}`,
-      { next: { revalidate: 300 } } // Cache for 5 minutes
+      { next: { revalidate: 300 } } as any // Cache for 5 minutes
     );
     const data = await response.json();
     if (data.status === "ok" && data.data?.aqi) {
@@ -158,9 +158,9 @@ export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {
-  let timeout: NodeJS.Timeout;
+  let timeout: ReturnType<typeof setTimeout> | undefined;
   return (...args: Parameters<T>) => {
-    clearTimeout(timeout);
+    if (timeout) clearTimeout(timeout);
     timeout = setTimeout(() => func(...args), wait);
   };
 }
