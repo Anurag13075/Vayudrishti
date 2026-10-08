@@ -51,7 +51,7 @@ export default function RootLayout({
           crossOrigin=""
         />
       </head>
-      <body className="bg-[#fafafa] text-[#09090b] font-sans antialiased selection:bg-neutral-900 selection:text-white min-h-screen">
+      <body className="bg-[#fbfbf9] text-[#111110] font-sans antialiased selection:bg-[#111110] selection:text-white min-h-screen">
         <div className="relative min-h-screen">
           {children}
         </div>

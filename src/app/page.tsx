@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -11,7 +11,6 @@ import {
   ArrowRight,
   Check,
   Search,
-  School,
   Clock,
   AlertTriangle,
   Bot,
@@ -20,384 +19,476 @@ import {
   Cpu,
   ChevronRight,
   Sparkles,
+  Calendar,
+  Sliders,
+  Copy,
+  ExternalLink,
+  Bell,
+  CheckCircle2,
+  Share2,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
-import { INDIAN_CITIES } from "@/lib/constants";
-import { simulateAqi, getAqiLevel } from "@/lib/utils";
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<"map" | "breathe" | "schools" | "advisor">("map");
+  // =========================================================================
+  // INTERACTIVE HERO WIDGET STATE (Cal.com Booking Widget Style)
+  // =========================================================================
+  const [selectedDuration, setSelectedDuration] = useState<"15m" | "30m" | "45m" | "1h">("30m");
+  const [selectedDate, setSelectedDate] = useState<number>(21);
+  const [selectedSlot, setSelectedSlot] = useState<string>("07:30 AM");
 
-  const tabOptions = [
-    { id: "map", label: "Live Telemetry" },
-    { id: "breathe", label: "Breath Score™" },
-    { id: "schools", label: "School Sentinel" },
-    { id: "advisor", label: "AWS Bedrock Advisor" },
-  ] as const;
+  const doseByDuration = {
+    "15m": { dose: "14.2 µg", reserve: "4.8 hrs", safe: true },
+    "30m": { dose: "28.4 µg", reserve: "3.2 hrs", safe: true },
+    "45m": { dose: "42.6 µg", reserve: "1.9 hrs", safe: false },
+    "1h": { dose: "56.8 µg", reserve: "0.8 hrs", safe: false },
+  };
+
+  // =========================================================================
+  // CARD 02 AVAILABILITY TOGGLES (Cal.com Step 2 Widget)
+  // =========================================================================
+  const [scheduleToggles, setScheduleToggles] = useState({
+    mon: true,
+    tue: false,
+    wed: true,
+  });
+
+  // =========================================================================
+  // CARD 03 DEFENSE TOGGLES (Cal.com Video Meet Style)
+  // =========================================================================
+  const [defenseToggles, setDefenseToggles] = useState({
+    mask: true,
+    purifier: true,
+    windows: false,
+  });
+
+  // =========================================================================
+  // REAL-TIME AUTO-TYPING AI SIMULATION (Wispr Flow Style)
+  // =========================================================================
+  const [typingIndex, setTypingIndex] = useState(0);
+  const sampleText =
+    "Lodhi Road sensor ingested. Surface thermal inversion trapping PM2.5 at 164 µg/m³. Automated advisory dispatched: shift morning athletic activities to indoor court.";
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTypingIndex((prev) => (prev < sampleText.length ? prev + 1 : prev));
+    }, 35);
+    return () => clearInterval(timer);
+  }, [sampleText.length]);
 
   return (
-    <div className="min-h-screen bg-[#fafafa] text-[#09090b] font-sans">
+    <div className="min-h-screen bg-[#fbfbf9] text-[#111110] font-sans selection:bg-[#111110] selection:text-white">
+      {/* Top Announcement Bar (Wispr Flow style) */}
+      <div className="bg-[#111110] text-white text-[12px] font-medium py-2 px-4 text-center">
+        <div className="max-w-6xl mx-auto flex items-center justify-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          <span>VayuDrishti v2.0 is live on AWS — Hyperlocal sensor streaming across 1,000+ Indian stations.</span>
+          <Link href="/map" className="underline font-semibold ml-1 hover:text-emerald-300 transition-colors">
+            Explore live map &rarr;
+          </Link>
+        </div>
+      </div>
+
       <Navbar />
 
       {/* =========================================================================
-          HERO SECTION: Editorial, Clean, High Signal
+          HERO SECTION: Pure Cal.com / Wispr Flow Layout
           ========================================================================= */}
-      <section className="pt-16 pb-20 md:pt-24 md:pb-28 border-b border-neutral-200/70">
+      <section className="pt-12 pb-20 md:pt-20 md:pb-28 border-b border-[#e5e5e0]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="max-w-3xl mb-12">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-100 border border-neutral-200 text-xs font-medium text-neutral-600 mb-6">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span>Track 01: Air · WeMakeDevs × AWS Environmental Hacks</span>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+            {/* Left Hero Narrative */}
+            <div className="lg:col-span-6 space-y-6">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#e2e2dc] shadow-2xs text-xs font-medium text-[#575752]">
+                <span className="font-semibold text-[#111110]">VayuDrishti v2.0</span>
+                <span className="text-[#a3a399]">&bull;</span>
+                <span className="text-emerald-600 font-medium">Built with AWS Cloud</span>
+                <ChevronRight className="w-3.5 h-3.5 text-[#73736c]" />
+              </div>
+
+              <h1 className="text-5xl sm:text-7xl font-bold tracking-tight text-[#111110] leading-[1.05]">
+                The better way to breathe in India.
+              </h1>
+
+              <p className="text-lg sm:text-xl text-[#575752] font-normal leading-relaxed max-w-xl">
+                A fully automated respiratory defense platform for individuals, school campuses taking precautions, and developers building clean-air intelligence.
+              </p>
+
+              <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                <Link
+                  href="/map"
+                  className="bg-[#111110] hover:bg-[#2b2b27] text-white text-sm font-medium px-6 py-3.5 rounded-full inline-flex items-center justify-center gap-2 shadow-xs transition-all hover:-translate-y-0.5"
+                >
+                  <MapPin className="w-4 h-4 text-emerald-400" />
+                  <span>Check Your Local Station</span>
+                </Link>
+
+                <Link
+                  href="/breathe"
+                  className="bg-white hover:bg-[#f7f7f3] text-[#111110] border border-[#e2e2dc] text-sm font-medium px-6 py-3.5 rounded-full inline-flex items-center justify-center gap-2 shadow-2xs transition-all hover:-translate-y-0.5"
+                >
+                  <span>Calculate Breath Score</span>
+                  <ArrowRight className="w-4 h-4 text-[#73736c]" />
+                </Link>
+              </div>
+
+              <div className="pt-4 flex items-center gap-3 text-xs text-[#73736c]">
+                <div className="flex -space-x-1.5">
+                  <div className="w-6 h-6 rounded-full bg-emerald-100 border border-white flex items-center justify-center text-[10px] font-bold text-emerald-800">
+                    D
+                  </div>
+                  <div className="w-6 h-6 rounded-full bg-blue-100 border border-white flex items-center justify-center text-[10px] font-bold text-blue-800">
+                    M
+                  </div>
+                  <div className="w-6 h-6 rounded-full bg-purple-100 border border-white flex items-center justify-center text-[10px] font-bold text-purple-800">
+                    B
+                  </div>
+                </div>
+                <span>Active telemetry across Delhi NCR, Mumbai, Bengaluru & 20+ metro regions.</span>
+              </div>
             </div>
 
-            <h1 className="text-4xl sm:text-6xl font-semibold tracking-tight text-neutral-900 leading-[1.08] mb-6">
-              Every breath counted.
-              <br />
-              <span className="text-neutral-400">Actionable before it harms.</span>
-            </h1>
+            {/* Right Hero Widget: REAL LIVING INTERACTIVE CALENDAR WIDGET (Direct Cal.com Match) */}
+            <div className="lg:col-span-6">
+              <div className="bg-white border border-[#e5e5e0] rounded-2xl shadow-[0_20px_45px_-12px_rgba(0,0,0,0.08)] overflow-hidden transition-all">
+                {/* Widget Header: Denise Wilson Style Station Avatar */}
+                <div className="p-6 border-b border-[#f0f0eb] flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="relative">
+                      <div className="w-11 h-11 rounded-full bg-[#111110] flex items-center justify-center text-white font-bold text-sm">
+                        <Wind className="w-5 h-5 text-emerald-400" />
+                      </div>
+                      <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-500 border-2 border-white" />
+                    </div>
+                    <div>
+                      <div className="text-xs text-[#73736c]">CPCB Station Telemetry</div>
+                      <h3 className="text-base font-semibold text-[#111110]">Lodhi Road Atmospheric Station</h3>
+                    </div>
+                  </div>
+                  <span className="text-xs font-mono font-medium px-2.5 py-1 rounded-md bg-amber-50 text-amber-800 border border-amber-200">
+                    164 AQI &bull; Live
+                  </span>
+                </div>
 
-            <p className="text-lg sm:text-xl text-neutral-600 font-normal leading-relaxed max-w-2xl mb-8">
-              India's first personal respiratory defense platform. Moving beyond raw numbers into automated school safeguards, cumulative exposure scoring, and clinical AI guidance.
-            </p>
+                <div className="p-6 grid grid-cols-1 md:grid-cols-12 gap-6">
+                  {/* Left Column of Widget: Duration Selector & Telemetry Details */}
+                  <div className="md:col-span-6 space-y-5">
+                    <div>
+                      <label className="text-xs font-medium text-[#73736c] block mb-2">Planned Outdoor Window</label>
+                      <div className="grid grid-cols-4 gap-1.5 bg-[#f4f4f2] p-1 rounded-lg border border-[#e5e5e0]">
+                        {(["15m", "30m", "45m", "1h"] as const).map((d) => (
+                          <button
+                            key={d}
+                            onClick={() => setSelectedDuration(d)}
+                            className={`py-1.5 text-xs font-medium rounded-md transition-all ${
+                              selectedDuration === d
+                                ? "bg-white text-[#111110] shadow-xs font-semibold"
+                                : "text-[#73736c] hover:text-[#111110]"
+                            }`}
+                          >
+                            {d}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
 
-            <div className="flex flex-wrap items-center gap-3">
-              <Link
-                href="/map"
-                className="inline-flex items-center justify-center gap-2 text-sm font-medium text-white bg-neutral-900 hover:bg-neutral-800 px-5 py-2.5 rounded-full transition-all"
-              >
-                <span>Launch Live Map</span>
-                <ArrowRight className="w-4 h-4 text-neutral-400" />
-              </Link>
-              <Link
-                href="/breathe"
-                className="inline-flex items-center justify-center gap-2 text-sm font-medium text-neutral-800 bg-white hover:bg-neutral-50 border border-neutral-200 px-5 py-2.5 rounded-full transition-all shadow-xs"
-              >
-                <span>Calculate Breath Score</span>
-              </Link>
+                    {/* Calculated Exposure Metric (Updates in real time) */}
+                    <div className="p-3.5 bg-[#fbfbf9] border border-[#e5e5e0] rounded-xl space-y-2">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-[#73736c]">Estimated PM2.5 Inhaled</span>
+                        <span className="font-mono font-bold text-[#111110]">
+                          {doseByDuration[selectedDuration].dose}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-[#73736c]">Safe Reserve Left</span>
+                        <span
+                          className={`font-mono font-semibold ${
+                            doseByDuration[selectedDuration].safe ? "text-emerald-700" : "text-amber-700"
+                          }`}
+                        >
+                          {doseByDuration[selectedDuration].reserve}
+                        </span>
+                      </div>
+                      <div className="w-full bg-[#e5e5e0] h-1.5 rounded-full overflow-hidden">
+                        <div
+                          className={`h-full transition-all duration-300 ${
+                            doseByDuration[selectedDuration].safe ? "bg-emerald-600" : "bg-amber-600"
+                          }`}
+                          style={{
+                            width:
+                              selectedDuration === "15m"
+                                ? "25%"
+                                : selectedDuration === "30m"
+                                ? "50%"
+                                : selectedDuration === "45m"
+                                ? "75%"
+                                : "95%",
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="text-xs text-[#73736c] space-y-1.5 pt-1">
+                      <div className="flex items-center gap-2">
+                        <MapPin className="w-3.5 h-3.5 text-[#a3a399]" />
+                        <span>Central Delhi &bull; Lat 28.58° N</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-3.5 h-3.5 text-[#a3a399]" />
+                        <span>Selected slot: {selectedSlot}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right Column of Widget: Cal.com Calendar Date Grid */}
+                  <div className="md:col-span-6 border-t md:border-t-0 md:border-l border-[#f0f0eb] md:pl-6 pt-4 md:pt-0">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-xs font-semibold text-[#111110]">October 2026</span>
+                      <span className="text-[11px] font-mono text-[#73736c]">UTC+5:30</span>
+                    </div>
+
+                    {/* Weekday headers */}
+                    <div className="grid grid-cols-7 gap-1 text-center text-[10px] font-medium text-[#a3a399] mb-1">
+                      <span>S</span>
+                      <span>M</span>
+                      <span>T</span>
+                      <span>W</span>
+                      <span>T</span>
+                      <span>F</span>
+                      <span>S</span>
+                    </div>
+
+                    {/* Calendar days with clickable date state */}
+                    <div className="grid grid-cols-7 gap-1 text-center text-xs">
+                      {[
+                        null, null, null, 1, 2, 3, 4,
+                        5, 6, 7, 8, 9, 10, 11,
+                        12, 13, 14, 15, 16, 17, 18,
+                        19, 20, 21, 22, 23, 24, 25,
+                        26, 27, 28, 29, 30, 31,
+                      ].map((day, idx) => {
+                        if (!day) return <div key={idx} />;
+                        const isSelected = selectedDate === day;
+                        return (
+                          <button
+                            key={idx}
+                            onClick={() => setSelectedDate(day)}
+                            className={`h-7 w-7 mx-auto rounded-full text-[11px] font-medium flex items-center justify-center transition-all ${
+                              isSelected
+                                ? "bg-[#111110] text-white font-bold"
+                                : "text-[#575752] hover:bg-[#f0f0eb]"
+                            }`}
+                          >
+                            {day}
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    <div className="mt-4 pt-3 border-t border-[#f0f0eb] flex items-center justify-between text-xs">
+                      <span className="text-[#73736c]">Inversion Level</span>
+                      <span className="font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded text-[11px]">
+                        Low Hazard
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Widget Footer CTA */}
+                <div className="bg-[#fbfbf9] px-6 py-3 border-t border-[#f0f0eb] flex items-center justify-between text-xs">
+                  <span className="text-[#73736c]">Automated Health Protocol</span>
+                  <Link href="/breathe" className="font-semibold text-[#111110] hover:underline flex items-center gap-1">
+                    Log Your Dose &rarr;
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* =========================================================================
-              INTERACTIVE BESIDE-STYLE APP WORKSPACE PREVIEW
-              ========================================================================= */}
-          <div className="mt-8">
-            {/* Pill Tab Selector */}
-            <div className="flex justify-center mb-6">
-              <div className="inline-flex items-center p-1 bg-neutral-100/90 border border-neutral-200 rounded-full gap-1">
-                {tabOptions.map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all ${
-                      activeTab === tab.id
-                        ? "bg-white text-neutral-900 shadow-xs font-semibold"
-                        : "text-neutral-600 hover:text-neutral-900"
-                    }`}
+      {/* =========================================================================
+          SECTION: THE 3-STEP LIVING CARDS (Exact match to Cal.com Image 1)
+          01 Connect your sensor | 02 Set your availability | 03 Choose your defense
+          ========================================================================= */}
+      <section className="py-24 border-b border-[#e5e5e0] bg-[#fbfbf9]">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* CARD 01: CONNECT SENSOR STREAM WITH REVOLVING ORBIT */}
+            <div className="cal-card p-7 flex flex-col justify-between">
+              <div>
+                <span className="text-xs font-mono font-semibold px-2 py-1 rounded bg-[#f4f4f2] text-[#73736c] inline-block mb-4">
+                  01
+                </span>
+                <h3 className="text-xl font-bold tracking-tight text-[#111110] mb-2">
+                  Connect your sensor stream
+                </h3>
+                <p className="text-sm text-[#575752] leading-relaxed mb-6">
+                  We cross-reference 1,000+ CPCB, satellite, and community sensors so you don't breathe blind.
+                </p>
+              </div>
+
+              {/* LIVING WIDGET: Central VayuDrishti pill with rotating orbit */}
+              <div className="relative h-48 w-full bg-[#fafafa] rounded-xl border border-[#e5e5e0] flex items-center justify-center overflow-hidden">
+                {/* Concentric orbit rings */}
+                <div className="absolute w-36 h-36 rounded-full border border-dashed border-[#d1d1c7]" />
+                <div className="absolute w-24 h-24 rounded-full border border-[#e5e5e0]" />
+
+                {/* Central VayuDrishti Pill */}
+                <div className="relative z-10 px-3.5 py-1.5 rounded-full bg-white border border-[#e2e2dc] shadow-sm text-xs font-semibold text-[#111110] flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span>VayuDrishti</span>
+                </div>
+
+                {/* Animated Orbit Container 1 (Clockwise) */}
+                <div className="absolute w-36 h-36 animate-orbit pointer-events-none">
+                  {/* CPCB badge revolving at top */}
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
+                    <div className="animate-counter-orbit px-2 py-0.5 bg-white border border-[#e2e2dc] rounded-full text-[10px] font-bold text-blue-700 shadow-xs">
+                      CPCB
+                    </div>
+                  </div>
+                  {/* SAFAR badge revolving at bottom */}
+                  <div className="absolute -bottom-3.5 left-1/2 -translate-x-1/2">
+                    <div className="animate-counter-orbit px-2 py-0.5 bg-white border border-[#e2e2dc] rounded-full text-[10px] font-bold text-amber-700 shadow-xs">
+                      SAFAR
+                    </div>
+                  </div>
+                </div>
+
+                {/* Animated Orbit Container 2 (Counter-Clockwise) */}
+                <div className="absolute w-24 h-24 animate-counter-orbit pointer-events-none">
+                  <div className="absolute top-1/2 -left-3 -translate-y-1/2">
+                    <div className="animate-orbit px-1.5 py-0.5 bg-white border border-[#e2e2dc] rounded-full text-[9px] font-bold text-purple-700 shadow-xs">
+                      AWS
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* CARD 02: SET EXPOSURE LIMITS (Cal.com Availability Toggles Style) */}
+            <div className="cal-card p-7 flex flex-col justify-between">
+              <div>
+                <span className="text-xs font-mono font-semibold px-2 py-1 rounded bg-[#f4f4f2] text-[#73736c] inline-block mb-4">
+                  02
+                </span>
+                <h3 className="text-xl font-bold tracking-tight text-[#111110] mb-2">
+                  Set your exposure limits
+                </h3>
+                <p className="text-sm text-[#575752] leading-relaxed mb-6">
+                  Want to block off hazardous morning hours? Set family exposure limits? We make that easy.
+                </p>
+              </div>
+
+              {/* LIVING WIDGET: Real Interactive Toggle Rows */}
+              <div className="space-y-2 bg-[#fafafa] p-3 rounded-xl border border-[#e5e5e0]">
+                {[
+                  { key: "mon" as const, day: "Mon", time: "6:00 am - 7:30 am", safe: true },
+                  { key: "tue" as const, day: "Tue", time: "8:30 am - 10:00 am", safe: false },
+                  { key: "wed" as const, day: "Wed", time: "4:30 pm - 6:00 pm", safe: true },
+                ].map((row) => (
+                  <div
+                    key={row.key}
+                    className="p-2.5 bg-white border border-[#e5e5e0] rounded-lg flex items-center justify-between shadow-2xs"
                   >
-                    {tab.label}
-                  </button>
+                    <div className="flex items-center gap-3">
+                      {/* Toggle button */}
+                      <button
+                        onClick={() =>
+                          setScheduleToggles((prev) => ({ ...prev, [row.key]: !prev[row.key] }))
+                        }
+                        className={`w-8 h-4.5 flex items-center rounded-full p-0.5 transition-colors ${
+                          scheduleToggles[row.key] ? "bg-[#111110]" : "bg-[#d1d1c7]"
+                        }`}
+                      >
+                        <div
+                          className={`bg-white w-3.5 h-3.5 rounded-full shadow-md transform transition-transform ${
+                            scheduleToggles[row.key] ? "translate-x-3.5" : "translate-x-0"
+                          }`}
+                        />
+                      </button>
+                      <span className="text-xs font-semibold text-[#111110]">{row.day}</span>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <span className="text-[11px] font-mono text-[#575752]">{row.time}</span>
+                      <span
+                        className={`w-1.5 h-1.5 rounded-full ${
+                          scheduleToggles[row.key] ? (row.safe ? "bg-emerald-500" : "bg-amber-500") : "bg-neutral-300"
+                        }`}
+                      />
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>
 
-            {/* macOS Browser Mockup */}
-            <div className="bg-white border border-neutral-200 rounded-2xl shadow-xl overflow-hidden max-w-5xl mx-auto">
-              {/* Window Header */}
-              <div className="h-10 border-b border-neutral-100 bg-neutral-50/70 px-4 flex items-center justify-between">
-                <div className="flex items-center gap-1.5">
-                  <div className="w-2.5 h-2.5 rounded-full bg-neutral-300" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-neutral-300" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-neutral-300" />
-                </div>
-                <div className="flex items-center gap-2 px-3 py-1 bg-white border border-neutral-200/80 rounded-md text-[11px] text-neutral-500 font-mono">
-                  <span>app.vayudrishti.in/{activeTab}</span>
-                </div>
-                <div className="w-10" />
-              </div>
-
-              {/* Dynamic Mockup Body */}
-              <div className="p-6 sm:p-8 min-h-[420px] bg-white">
-                <AnimatePresence mode="wait">
-                  {/* TAB 1: LIVE TELEMETRY PREVIEW */}
-                  {activeTab === "map" && (
-                    <motion.div
-                      key="map"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      transition={{ duration: 0.18 }}
-                      className="grid grid-cols-1 md:grid-cols-12 gap-6"
-                    >
-                      <div className="md:col-span-4 space-y-3">
-                        <div className="flex items-center justify-between pb-2 border-b border-neutral-100">
-                          <span className="text-xs font-semibold uppercase tracking-wider text-neutral-500">Live Stations</span>
-                          <span className="text-[11px] text-emerald-600 font-medium">1,024 Online</span>
-                        </div>
-                        {INDIAN_CITIES.slice(0, 4).map((city) => {
-                          const aqi = simulateAqi(city.key);
-                          const level = getAqiLevel(aqi);
-                          return (
-                            <div
-                              key={city.key}
-                              className="p-3 rounded-xl border border-neutral-100 hover:border-neutral-200 bg-neutral-50/50 flex items-center justify-between transition-colors"
-                            >
-                              <div>
-                                <div className="text-sm font-semibold text-neutral-900">{city.name}</div>
-                                <div className="text-xs text-neutral-500">{city.state}</div>
-                              </div>
-                              <div className="text-right">
-                                <div className="text-sm font-bold font-mono" style={{ color: level.color }}>
-                                  {aqi} AQI
-                                </div>
-                                <div className="text-[10px] text-neutral-400 uppercase font-medium">{level.label}</div>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-
-                      <div className="md:col-span-8 border border-neutral-100 rounded-xl p-5 bg-[#fafafa] flex flex-col justify-between">
-                        <div>
-                          <div className="flex items-center justify-between mb-4">
-                            <div className="flex items-center gap-2">
-                              <span className="w-2 h-2 rounded-full bg-red-500" />
-                              <span className="text-sm font-semibold text-neutral-900">Delhi NCR Hotspot Analysis</span>
-                            </div>
-                            <span className="text-xs font-mono text-neutral-500">CPCB Telemetry Ingested</span>
-                          </div>
-
-                          <div className="grid grid-cols-3 gap-3 mb-6">
-                            <div className="p-3 bg-white border border-neutral-200/60 rounded-lg">
-                              <span className="text-[11px] text-neutral-500">PM2.5 Concentration</span>
-                              <div className="text-lg font-bold font-mono text-neutral-900 mt-1">148 µg/m³</div>
-                            </div>
-                            <div className="p-3 bg-white border border-neutral-200/60 rounded-lg">
-                              <span className="text-[11px] text-neutral-500">Inversion Height</span>
-                              <div className="text-lg font-bold font-mono text-neutral-900 mt-1">420 m</div>
-                            </div>
-                            <div className="p-3 bg-white border border-neutral-200/60 rounded-lg">
-                              <span className="text-[11px] text-neutral-500">Surface Wind</span>
-                              <div className="text-lg font-bold font-mono text-neutral-900 mt-1">3.2 km/h NW</div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="p-4 bg-white border border-neutral-200 rounded-xl flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <div className="w-9 h-9 rounded-full bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700">
-                              <Shield className="w-4 h-4" />
-                            </div>
-                            <div>
-                              <div className="text-xs font-semibold text-neutral-900">Immediate Advisory Issued</div>
-                              <div className="text-xs text-neutral-500">Outdoor morning assemblies should shift indoors across 84 schools.</div>
-                            </div>
-                          </div>
-                          <Link href="/map" className="text-xs font-medium text-neutral-900 hover:underline flex items-center gap-1">
-                            Inspect Map <ChevronRight className="w-3.5 h-3.5" />
-                          </Link>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-
-                  {/* TAB 2: BREATH SCORE PREVIEW */}
-                  {activeTab === "breathe" && (
-                    <motion.div
-                      key="breathe"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      transition={{ duration: 0.18 }}
-                      className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center"
-                    >
-                      <div className="md:col-span-5 text-center p-6 border border-neutral-100 rounded-2xl bg-neutral-50/50">
-                        <div className="inline-block p-4 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-700 mb-3 font-mono text-4xl font-bold">
-                          78/100
-                        </div>
-                        <h3 className="text-base font-semibold text-neutral-900">Moderate Exposure Reserve</h3>
-                        <p className="text-xs text-neutral-500 mt-1 max-w-xs mx-auto">
-                          Based on 45 minutes outdoors in South Delhi. 3.2 hours of safe outdoor window remaining.
-                        </p>
-                      </div>
-
-                      <div className="md:col-span-7 space-y-3">
-                        <div className="text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-2">Daily Exposure Factors</div>
-                        {[
-                          { label: "Particulate Inhaled Today", val: "38.4 µg", detail: "Within safe biological threshold" },
-                          { label: "N95 Mask Filtration", val: "94.2% Eff.", detail: "Active filtration applied" },
-                          { label: "Optimal Workout Window", val: "02:00 PM - 04:30 PM", detail: "Lowest diurnal AQI band" },
-                        ].map((row, i) => (
-                          <div key={i} className="p-3.5 bg-white border border-neutral-200/80 rounded-xl flex items-center justify-between">
-                            <div>
-                              <div className="text-xs font-medium text-neutral-900">{row.label}</div>
-                              <div className="text-[11px] text-neutral-400">{row.detail}</div>
-                            </div>
-                            <span className="text-xs font-mono font-semibold text-neutral-700 bg-neutral-100 px-2.5 py-1 rounded-md">
-                              {row.val}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </motion.div>
-                  )}
-
-                  {/* TAB 3: SCHOOL SENTINEL */}
-                  {activeTab === "schools" && (
-                    <motion.div
-                      key="schools"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      transition={{ duration: 0.18 }}
-                      className="space-y-4"
-                    >
-                      <div className="p-4 bg-amber-50/60 border border-amber-200/70 rounded-xl flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-amber-500 text-white flex items-center justify-center font-bold text-xs">
-                            !
-                          </div>
-                          <div>
-                            <span className="text-xs font-bold text-amber-950 uppercase tracking-wide">Status: Restrict Outdoor Activities</span>
-                            <div className="text-xs text-amber-800">AQI currently 164 across Central Delhi. Fine PM2.5 elevated.</div>
-                          </div>
-                        </div>
-                        <span className="text-xs font-mono bg-white text-neutral-700 border border-amber-200 px-2.5 py-1 rounded-md">
-                          Verified CPCB Rule 4
-                        </span>
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        {[
-                          { title: "Morning Assembly", status: "Indoor Only", pass: false },
-                          { title: "Sports Period", status: "Light Cardio", pass: true },
-                          { title: "Bus Commute", status: "N95 Mandatory", pass: false },
-                        ].map((item, idx) => (
-                          <div key={idx} className="p-4 border border-neutral-200 rounded-xl bg-white">
-                            <div className="text-xs text-neutral-500">{item.title}</div>
-                            <div className="text-sm font-semibold text-neutral-900 mt-1">{item.status}</div>
-                            <div className="mt-3 flex items-center gap-1.5 text-[11px]">
-                              <span className={`w-2 h-2 rounded-full ${item.pass ? "bg-emerald-500" : "bg-amber-500"}`} />
-                              <span className="text-neutral-500">{item.pass ? "Safe to proceed" : "Action required"}</span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </motion.div>
-                  )}
-
-                  {/* TAB 4: AWS BEDROCK ADVISOR */}
-                  {activeTab === "advisor" && (
-                    <motion.div
-                      key="advisor"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      transition={{ duration: 0.18 }}
-                      className="space-y-4"
-                    >
-                      <div className="p-5 border border-neutral-200 rounded-xl bg-neutral-50/50">
-                        <div className="flex items-center gap-2 mb-3">
-                          <Bot className="w-4 h-4 text-purple-600" />
-                          <span className="text-xs font-semibold text-neutral-900">AWS Bedrock · Claude 3.5 Sonnet Assessment</span>
-                          <span className="text-[10px] text-neutral-400 font-mono ml-auto">Latency 340ms</span>
-                        </div>
-                        <p className="text-sm text-neutral-700 leading-relaxed bg-white p-4 rounded-lg border border-neutral-200/60 font-sans">
-                          "Patient demographic profile: Adult with mild asthma, South Delhi (AQI 184). Inhalation risk reaches airway hyper-reactivity threshold after 25 minutes of unmasked exertion. Move morning jog indoors; maintain indoor HEPA air exchange."
-                        </p>
-                      </div>
-
-                      <div className="flex items-center justify-between text-xs text-neutral-500 pt-2 border-t border-neutral-100">
-                        <span>Model: anthropic.claude-3-5-sonnet-20240620-v1:0</span>
-                        <Link href="/advisor" className="text-neutral-900 font-medium hover:underline flex items-center gap-1">
-                          Test with your profile <ArrowRight className="w-3.5 h-3.5" />
-                        </Link>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================================
-          SECTION: THE PROBLEM (Modeled directly on Beside Image 3)
-          ========================================================================= */}
-      <section className="py-24 border-b border-neutral-200/70">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-            {/* Left Column: Problem Narrative */}
-            <div className="lg:col-span-5 space-y-6">
-              <span className="text-xs font-semibold uppercase tracking-wider text-neutral-400">The Problem</span>
-              <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-neutral-900 leading-tight">
-                Three barriers stand between citizens and clean air.
-              </h2>
-              <p className="text-base text-neutral-600 font-normal leading-relaxed">
-                Existing air quality dashboards dump confusing ppm numbers without telling people what to do. Parents don't know if school assemblies are safe, and patients don't know their cumulative toxic dose.
-              </p>
-
-              <div className="p-6 bg-white border border-neutral-200 rounded-2xl">
-                <div className="text-4xl font-bold font-mono text-neutral-900 mb-1">2.18M</div>
-                <div className="text-sm font-semibold text-neutral-800">Annual deaths in India from air pollution</div>
-                <p className="text-xs text-neutral-500 mt-2">
-                  "Average citizen in Delhi loses 5.3 years of life expectancy — the worst environmental public health crisis of our generation."
+            {/* CARD 03: CHOOSE HOW TO DEFEND (Cal.com Video Meet Style) */}
+            <div className="cal-card p-7 flex flex-col justify-between">
+              <div>
+                <span className="text-xs font-mono font-semibold px-2 py-1 rounded bg-[#f4f4f2] text-[#73736c] inline-block mb-4">
+                  03
+                </span>
+                <h3 className="text-xl font-bold tracking-tight text-[#111110] mb-2">
+                  Choose how to defend
+                </h3>
+                <p className="text-sm text-[#575752] leading-relaxed mb-6">
+                  It could be an N95 respirator, indoor HEPA filtration, or rescheduling the school athletic meet.
                 </p>
-                <div className="text-[11px] text-neutral-400 mt-2 font-mono">— The Lancet Planetary Health</div>
               </div>
-            </div>
 
-            {/* Right Column: Beside-Style Resolution Table */}
-            <div className="lg:col-span-7 space-y-3">
-              {[
-                {
-                  problem: "Knowing when school outdoor play is biologically dangerous",
-                  solution: "School Sentinel Engine",
-                  solved: true,
-                },
-                {
-                  problem: "Tracking your personal respiratory dose over the week",
-                  solution: "Personal Breath Score™",
-                  solved: true,
-                },
-                {
-                  problem: "Clinical health advice tailored to age, asthma, and local AQI",
-                  solution: "AWS Bedrock Clinical AI",
-                  solved: true,
-                },
-                {
-                  problem: "Whistleblowing illegal stubble & industrial burns",
-                  solution: "Citizen Watch & Upvoting",
-                  solved: true,
-                },
-              ].map((item, idx) => (
-                <div
-                  key={idx}
-                  className="p-5 bg-white border border-neutral-200/90 rounded-2xl flex items-center justify-between gap-4 transition-all hover:border-neutral-300"
-                >
-                  <div className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5">
-                      <Check className="w-3.5 h-3.5" />
-                    </div>
-                    <span className="text-sm font-medium text-neutral-800">{item.problem}</span>
+              {/* LIVING WIDGET: Meeting/Defense Control Panel */}
+              <div className="bg-[#fafafa] rounded-xl border border-[#e5e5e0] p-4 flex flex-col justify-between h-48">
+                <div className="flex items-center justify-between pb-2 border-b border-[#e5e5e0]">
+                  <div className="flex items-center gap-1.5">
+                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+                    <span className="text-xs font-semibold text-[#111110]">Respiratory Shield</span>
                   </div>
-                  <span className="text-xs font-semibold text-neutral-900 bg-neutral-100 border border-neutral-200 px-3 py-1.5 rounded-full whitespace-nowrap">
-                    {item.solution}
+                  <span className="text-[10px] font-mono text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
+                    Active 94.2%
                   </span>
                 </div>
-              ))}
 
-              <div className="p-5 bg-neutral-900 text-white rounded-2xl flex items-center justify-between">
-                <div>
-                  <div className="text-sm font-semibold">The life and health of your family</div>
-                  <div className="text-xs text-neutral-400 mt-0.5">Protected with predictive, automated intelligence.</div>
+                {/* Oscillating Living Waveform Bars (Wispr Flow style) */}
+                <div className="my-auto py-2 flex items-center justify-center gap-1.5 h-12">
+                  <div className="w-1.5 bg-[#111110] rounded-full animate-wave-1" />
+                  <div className="w-1.5 bg-[#111110] rounded-full animate-wave-2" />
+                  <div className="w-1.5 bg-emerald-600 rounded-full animate-wave-3" />
+                  <div className="w-1.5 bg-[#111110] rounded-full animate-wave-4" />
+                  <div className="w-1.5 bg-emerald-600 rounded-full animate-wave-5" />
+                  <div className="w-1.5 bg-[#111110] rounded-full animate-wave-6" />
+                  <div className="w-1.5 bg-[#111110] rounded-full animate-wave-7" />
                 </div>
-                <Link
-                  href="/breathe"
-                  className="text-xs font-medium bg-white text-neutral-900 px-3.5 py-1.5 rounded-full hover:bg-neutral-100 transition-colors"
-                >
-                  Start Protecting
-                </Link>
+
+                {/* Action toggles */}
+                <div className="flex items-center justify-around pt-2 border-t border-[#e5e5e0] text-xs">
+                  <button
+                    onClick={() => setDefenseToggles((p) => ({ ...p, mask: !p.mask }))}
+                    className={`px-2 py-1 rounded text-[11px] font-medium transition-colors ${
+                      defenseToggles.mask ? "bg-[#111110] text-white" : "bg-white text-[#73736c] border border-[#e5e5e0]"
+                    }`}
+                  >
+                    N95 Mask
+                  </button>
+                  <button
+                    onClick={() => setDefenseToggles((p) => ({ ...p, purifier: !p.purifier }))}
+                    className={`px-2 py-1 rounded text-[11px] font-medium transition-colors ${
+                      defenseToggles.purifier ? "bg-[#111110] text-white" : "bg-white text-[#73736c] border border-[#e5e5e0]"
+                    }`}
+                  >
+                    HEPA Purifier
+                  </button>
+                  <button
+                    onClick={() => setDefenseToggles((p) => ({ ...p, windows: !p.windows }))}
+                    className={`px-2 py-1 rounded text-[11px] font-medium transition-colors ${
+                      defenseToggles.windows ? "bg-[#111110] text-white" : "bg-white text-[#73736c] border border-[#e5e5e0]"
+                    }`}
+                  >
+                    Sealed Vents
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -405,16 +496,226 @@ export default function Home() {
       </section>
 
       {/* =========================================================================
-          SECTION: CLOUD ARCHITECTURE (Clean & Technical for Judges)
+          SECTION: WISPR FLOW INSPIRED EDITORIAL (Circular rotating SVG text path)
+          "Don't choke, just breathe."
           ========================================================================= */}
-      <section className="py-24 border-b border-neutral-200/70 bg-white">
+      <section className="py-24 border-b border-[#e5e5e0] bg-white overflow-hidden">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            {/* Left Column: Wispr Flow style rotating text SVG badge */}
+            <div className="lg:col-span-5 flex flex-col items-center justify-center text-center">
+              <div className="relative w-64 h-64 flex items-center justify-center">
+                {/* Rotating Circular SVG Text */}
+                <svg viewBox="0 0 200 200" className="w-full h-full animate-text-spin">
+                  <path
+                    id="circlePath"
+                    d="M 100, 100 m -75, 0 a 75,75 0 1,1 150,0 a 75,75 0 1,1 -150,0"
+                    fill="none"
+                  />
+                  <text className="text-[10px] font-mono tracking-[0.22em] uppercase fill-[#73736c]">
+                    <textPath href="#circlePath" startOffset="0%">
+                      HYPERLOCAL AIR QUALITY INTELLIGENCE &bull; AWS BEDROCK &bull; CPCB SENSOR STREAM &bull;{" "}
+                    </textPath>
+                  </text>
+                </svg>
+
+                {/* Central Fingerprint / Particle Badge (Wispr Flow style) */}
+                <div className="absolute w-20 h-20 rounded-full bg-[#f4f4f2] border border-[#e2e2dc] flex items-center justify-center shadow-inner">
+                  <Wind className="w-8 h-8 text-[#111110] animate-pulse" />
+                </div>
+              </div>
+
+              <div className="mt-4 text-xs font-mono text-[#73736c]">Continuous Ingestion Engine</div>
+            </div>
+
+            {/* Right Column: Editorial Serif & Real-time Auto-typing */}
+            <div className="lg:col-span-7 space-y-5">
+              <div className="text-xs font-mono font-semibold uppercase tracking-wider text-[#73736c]">
+                AUTOMATED CLINICAL INTELLIGENCE
+              </div>
+
+              <h2 className="text-4xl sm:text-6xl font-bold tracking-tight text-[#111110]">
+                Don't guess.
+                <br />
+                <span className="italic font-normal font-serif text-[#575752]">Know what you inhale.</span>
+              </h2>
+
+              <p className="text-base sm:text-lg text-[#575752] leading-relaxed max-w-xl">
+                The first environmental companion that translates microscopic aerosol physics into everyday decisions for your family.
+              </p>
+
+              {/* Real-time typing console widget */}
+              <div className="p-5 bg-[#fbfbf9] border border-[#e5e5e0] rounded-2xl shadow-2xs font-mono text-xs text-[#111110] leading-relaxed">
+                <div className="flex items-center gap-2 mb-3 pb-2 border-b border-[#e5e5e0] text-[#73736c]">
+                  <Bot className="w-4 h-4 text-purple-600" />
+                  <span>AWS Bedrock Clinical Stream</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 ml-auto animate-ping" />
+                </div>
+                <p>
+                  {sampleText.slice(0, typingIndex)}
+                  <span className="inline-block w-1.5 h-3.5 bg-[#111110] ml-0.5 animate-pulse" />
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          SECTION: FEATURE GRID (Cal.com Image 3 & 4 4-Card Layout)
+          Notice & buffers | Custom booking link | Overlay calendar | Automated reminders
+          ========================================================================= */}
+      <section className="py-24 border-b border-[#e5e5e0] bg-[#fbfbf9]">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* GRID CARD 1: AVOID MEETING OVERLOAD (Cal.com Notice & Buffers) */}
+            <div className="cal-card p-8 flex flex-col justify-between">
+              <div>
+                <h3 className="text-xl font-bold text-[#111110] mb-2">Avoid toxic exposure overload</h3>
+                <p className="text-sm text-[#575752] leading-relaxed mb-6">
+                  Only exercise when atmospheric dispersion is high. Set daily limits and add buffers around peak rush hours.
+                </p>
+              </div>
+
+              {/* LIVING WIDGET: Dropdown Settings Box */}
+              <div className="bg-white border border-[#e5e5e0] rounded-xl p-5 shadow-2xs space-y-3">
+                <div className="text-xs font-semibold text-[#111110]">Notice & Exposure Buffers</div>
+
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-xs p-2 bg-[#fbfbf9] border border-[#e5e5e0] rounded-lg">
+                    <span className="text-[#575752]">Minimum notice before outdoor transit</span>
+                    <span className="font-semibold text-[#111110] font-mono">3 hours</span>
+                  </div>
+
+                  <div className="flex items-center justify-between text-xs p-2 bg-[#fbfbf9] border border-[#e5e5e0] rounded-lg">
+                    <span className="text-[#575752]">HEPA Purifier pre-activation buffer</span>
+                    <span className="font-semibold text-[#111110] font-mono">20 mins</span>
+                  </div>
+
+                  <div className="flex items-center justify-between text-xs p-2 bg-[#fbfbf9] border border-[#e5e5e0] rounded-lg">
+                    <span className="text-[#575752]">Diurnal high-risk window lock</span>
+                    <span className="font-semibold text-rose-700 font-mono">06:00 - 08:30 AM</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* GRID CARD 2: STAND OUT WITH A CUSTOM LINK (Cal.com Booking Link Style) */}
+            <div className="cal-card p-8 flex flex-col justify-between">
+              <div>
+                <h3 className="text-xl font-bold text-[#111110] mb-2">Stand out with a verified clean-air link</h3>
+                <p className="text-sm text-[#575752] leading-relaxed mb-6">
+                  Customize your campus link so it's transparent and trusted by parents. Clean, verified, unforgeable.
+                </p>
+              </div>
+
+              {/* LIVING WIDGET: Custom link pill floating on card */}
+              <div className="relative pt-6">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10 px-4 py-1.5 rounded-full bg-[#111110] text-white text-xs font-mono font-medium shadow-md flex items-center gap-2">
+                  <span>vayudrishti.in/dps-rk-puram</span>
+                  <ExternalLink className="w-3 h-3 text-[#a3a399]" />
+                </div>
+
+                <div className="bg-white border border-[#e5e5e0] rounded-xl p-5 shadow-2xs space-y-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center font-bold text-emerald-800 text-xs">
+                      DPS
+                    </div>
+                    <div>
+                      <div className="text-xs font-semibold text-[#111110]">DPS R.K. Puram Sentinel</div>
+                      <div className="text-[11px] text-emerald-700">Verified Clean Campus Protocol</div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 text-xs pt-1 border-t border-[#f0f0eb]">
+                    <span className="text-[#73736c]">Indoor Classroom Air:</span>
+                    <span className="font-mono font-bold text-emerald-700">32 AQI (HEPA Active)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* GRID CARD 3: STREAMLINE YOUR BOOKERS' EXPERIENCE (Cal.com Overlay) */}
+            <div className="cal-card p-8 flex flex-col justify-between">
+              <div>
+                <h3 className="text-xl font-bold text-[#111110] mb-2">Streamline campus & school directives</h3>
+                <p className="text-sm text-[#575752] leading-relaxed mb-6">
+                  Overlay live particulate curves, receive automated morning alerts, and reschedule outdoor sports with ease.
+                </p>
+              </div>
+
+              {/* LIVING WIDGET: Day Schedule Overlay */}
+              <div className="bg-white border border-[#e5e5e0] rounded-xl p-4 shadow-2xs">
+                <div className="flex items-center justify-between text-xs pb-2 border-b border-[#e5e5e0] mb-2">
+                  <span className="font-semibold text-[#111110]">Automated Morning Directive</span>
+                  <span className="text-[11px] font-mono text-emerald-600">Generated 05:45 AM</span>
+                </div>
+
+                <div className="grid grid-cols-4 gap-1.5 text-center text-xs">
+                  {[
+                    { slot: "Assembly", safe: false, label: "Indoor" },
+                    { slot: "Recess", safe: true, label: "Cleared" },
+                    { slot: "Athletics", safe: false, label: "Reschedule" },
+                    { slot: "Commute", safe: true, label: "N95 Bus" },
+                  ].map((s, idx) => (
+                    <div
+                      key={idx}
+                      className={`p-2 rounded-lg border ${
+                        s.safe
+                          ? "bg-emerald-50/70 border-emerald-200 text-emerald-800"
+                          : "bg-amber-50/70 border-amber-200 text-amber-800"
+                      }`}
+                    >
+                      <div className="text-[10px] text-[#73736c]">{s.slot}</div>
+                      <div className="font-semibold text-[11px] mt-0.5">{s.label}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* GRID CARD 4: REDUCE NO-SHOWS (Cal.com Toast Alert Notification Style) */}
+            <div className="cal-card p-8 flex flex-col justify-between">
+              <div>
+                <h3 className="text-xl font-bold text-[#111110] mb-2">Reduce health emergencies with instant alerts</h3>
+                <p className="text-sm text-[#575752] leading-relaxed mb-6">
+                  Easily send SMS or push alerts about air spikes, and trigger immediate classroom ventilation protocols.
+                </p>
+              </div>
+
+              {/* LIVING WIDGET: Sliding Toast Notification Widget */}
+              <div className="bg-[#fafafa] p-4 rounded-xl border border-[#e5e5e0] flex items-center justify-center">
+                <div className="bg-white border border-[#e5e5e0] rounded-xl p-3.5 shadow-md flex items-center gap-3 w-full animate-float-subtle">
+                  <div className="w-8 h-8 rounded-lg bg-rose-100 flex items-center justify-center text-rose-700 shrink-0">
+                    <Bell className="w-4 h-4 animate-bounce" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-xs font-semibold text-[#111110]">Spike Alert Dispatched</div>
+                    <div className="text-[11px] text-[#575752]">
+                      Anand Vihar surged to 284 AQI &bull; Directives sent to 42 schools
+                    </div>
+                  </div>
+                  <span className="text-[10px] font-mono text-[#a3a399]">Just now</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          SECTION: CLOUD ARCHITECTURE (Clean & Technical for AWS Judges)
+          ========================================================================= */}
+      <section className="py-24 border-b border-[#e5e5e0] bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="max-w-2xl mb-12">
-            <span className="text-xs font-semibold uppercase tracking-wider text-neutral-400">AWS Infrastructure</span>
-            <h2 className="text-3xl font-semibold tracking-tight text-neutral-900 mt-2 mb-4">
-              Engineered on modern AWS serverless primitives.
+            <span className="text-xs font-mono font-semibold uppercase tracking-wider text-[#73736c]">
+              AWS CLOUD ARCHITECTURE
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#111110] mt-2 mb-3">
+              Built on production AWS primitives.
             </h2>
-            <p className="text-neutral-600 text-sm leading-relaxed">
+            <p className="text-[#575752] text-sm leading-relaxed">
               Designed for high-throughput ingestion from 1,000+ national monitoring stations with sub-10ms query latency.
             </p>
           </div>
@@ -446,16 +747,19 @@ export default function Home() {
                 icon: Cloud,
               },
             ].map((card, i) => (
-              <div key={i} className="p-5 border border-neutral-200 rounded-xl bg-neutral-50/50 flex flex-col justify-between">
+              <div
+                key={i}
+                className="p-5 border border-[#e5e5e0] rounded-xl bg-[#fbfbf9] flex flex-col justify-between hover:border-[#d1d1c7] transition-colors"
+              >
                 <div>
-                  <div className="w-8 h-8 rounded-lg bg-white border border-neutral-200 flex items-center justify-center text-neutral-800 mb-4">
+                  <div className="w-8 h-8 rounded-lg bg-white border border-[#e2e2dc] flex items-center justify-center text-[#111110] mb-4 shadow-2xs">
                     <card.icon className="w-4 h-4" />
                   </div>
-                  <span className="text-[11px] font-mono text-neutral-500 uppercase">{card.tag}</span>
-                  <div className="text-base font-semibold text-neutral-900 mt-1 mb-2">{card.title}</div>
-                  <p className="text-xs text-neutral-600 leading-relaxed">{card.desc}</p>
+                  <span className="text-[10px] font-mono text-[#73736c] uppercase">{card.tag}</span>
+                  <div className="text-base font-bold text-[#111110] mt-1 mb-2">{card.title}</div>
+                  <p className="text-xs text-[#575752] leading-relaxed">{card.desc}</p>
                 </div>
-                <div className="mt-6 pt-3 border-t border-neutral-200/60 flex items-center text-[11px] text-emerald-700 font-medium">
+                <div className="mt-6 pt-3 border-t border-[#e5e5e0] flex items-center text-[11px] text-emerald-700 font-medium">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-2" /> Live in production
                 </div>
               </div>
@@ -465,24 +769,34 @@ export default function Home() {
       </section>
 
       {/* =========================================================================
-          FOOTER: Minimalist & Crisp
+          FOOTER: Cal.com Minimalist Editorial
           ========================================================================= */}
-      <footer className="py-12 bg-white">
+      <footer className="py-12 bg-[#fbfbf9]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-md bg-neutral-900 flex items-center justify-center text-white">
+            <div className="w-6 h-6 rounded-md bg-[#111110] flex items-center justify-center text-white">
               <Wind className="w-3.5 h-3.5 text-emerald-400" />
             </div>
-            <span className="text-sm font-semibold text-neutral-900">VayuDrishti</span>
-            <span className="text-xs text-neutral-400 ml-2">© 2026 WeMakeDevs × AWS Tour</span>
+            <span className="text-sm font-semibold text-[#111110]">VayuDrishti</span>
+            <span className="text-xs text-[#a3a399] ml-2">&copy; 2026 WeMakeDevs &times; AWS Tour</span>
           </div>
 
-          <div className="flex items-center gap-6 text-xs text-neutral-500">
-            <Link href="/map" className="hover:text-neutral-900 transition-colors">Live Map</Link>
-            <Link href="/breathe" className="hover:text-neutral-900 transition-colors">Breath Score</Link>
-            <Link href="/advisor" className="hover:text-neutral-900 transition-colors">AI Advisor</Link>
-            <Link href="/schools" className="hover:text-neutral-900 transition-colors">Schools</Link>
-            <Link href="/report" className="hover:text-neutral-900 transition-colors">Report Incident</Link>
+          <div className="flex items-center gap-6 text-xs text-[#575752]">
+            <Link href="/map" className="hover:text-[#111110] transition-colors">
+              Live Map
+            </Link>
+            <Link href="/breathe" className="hover:text-[#111110] transition-colors">
+              Breath Score
+            </Link>
+            <Link href="/advisor" className="hover:text-[#111110] transition-colors">
+              AI Advisor
+            </Link>
+            <Link href="/schools" className="hover:text-[#111110] transition-colors">
+              School Sentinel
+            </Link>
+            <Link href="/report" className="hover:text-[#111110] transition-colors">
+              Report Incident
+            </Link>
           </div>
         </div>
       </footer>

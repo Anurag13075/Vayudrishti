@@ -38,7 +38,6 @@ export function formatNumber(num: number): string {
   return num.toLocaleString("en-IN");
 }
 
-/** Get a greeting based on time of day */
 export function getGreeting(): string {
   const hour = new Date().getHours();
   if (hour < 12) return "Good Morning";
@@ -46,7 +45,7 @@ export function getGreeting(): string {
   return "Good Evening";
 }
 
-/** Calculate Breath Score (0-100, higher is better) from AQI */
+
 export function calculateBreathScore(aqi: number): number {
   if (aqi <= 50) return Math.round(100 - aqi * 0.2);
   if (aqi <= 100) return Math.round(90 - (aqi - 50) * 0.6);
@@ -56,7 +55,7 @@ export function calculateBreathScore(aqi: number): number {
   return Math.max(0, Math.round(5 - (aqi - 300) * 0.025));
 }
 
-/** Get Breath Score label */
+
 export function getBreathScoreLabel(score: number): string {
   if (score >= 90) return "Excellent";
   if (score >= 70) return "Good";

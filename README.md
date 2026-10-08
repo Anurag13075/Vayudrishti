@@ -70,12 +70,16 @@ VayuDrishti is designed to scale across India using AWS serverless and AI infras
 
 ---
 
-## 🎨 Design & User Experience Highlights
+## 🎨 Design & Craft: Living Product UI (Cal.com & Wispr Flow Inspired)
 
-- **Dark-First Cinematic Aesthetics**: OLED-optimized dark theme (`#030712`) with luminous accent glows and glassmorphism cards.
-- **Smooth Framer Motion Choreography**: Staggered scroll reveals, floating atmospheric orbs, pulsing risk markers, and interactive micro-interactions.
-- **Data Visualization**: Dynamic AreaCharts via Recharts for 24-hour predictive trends and real-time SVG circular gauges.
-- **Mobile-First Responsive Layout**: Flawless navigation on mobile, tablet, and ultra-wide displays.
+- **Cal.com & Wispr Flow Craftsmanship**: Warm ivory canvas (`#fbfbf9`), hairline borders (`#e5e5e0`), deep charcoal typography, and subtle micro-shadows.
+- **Living Interactive Widgets**:
+  - **Revolving Concentric SVG Orbits**: Real-time 360° planetary rotation of sensor networks (`CPCB`, `SAFAR`, `AWS`) with counter-orbit stabilization.
+  - **Interactive Station Dose Scheduler**: Functional calendar grid, duration pills (`15m`, `30m`, `45m`, `1h`), and dynamic particulate dose calculations.
+  - **Wispr Flow Rotating Circular Text**: SVG `<textPath>` continuous rotation spinning around an atmospheric particle badge.
+  - **Oscillating Waveform Bars**: Real-time fluid atmospheric sensor frequency equalization.
+  - **Living Toast Notifications**: Slide-up municipal alert cards simulating live incident dispatches.
+- **Data Visualization**: Diurnal particulate AreaCharts, interactive toggle switches, and zero AI-slop neon glassmorphism.
 
 ---
 
