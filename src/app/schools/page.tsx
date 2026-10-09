@@ -199,81 +199,208 @@ export default function SchoolsPage() {
           ))}
         </div>
 
-        {/* Cal.com style Notification Card: Parent SMS Alert Simulator */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mb-8">
-          <div className="md:col-span-6 bg-white border border-[#e5e5e0] rounded-2xl p-6 shadow-xs flex flex-col justify-between">
+        {/* Thermal Inversion Predictor: The Scientific Problem Indian Schools Face */}
+        <div className="bg-white border border-[#e5e5e0] rounded-2xl p-6 sm:p-8 mb-8 shadow-xs">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-4 border-b border-[#f0f0eb] gap-2">
             <div>
-              <div className="flex items-center gap-2 mb-2">
-                <Smartphone className="w-4 h-4 text-[#73736c]" />
-                <h3 className="text-sm font-semibold text-[#111110]">Automated Parent SMS Broadcast</h3>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping" />
+                <span className="text-xs font-bold uppercase tracking-wider text-[#73736c]">
+                  Morning Ground-Level Boundary Layer
+                </span>
               </div>
-              <p className="text-xs text-[#575752] mb-4">
-                Pre-formatted SMS notification triggered to 2,400 registered parents when local AQI triggers caution threshold.
-              </p>
+              <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-[#111110]">
+                05:00 AM &ndash; 09:30 AM Thermal Inversion Clearance Curve
+              </h3>
             </div>
-
-            <div className="p-4 bg-[#fbfbf9] border border-[#e5e5e0] rounded-xl space-y-2">
-              <div className="flex items-center justify-between text-[11px] text-[#73736c] font-mono pb-1 border-b border-[#e5e5e0]">
-                <span>SMS GATEWAY: VAYU-CAMPUS</span>
-                <span>06:02 AM</span>
-              </div>
-              <p className="text-xs text-[#111110] font-sans leading-relaxed">
-                "Dear Parent, local AQI at Delhi campus is {aqi} (Unhealthy). In accordance with CPCB Rule 4, all outdoor assemblies and sports have been moved indoors to HEPA-purified halls today. Please equip student with N95 mask for transit."
-              </p>
-            </div>
-
-            <div className="mt-4 pt-3 border-t border-[#f0f0eb] flex items-center justify-between text-xs">
-              <span className="text-[#73736c]">Twilio / AWS SNS Delivery</span>
-              <button
-                onClick={() => setSmsSent(true)}
-                className="text-xs font-semibold text-[#111110] hover:underline"
-              >
-                {smsSent ? "Test Dispatch Triggered" : "Test Parent Broadcast"}
-              </button>
+            <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 px-3 py-1.5 rounded-full text-xs font-semibold">
+              💡 Shifting Assembly to 08:30 AM = -47% Particulate Dose
             </div>
           </div>
 
-          {/* 5-Day Forward Planning Schedule */}
-          <div className="md:col-span-6 bg-white border border-[#e5e5e0] rounded-2xl p-6 shadow-xs flex flex-col justify-between">
-            <div>
-              <div className="flex items-center justify-between pb-3 mb-4 border-b border-[#f0f0eb]">
-                <h3 className="text-sm font-semibold text-[#111110]">5-Day Campus Planning Forecast</h3>
-                <span className="text-xs text-[#73736c] font-mono">CPCB Forecast</span>
+          <p className="text-xs text-[#575752] leading-relaxed mb-6">
+            Early morning radiative cooling traps cold diesel smog in the bottom 50 meters of air right when school buses run (07:00 AM). As morning solar radiation warms the surface, the atmospheric inversion breaks after 08:15 AM, allowing upward particulate dispersion.
+          </p>
+
+          <div className="grid grid-cols-2 sm:grid-cols-6 gap-3 mb-6">
+            {[
+              { time: "06:00 AM", aqi: 310, status: "Hazardous Trapped Smog", delta: "Peak Inversion" },
+              { time: "07:00 AM", aqi: 285, status: "Severe Ground Layer", delta: "Bus Transit" },
+              { time: "07:30 AM", aqi: 260, status: "Critical Assembly Hazard", delta: "Assembly Window" },
+              { time: "08:15 AM", aqi: 195, status: "Solar Inversion Breaking", delta: "Dispersion Begins" },
+              { time: "08:45 AM", aqi: 145, status: "Permissible Safe Window", delta: "Optimal Assembly" },
+              { time: "09:30 AM", aqi: 120, status: "Ventilated Boundary Layer", delta: "Recess Cleared" },
+            ].map((slot, i) => (
+              <div
+                key={i}
+                className={`p-3.5 rounded-xl border text-center transition-all ${
+                  slot.time === "07:30 AM"
+                    ? "bg-rose-50 border-rose-300 ring-2 ring-rose-400/20"
+                    : slot.time === "08:45 AM"
+                    ? "bg-emerald-50 border-emerald-300 ring-2 ring-emerald-400/20"
+                    : "bg-[#fbfbf9] border-[#e5e5e0]"
+                }`}
+              >
+                <div className="text-xs font-mono font-bold text-[#111110]">{slot.time}</div>
+                <div className="text-xl font-mono font-bold my-1 text-[#111110]">{slot.aqi}</div>
+                <div className="text-[10px] font-semibold text-[#575752] leading-tight">{slot.delta}</div>
+                <div className="text-[9px] text-[#73736c] mt-1">{slot.status}</div>
               </div>
-              <p className="text-xs text-[#575752] mb-4">
-                Forward projection of surface boundary layer ventilation to plan sports matches and athletic meets.
+            ))}
+          </div>
+
+          <div className="p-4 bg-[#fbfbf9] rounded-xl border border-[#e5e5e0] flex items-start gap-3 text-xs text-[#575752]">
+            <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+            <div>
+              <span className="font-semibold text-[#111110]">School Sentinel Administrative Directive: </span>
+              Delay morning outdoor prayer/assembly from 07:30 AM to 08:45 AM. Children absorb 50% more air per kg of body weight than adults; this 75-minute adjustment spares young developing lungs from breathing the trapped overnight diesel inversion layer.
+            </div>
+          </div>
+        </div>
+
+        {/* WhatsApp & SMS Parent Notification Suite + Classroom CADR Calculator */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mb-8">
+          {/* Parent WhatsApp & SMS Broadcast Card */}
+          <div className="md:col-span-7 bg-white border border-[#e5e5e0] rounded-2xl p-6 shadow-xs flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#f0f0eb]">
+                <div className="flex items-center gap-2">
+                  <Smartphone className="w-4 h-4 text-[#25D366]" />
+                  <h3 className="text-sm font-semibold text-[#111110]">One-Click Parent WhatsApp & SMS Notice</h3>
+                </div>
+                <span className="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-mono font-semibold">
+                  Verified Template
+                </span>
+              </div>
+              <p className="text-xs text-[#575752] mb-3">
+                Broadcast pre-cleared respiratory circulars directly to parents over WhatsApp groups and SMS.
               </p>
             </div>
 
-            <div className="grid grid-cols-5 gap-2 text-center">
-              {[
-                { day: "Mon", aqi: 154, rec: "Caution" },
-                { day: "Tue", aqi: 182, rec: "Restricted" },
-                { day: "Wed", aqi: 135, rec: "Caution" },
-                { day: "Thu", aqi: 92, rec: "Cleared" },
-                { day: "Fri", aqi: 88, rec: "Cleared" },
-              ].map((d, i) => (
-                <div key={i} className="p-3 rounded-xl border border-[#f0f0eb] bg-[#fbfbf9]">
-                  <span className="text-xs font-semibold text-[#111110] block">{d.day}</span>
-                  <div className="text-base font-mono font-bold my-1 text-[#111110]">{d.aqi}</div>
-                  <span
-                    className={`text-[9px] font-semibold px-1.5 py-0.5 rounded-full inline-block ${
-                      d.rec === "Cleared"
-                        ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                        : d.rec === "Caution"
-                        ? "bg-amber-50 text-amber-700 border border-amber-200"
-                        : "bg-rose-50 text-rose-700 border border-rose-200"
-                    }`}
-                  >
-                    {d.rec}
-                  </span>
+            <div className="p-4 bg-[#efeae2] rounded-xl border border-neutral-300 text-xs font-sans text-[#111b21] relative shadow-inner">
+              <div className="bg-white rounded-lg p-3 shadow-xs border border-neutral-200/60 space-y-1.5 leading-relaxed">
+                <div className="font-bold text-[#075e54] flex items-center justify-between">
+                  <span>🏫 [Delhi Public School Sentinel Notice]</span>
+                  <span className="text-[10px] font-normal text-neutral-400">06:05 AM</span>
                 </div>
-              ))}
+                <p>
+                  Dear Parent, local morning ground inversion AQI is <strong>{aqi} ({level.label})</strong>. Under CPCB School Protocol, morning assembly and sports drills for Classes Nursery&ndash;8th are relocated to indoor auditoriums.
+                </p>
+                <p className="text-[11px] text-neutral-600">
+                  • School transport windows will remain sealed.<br />
+                  • Students with asthma or allergic bronchitis are excused from outdoor drills.<br />
+                  • Outdoor recess will commence after 09:00 AM once solar inversion lifts.
+                </p>
+              </div>
             </div>
 
-            <div className="mt-4 pt-3 border-t border-[#f0f0eb] text-right text-xs text-[#73736c]">
-              Next revision: 12:00 PM
+            <div className="mt-4 pt-3 border-t border-[#f0f0eb] flex flex-wrap items-center justify-between gap-2 text-xs">
+              <div className="flex items-center gap-2">
+                <a
+                  href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
+                    `🏫 [DPS Sentinel Alert] Morning ground AQI is ${aqi}. In accordance with CPCB protocols, outdoor assemblies are moved indoors today. School bus windows sealed shut. https://vayudrishti.in/schools`
+                  )}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="bg-[#25D366] hover:bg-[#20bd5a] text-white px-3 py-1.5 rounded-full font-semibold inline-flex items-center gap-1.5 transition-colors shadow-2xs"
+                >
+                  <span>Share to WhatsApp</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(
+                      `🏫 [DPS Sentinel Alert] Morning ground AQI is ${aqi}. In accordance with CPCB protocols, outdoor assemblies are moved indoors today. School bus windows sealed shut.`
+                    );
+                    setSmsSent(true);
+                    setTimeout(() => setSmsSent(false), 3000);
+                  }}
+                  className="bg-neutral-100 hover:bg-neutral-200 text-[#111110] px-3 py-1.5 rounded-full font-medium transition-colors"
+                >
+                  {smsSent ? "✓ Copied Notice!" : "Copy Circular Text"}
+                </button>
+              </div>
+
+              <span className="text-[#73736c] text-[11px] font-mono">2,400 Parents Synced</span>
             </div>
+          </div>
+
+          {/* Classroom CADR Air Purifier & Clean Air Rate Calculator */}
+          <div className="md:col-span-5 bg-white border border-[#e5e5e0] rounded-2xl p-6 shadow-xs flex flex-col justify-between">
+            <div>
+              <div className="flex items-center justify-between pb-3 mb-3 border-b border-[#f0f0eb]">
+                <h3 className="text-sm font-semibold text-[#111110]">Classroom Clean Air Calculator</h3>
+                <span className="text-xs text-[#73736c] font-mono">WHO Standards</span>
+              </div>
+              <p className="text-xs text-[#575752] mb-4">
+                Calculate required Clean Air Delivery Rate (CADR) and ventilation cycles for 40-student rooms.
+              </p>
+            </div>
+
+            <div className="space-y-3 bg-[#fbfbf9] p-4 rounded-xl border border-[#e5e5e0]">
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-[#575752]">Typical Classroom:</span>
+                <span className="font-bold text-[#111110]">600 sq ft &bull; 40 Students</span>
+              </div>
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-[#575752]">Recommended CADR:</span>
+                <span className="font-mono font-bold text-emerald-700">480 m³/hour</span>
+              </div>
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-[#575752]">Air Changes per Hour (ACH):</span>
+                <span className="font-mono font-bold text-[#111110]">5.2 Air Changes / hr</span>
+              </div>
+              <div className="flex items-center justify-between text-xs pt-2 border-t border-[#e5e5e0]">
+                <span className="text-[#575752]">Window Ventilation Window:</span>
+                <span className="font-semibold text-emerald-700">11:30 AM &ndash; 02:00 PM</span>
+              </div>
+            </div>
+
+            <div className="mt-4 pt-3 border-t border-[#f0f0eb] flex items-center justify-between text-xs text-[#73736c]">
+              <span>Maintains CO₂ &lt; 800 ppm</span>
+              <span className="font-mono text-emerald-700 font-semibold">99.97% HEPA Filtered</span>
+            </div>
+          </div>
+        </div>
+
+        {/* 5-Day Forward Planning Schedule */}
+        <div className="bg-white border border-[#e5e5e0] rounded-2xl p-6 shadow-xs mb-8">
+          <div className="flex items-center justify-between pb-3 mb-4 border-b border-[#f0f0eb]">
+            <div>
+              <h3 className="text-sm font-semibold text-[#111110]">5-Day Campus Planning Forecast</h3>
+              <p className="text-xs text-[#575752] mt-0.5">
+                Forward projection of surface boundary layer ventilation to schedule inter-school sports matches and sports days.
+              </p>
+            </div>
+            <span className="text-xs text-[#73736c] font-mono">CPCB Forecast</span>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 text-center">
+            {[
+              { day: "Monday", aqi: 154, rec: "Caution", desc: "Shorten outdoor PE" },
+              { day: "Tuesday", aqi: 182, rec: "Restricted", desc: "Move drills indoors" },
+              { day: "Wednesday", aqi: 135, rec: "Caution", desc: "Asthma students indoors" },
+              { day: "Thursday", aqi: 92, rec: "Cleared", desc: "Ideal for Sports Meet" },
+              { day: "Friday", aqi: 88, rec: "Cleared", desc: "Full outdoor activities" },
+            ].map((d, i) => (
+              <div key={i} className="p-3.5 rounded-xl border border-[#f0f0eb] bg-[#fbfbf9]">
+                <span className="text-xs font-semibold text-[#111110] block">{d.day}</span>
+                <div className="text-xl font-mono font-bold my-1 text-[#111110]">{d.aqi}</div>
+                <span
+                  className={`text-[9px] font-semibold px-2 py-0.5 rounded-full inline-block ${
+                    d.rec === "Cleared"
+                      ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                      : d.rec === "Caution"
+                      ? "bg-amber-50 text-amber-700 border border-amber-200"
+                      : "bg-rose-50 text-rose-700 border border-rose-200"
+                  }`}
+                >
+                  {d.rec}
+                </span>
+                <div className="text-[10px] text-[#73736c] mt-1.5">{d.desc}</div>
+              </div>
+            ))}
           </div>
         </div>
       </main>

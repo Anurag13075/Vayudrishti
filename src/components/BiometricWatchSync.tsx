@@ -630,6 +630,49 @@ export default function BiometricWatchSync({
             </div>
           </div>
 
+          {/* Daily Air Budget Wallet (Calorie-Tracker for Toxic PM2.5) */}
+          <div className="bg-white border border-[#e5e5e0] rounded-xl p-3.5 space-y-2.5">
+            <div className="flex items-center justify-between text-xs">
+              <span className="font-bold text-[#111110]">Daily Bio-Inhalation Budget</span>
+              <span className="font-mono text-[11px] text-[#73736c]">75.0 µg WHO Limit</span>
+            </div>
+            
+            {/* Progress Bar */}
+            <div className="w-full bg-neutral-100 h-2.5 rounded-full overflow-hidden border border-neutral-200">
+              <div
+                className={`h-full transition-all duration-500 ${
+                  cumulativeMicrograms > 50
+                    ? "bg-rose-500"
+                    : cumulativeMicrograms > 25
+                    ? "bg-amber-500"
+                    : "bg-emerald-500"
+                }`}
+                style={{
+                  width: `${Math.min(100, Math.max(8, (cumulativeMicrograms / 75) * 100))}%`,
+                }}
+              />
+            </div>
+
+            <div className="flex items-center justify-between text-[11px] text-[#73736c]">
+              <span>
+                Consumed: <strong className="text-[#111110]">{cumulativeMicrograms.toFixed(1)} µg</strong>
+              </span>
+              <span>
+                Remaining Reserve:{" "}
+                <strong className="text-emerald-700">
+                  {Math.max(0, 75 - cumulativeMicrograms).toFixed(1)} µg
+                </strong>
+              </span>
+            </div>
+
+            <div className="pt-2 border-t border-[#f0f0eb] flex items-center justify-between text-[11px]">
+              <span className="text-[#575752]">Indoor HEPA Recovery:</span>
+              <span className="font-mono font-semibold text-emerald-700">
+                {Math.min(90, Math.round(cumulativeMicrograms * 1.8 + 15))} mins required
+              </span>
+            </div>
+          </div>
+
           {/* Dynamic Warning Alert Box */}
           <div
             className={`p-3.5 rounded-xl border text-xs leading-relaxed ${
@@ -654,6 +697,124 @@ export default function BiometricWatchSync({
             {activity === "jog" || activity === "sprint"
               ? "Heavy exertion at 140+ BPM accelerates micro-particle absorption deep into cardiovascular tissue. Wear an N95 respirator immediately or transfer cardio indoors."
               : "Walking / rest ventilation is within safe biological reserve limits for the current hour."}
+          </div>
+
+          {/* WhatsApp Bio-Telemetry Share Button */}
+          <a
+            href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
+              `🫁 [VayuDrishti Bio-Telemetry] Live status: Heart Rate ${heartRate} BPM, Minute-Ventilation ${minuteVentilation} L/min, Inhaled ${cumulativeMicrograms.toFixed(
+                1
+              )} µg PM2.5 (${cigaretteEquivalent} cigarettes equivalent). Track yours at https://vayudrishti.in/breathe`
+            )}`}
+            target="_blank"
+            rel="noreferrer"
+            className="w-full bg-[#25D366] hover:bg-[#20bd5a] text-white py-2.5 px-4 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-colors shadow-2xs"
+          >
+            <span>📱 Share Bio-Telemetry to WhatsApp</span>
+          </a>
+        </div>
+      </div>
+
+      {/* Anatomical Alveolar Lung Deposition Visualizer (Cross-Section Physics) */}
+      <div className="border-t border-[#e5e5e0] p-5 sm:p-6 bg-[#fbfbf9]">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+              <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-[#73736c]">
+                PHYSIOLOGICAL DEPOSITION MODEL
+              </h4>
+            </div>
+            <h3 className="text-base font-bold text-[#111110]">
+              Deep Pulmonary Alveolar Penetration Cross-Section
+            </h3>
+          </div>
+          <div className="text-xs font-mono text-[#575752] bg-white border border-[#e5e5e0] px-3 py-1 rounded-full">
+            Ventilation Velocity: {minuteVentilation} L/min &bull; {isMaskOn ? "95% Filtered" : "Unfiltered Inhalation"}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          {/* Anatomical SVG Lung Cross-Section */}
+          <div className="lg:col-span-5 bg-white border border-[#e5e5e0] rounded-xl p-4 flex items-center justify-center relative overflow-hidden h-52">
+            <svg viewBox="0 0 200 160" className="w-full h-full max-h-44">
+              {/* Trachea */}
+              <rect x="94" y="10" width="12" height="35" rx="3" fill="#cbd5e1" stroke="#94a3b8" strokeWidth="1.5" />
+              {/* Left & Right Main Bronchus */}
+              <path d="M 96 45 Q 70 65 50 85" fill="none" stroke="#94a3b8" strokeWidth="6" strokeLinecap="round" />
+              <path d="M 104 45 Q 130 65 150 85" fill="none" stroke="#94a3b8" strokeWidth="6" strokeLinecap="round" />
+              {/* Left Lung Lobe */}
+              <path
+                d="M 45 60 C 20 70 15 110 30 135 C 45 155 75 145 85 130 C 95 115 85 75 65 60 Z"
+                fill="#fee2e2"
+                stroke="#f87171"
+                strokeWidth="1.5"
+                opacity="0.8"
+              />
+              {/* Right Lung Lobe */}
+              <path
+                d="M 155 60 C 180 70 185 110 170 135 C 155 155 125 145 115 130 C 105 115 115 75 135 60 Z"
+                fill="#fee2e2"
+                stroke="#f87171"
+                strokeWidth="1.5"
+                opacity="0.8"
+              />
+              {/* Deep Alveolar Clusters (Micro-dots that turn black/grey as particulates deposit) */}
+              {[
+                { cx: 40, cy: 100 },
+                { cx: 55, cy: 120 },
+                { cx: 65, cy: 95 },
+                { cx: 70, cy: 125 },
+                { cx: 160, cy: 100 },
+                { cx: 145, cy: 120 },
+                { cx: 135, cy: 95 },
+                { cx: 130, cy: 125 },
+              ].map((dot, idx) => (
+                <circle
+                  key={idx}
+                  cx={dot.cx}
+                  cy={dot.cy}
+                  r={activity === "jog" || activity === "sprint" ? "6" : "4"}
+                  fill={isMaskOn ? "#10b981" : "#dc2626"}
+                  opacity={isMaskOn ? "0.3" : "0.75"}
+                  className="transition-all duration-300"
+                />
+              ))}
+            </svg>
+
+            <div className="absolute bottom-2 left-3 text-[10px] text-[#73736c] font-mono">
+              Alveolar Air Sacs: {isMaskOn ? "Protected" : "Inflammatory Cytokine Deposition"}
+            </div>
+          </div>
+
+          {/* Clinical Explanation Table */}
+          <div className="lg:col-span-7 space-y-3 text-xs text-[#575752]">
+            <div className="bg-white p-3 rounded-lg border border-[#e5e5e0] flex items-start gap-2.5">
+              <span className="w-5 h-5 rounded-full bg-neutral-100 flex items-center justify-center font-bold text-[10px] text-[#111110] shrink-0">
+                1
+              </span>
+              <div>
+                <strong className="text-[#111110]">Upper Airway vs Lower Alveoli:</strong> Coarse dust (&gt;10 µm) is trapped by nasal cilia. PM2.5 fine particulates penetrate through terminal bronchioles into the gas-exchange alveolar capillary membrane.
+              </div>
+            </div>
+
+            <div className="bg-white p-3 rounded-lg border border-[#e5e5e0] flex items-start gap-2.5">
+              <span className="w-5 h-5 rounded-full bg-neutral-100 flex items-center justify-center font-bold text-[10px] text-[#111110] shrink-0">
+                2
+              </span>
+              <div>
+                <strong className="text-[#111110]">Tidal Volume Multiplication:</strong> Running shifts your breathing pattern from nasal to oral, bypassing filtration entirely while expanding tidal volume from 0.5 L to 2.2 L per breath.
+              </div>
+            </div>
+
+            <div className="bg-white p-3 rounded-lg border border-[#e5e5e0] flex items-start gap-2.5">
+              <span className="w-5 h-5 rounded-full bg-neutral-100 flex items-center justify-center font-bold text-[10px] text-[#111110] shrink-0">
+                3
+              </span>
+              <div>
+                <strong className="text-[#111110]">Vascular Translocation:</strong> Ultrafine particulates cross directly into pulmonary blood capillaries within 60 seconds, triggering systemic endothelial oxidative stress.
+              </div>
+            </div>
           </div>
         </div>
       </div>

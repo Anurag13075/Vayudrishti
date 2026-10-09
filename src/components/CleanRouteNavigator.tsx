@@ -126,6 +126,8 @@ const PRESET_CORRIDORS: CorridorRoute[] = [
 export default function CleanRouteNavigator() {
   const [selectedCorridorId, setSelectedCorridorId] = useState<string>("delhi-central");
   const [activeTab, setActiveTab] = useState<"clean" | "standard">("clean");
+  const [isSimulating, setIsSimulating] = useState(false);
+  const [simProgress, setSimProgress] = useState(0);
 
   const currentCorridor =
     PRESET_CORRIDORS.find((c) => c.id === selectedCorridorId) || PRESET_CORRIDORS[0];
@@ -315,19 +317,44 @@ export default function CleanRouteNavigator() {
               </span>
             </div>
 
-            {/* Stylized Vector Path Simulation Map */}
-            <div className="relative h-60 w-full bg-[#111110] rounded-xl overflow-hidden my-3 border border-[#2e2e2b] p-4 flex flex-col justify-between">
+            {/* Stylized Vector Path Simulation Map with Live Moving Car/Runner Dot */}
+            <div className="relative h-64 w-full bg-[#111110] rounded-xl overflow-hidden my-3 border border-[#2e2e2b] p-4 flex flex-col justify-between">
               {/* Grid Lines */}
               <div className="absolute inset-0 bg-[linear-gradient(to_right,#222220_1px,transparent_1px),linear-gradient(to_bottom,#222220_1px,transparent_1px)] bg-[size:24px_24px] opacity-30" />
 
               {/* Top Origin Pin */}
-              <div className="relative z-10 flex items-center gap-2">
-                <div className="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-bold shadow-md">
-                  A
+              <div className="relative z-10 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-bold shadow-md">
+                    A
+                  </div>
+                  <div className="bg-[#1c1c1a] border border-[#2e2e2b] px-2.5 py-1 rounded-md text-[11px] text-white font-medium">
+                    {currentCorridor.origin}
+                  </div>
                 </div>
-                <div className="bg-[#1c1c1a] border border-[#2e2e2b] px-2.5 py-1 rounded-md text-[11px] text-white font-medium">
-                  {currentCorridor.origin}
-                </div>
+
+                {/* Simulation Button */}
+                <button
+                  onClick={() => {
+                    setIsSimulating(true);
+                    setSimProgress(0);
+                    const interval = setInterval(() => {
+                      setSimProgress((prev) => {
+                        if (prev >= 100) {
+                          clearInterval(interval);
+                          setIsSimulating(false);
+                          return 100;
+                        }
+                        return prev + 5;
+                      });
+                    }, 250);
+                  }}
+                  disabled={isSimulating}
+                  className="bg-white/10 hover:bg-white/20 text-white text-[11px] font-semibold px-3 py-1 rounded-full border border-white/20 transition-all flex items-center gap-1.5"
+                >
+                  <Navigation className="w-3 h-3 text-emerald-400" />
+                  <span>{isSimulating ? `Navigating ${simProgress}%` : "▶ Run Live Commute Sim"}</span>
+                </button>
               </div>
 
               {/* Vector Paths SVG */}
@@ -353,12 +380,49 @@ export default function CleanRouteNavigator() {
                 />
 
                 {/* Tree Canopy Cluster (Natural Filter Area) */}
-                <circle cx="160" cy="150" r="28" fill="#059669" opacity="0.15" />
-                <circle cx="180" cy="160" r="22" fill="#059669" opacity="0.2" />
+                <circle cx="160" cy="150" r="28" fill="#059669" opacity="0.18" />
+                <circle cx="180" cy="160" r="22" fill="#059669" opacity="0.22" />
 
                 {/* Highway Diesel Smog Cluster */}
-                <circle cx="210" cy="90" r="32" fill="#dc2626" opacity="0.15" />
+                <circle cx="210" cy="90" r="32" fill="#dc2626" opacity="0.2" />
+
+                {/* Moving Simulation Dot */}
+                {isSimulating && (
+                  <circle
+                    cx={60 + (320 - 60) * (simProgress / 100)}
+                    cy={
+                      activeTab === "standard"
+                        ? 40 + (200 - 40) * (simProgress / 100) - 20 * Math.sin((simProgress / 100) * Math.PI)
+                        : 40 + (200 - 40) * (simProgress / 100) + 40 * Math.sin((simProgress / 100) * Math.PI)
+                    }
+                    r="6"
+                    fill="#38bdf8"
+                    stroke="#ffffff"
+                    strokeWidth="2"
+                    className="filter drop-shadow-md"
+                  />
+                )}
               </svg>
+
+              {/* Real-Time Hotspot AC Intervention Alert */}
+              <AnimatePresence>
+                {isSimulating && simProgress > 30 && simProgress < 75 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="relative z-20 bg-rose-950/90 border border-rose-500/80 text-rose-100 p-2.5 rounded-lg text-xs backdrop-blur-md shadow-lg"
+                  >
+                    <div className="flex items-center gap-1.5 font-bold text-rose-300 mb-0.5">
+                      <AlertTriangle className="w-3.5 h-3.5 text-rose-400 animate-pulse" />
+                      <span>🚨 Diesel Choke-Point Detected (390 µg/m³)</span>
+                    </div>
+                    <div>
+                      Immediate Action: <strong>Switch Car AC to Internal Recirculation</strong> mode now (-80% in-cabin soot in 90s) or tighten N95 seal.
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
               {/* Bottom Destination Pin */}
               <div className="relative z-10 flex items-center justify-end gap-2">
@@ -384,16 +448,56 @@ export default function CleanRouteNavigator() {
             </div>
           </div>
 
-          {/* Bottom Clinical Insight */}
-          <div className="p-3 bg-white rounded-xl border border-[#e5e5e0] text-xs text-[#575752] flex items-center justify-between">
+          {/* Action Hub: Google Maps, GPX Strava, WhatsApp Export */}
+          <div className="p-3.5 bg-white rounded-xl border border-[#e5e5e0] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
             <div>
               <span className="font-bold text-[#111110]">Commute Trade-Off: </span>
               Sacrificing <strong>+3 mins</strong> saves{" "}
-              <strong className="text-emerald-700">31.0 µg PM2.5</strong> from deep lung absorption.
+              <strong className="text-emerald-700">31.0 µg PM2.5</strong> (-{doseReductionPercent}% dose).
             </div>
-            <span className="text-[10px] font-mono text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded shrink-0">
-              Biologically Optimal
-            </span>
+
+            <div className="flex items-center gap-2 shrink-0">
+              <a
+                href={`https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(
+                  currentCorridor.origin
+                )}&destination=${encodeURIComponent(currentCorridor.destination)}&travelmode=driving`}
+                target="_blank"
+                rel="noreferrer"
+                className="bg-[#111110] hover:bg-[#2b2b27] text-white px-3 py-1.5 rounded-full text-xs font-semibold inline-flex items-center gap-1 transition-all"
+              >
+                <span>Google Maps</span>
+              </a>
+
+              <button
+                onClick={() => {
+                  const gpxData = `<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="VayuDrishti BreatheClean">
+  <trk><name>${currentCorridor.breatheClean.name}</name><desc>BreatheClean Green Canopy Corridor (-${doseReductionPercent}% PM2.5)</desc></trk>
+</gpx>`;
+                  const blob = new Blob([gpxData], { type: "application/gpx+xml" });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement("a");
+                  a.href = url;
+                  a.download = `${currentCorridor.id}-green-route.gpx`;
+                  a.click();
+                  URL.revokeObjectURL(url);
+                }}
+                className="bg-neutral-100 hover:bg-neutral-200 text-[#111110] px-3 py-1.5 rounded-full text-xs font-medium transition-colors"
+              >
+                GPX (Garmin/Strava)
+              </button>
+
+              <a
+                href={`https://api.whatsapp.com/send?text=${encodeURIComponent(
+                  `🌿 [BreatheClean Route Alert] Commuting from ${currentCorridor.origin} to ${currentCorridor.destination}? Take ${currentCorridor.breatheClean.name} to cut inhaled toxic PM2.5 by ${doseReductionPercent}%. Check on https://vayudrishti.in/map`
+                )}`}
+                target="_blank"
+                rel="noreferrer"
+                className="bg-[#25D366] hover:bg-[#20bd5a] text-white px-3 py-1.5 rounded-full text-xs font-semibold inline-flex items-center gap-1 transition-colors"
+              >
+                <span>WhatsApp</span>
+              </a>
+            </div>
           </div>
         </div>
       </div>

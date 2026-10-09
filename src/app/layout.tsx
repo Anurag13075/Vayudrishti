@@ -52,6 +52,8 @@ export const metadata: Metadata = {
   },
 };
 
+import WhatsAppBotSimulator from "@/components/WhatsAppBotSimulator";
+
 export default function RootLayout({
   children,
 }: {
@@ -76,6 +78,7 @@ export default function RootLayout({
       <body className="bg-[#fbfbf9] text-[#111110] font-sans antialiased selection:bg-[#111110] selection:text-white min-h-screen">
         <div className="relative min-h-screen">
           {children}
+          <WhatsAppBotSimulator />
         </div>
       </body>
     </html>
