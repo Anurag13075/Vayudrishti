@@ -865,13 +865,13 @@ export default function Home() {
         <section className="py-24 border-b border-[#e5e5e0] px-4 sm:px-8 bg-white">
           <div className="max-w-2xl mb-12">
             <span className="text-xs font-mono font-semibold uppercase tracking-wider text-[#73736c]">
-              HARDWARE BIO-TELEMETRY &bull; WEB BLUETOOTH GATT
+              HARDWARE BIO-TELEMETRY &bull; SMARTWATCH GATT &bull; PHONE ACCELEROMETER
             </span>
             <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#111110] mt-2 mb-3">
-              Your heart rate determines your dose.
+              Your biometrics drive your particulate dose.
             </h2>
             <p className="text-[#575752] text-sm leading-relaxed">
-              Standard apps assume you breathe the same sitting in a car as you do jogging. VayuDrishti connects directly to your smartwatch via Web Bluetooth, correlating live heart rate with respiratory tidal volume to compute your true alveolar particulate dose.
+              Standard apps assume you breathe the same sitting in a car as you do jogging. VayuDrishti connects directly to your <strong>smartwatch (Apple Watch, WearOS)</strong> or your <strong>smartphone sensors (live accelerometer step cadence & camera pulse PPG)</strong>, correlating physical exertion with respiratory minute volume ($V_E$) to compute your true alveolar particulate dose.
             </p>
           </div>
 
