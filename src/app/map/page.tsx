@@ -34,13 +34,8 @@ export default function InteractiveMapPage() {
 
   useEffect(() => {
     setIsClient(true);
-    updateCityData();
-    const interval = setInterval(updateCityData, 60000);
-    return () => clearInterval(interval);
-  }, []);
-
-  const updateCityData = () => {
-    const data = INDIAN_CITIES.map((city) => {
+    // Initialize base
+    const initialData = INDIAN_CITIES.map((city) => {
       const aqi = simulateAqi(city.key);
       return {
         ...city,
@@ -49,11 +44,63 @@ export default function InteractiveMapPage() {
         color: getAqiColor(aqi),
         forecast: generateForecast(aqi),
         pollutants: simulatePollutants(aqi),
+        isLive: false,
       };
     });
-    setCitiesData(data);
-    setLastUpdated(new Date());
-  };
+    setCitiesData(initialData);
+
+    // Fetch real live atmospheric telemetry for key cities
+    const fetchLiveTelemetry = async () => {
+      try {
+        const topCities = INDIAN_CITIES.slice(0, 10);
+        const results = await Promise.all(
+          topCities.map(async (c) => {
+            try {
+              const res = await fetch(`/api/aqi?city=${c.key}&lat=${c.lat}&lng=${c.lng}`);
+              if (res.ok) {
+                const live = await res.json();
+                return {
+                  ...c,
+                  aqi: live.aqi,
+                  level: getAqiLevel(live.aqi),
+                  color: live.color || getAqiColor(live.aqi),
+                  forecast: live.forecast || generateForecast(live.aqi),
+                  pollutants: live.pollutants
+                    ? {
+                        "PM2.5": live.pollutants.pm25,
+                        "PM10": live.pollutants.pm10,
+                        "CO": Math.round(live.pollutants.co / 10),
+                        "NO2": live.pollutants.no2,
+                        "SO2": live.pollutants.so2,
+                        "O3": live.pollutants.o3,
+                      }
+                    : simulatePollutants(live.aqi),
+                  isLive: true,
+                };
+              }
+            } catch (e) {
+              console.error(e);
+            }
+            return null;
+          })
+        );
+
+        setCitiesData((prev) =>
+          prev.map((city) => {
+            const liveMatch = results.find((r) => r && r.key === city.key);
+            return liveMatch || city;
+          })
+        );
+        setLastUpdated(new Date());
+      } catch (err) {
+        console.error("Live fetch error:", err);
+      }
+    };
+
+    fetchLiveTelemetry();
+    const interval = setInterval(fetchLiveTelemetry, 120000);
+    return () => clearInterval(interval);
+  }, []);
 
   const filteredCities = useMemo(() => {
     return citiesData.filter((city) => {

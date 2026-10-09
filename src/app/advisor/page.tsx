@@ -55,7 +55,16 @@ export default function AdvisorPage() {
 
   const getAdvice = async () => {
     setIsGenerating(true);
-    const aqi = simulateAqi(profile.city);
+    let aqi = 168;
+    try {
+      const liveRes = await fetch(`/api/aqi?city=${profile.city}`);
+      if (liveRes.ok) {
+        const liveData = await liveRes.json();
+        if (liveData.aqi) aqi = liveData.aqi;
+      }
+    } catch {
+      aqi = simulateAqi(profile.city);
+    }
     setCurrentAqi(aqi);
 
     try {

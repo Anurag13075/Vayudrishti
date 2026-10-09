@@ -76,16 +76,43 @@ export default function BreathePage() {
 
   // Mask status
   const [hasMask, setHasMask] = useState(true);
+  const [liveAqi, setLiveAqi] = useState<number>(168);
 
   useEffect(() => {
-    const baseAqi = simulateAqi(city);
-    const multiplier = activityMultipliers[selectedActivity].factor;
-    const effectiveAqi = hasMask ? baseAqi * 0.25 * multiplier : baseAqi * multiplier;
-    const calculatedScore = Math.max(8, Math.min(98, Math.round(100 - effectiveAqi / 2.8)));
+    let active = true;
+    const fetchCityData = async () => {
+      try {
+        const res = await fetch(`/api/aqi?city=${city}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (active && data.aqi) {
+            setLiveAqi(data.aqi);
+            if (data.forecast) setForecast(data.forecast);
+            return;
+          }
+        }
+      } catch (err) {
+        console.error(err);
+      }
+      if (active) {
+        const fallback = simulateAqi(city);
+        setLiveAqi(fallback);
+        setForecast(generateForecast(fallback));
+      }
+    };
 
+    fetchCityData();
+    return () => {
+      active = false;
+    };
+  }, [city]);
+
+  useEffect(() => {
+    const multiplier = activityMultipliers[selectedActivity].factor;
+    const effectiveAqi = hasMask ? liveAqi * 0.25 * multiplier : liveAqi * multiplier;
+    const calculatedScore = Math.max(8, Math.min(98, Math.round(100 - effectiveAqi / 2.8)));
     setTargetScore(calculatedScore);
-    setForecast(generateForecast(baseAqi));
-  }, [city, selectedActivity, hasMask]);
+  }, [liveAqi, selectedActivity, hasMask]);
 
   useEffect(() => {
     const interval = setInterval(() => {

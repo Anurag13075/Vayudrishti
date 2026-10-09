@@ -28,7 +28,29 @@ export default function SchoolsPage() {
   const [smsSent, setSmsSent] = useState(false);
 
   useEffect(() => {
-    setAqi(simulateAqi(city));
+    let active = true;
+    const fetchLive = async () => {
+      try {
+        const res = await fetch(`/api/aqi?city=${city}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (active && data.aqi) {
+            setAqi(data.aqi);
+            return;
+          }
+        }
+      } catch (err) {
+        console.error(err);
+      }
+      if (active) {
+        setAqi(simulateAqi(city));
+      }
+    };
+
+    fetchLive();
+    return () => {
+      active = false;
+    };
   }, [city]);
 
   const getSafetyStatus = () => {
