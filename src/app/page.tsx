@@ -101,85 +101,23 @@ export default function Home() {
   }, [sampleText.length]);
 
   // =========================================================================
-  // INTERACTIVE WORKFLOW AUTOMATION ENGINE STATE (Cal.com Workflows Style)
+  // CAL.COM 4-CARD FEATURE MATRIX STATE
   // =========================================================================
-  const [workflowTab, setWorkflowTab] = useState<"school" | "patient" | "hvac">("school");
-  const [workflowThreshold, setWorkflowThreshold] = useState<number>(140);
-  const [isSimulatingDispatch, setIsSimulatingDispatch] = useState<boolean>(false);
-  const [dispatchConfirmed, setDispatchConfirmed] = useState<boolean>(false);
+  const [card1Notice, setCard1Notice] = useState<string>("3 hours");
+  const [card1BufferBefore, setCard1BufferBefore] = useState<string>("15 mins");
+  const [card1BufferAfter, setCard1BufferAfter] = useState<string>("15 mins");
+  const [card1Interval, setCard1Interval] = useState<string>("15 mins");
 
-  const handleSimulateDispatch = () => {
-    setIsSimulatingDispatch(true);
-    setTimeout(() => {
-      setIsSimulatingDispatch(false);
-      setDispatchConfirmed(true);
-      setTimeout(() => setDispatchConfirmed(false), 3500);
-    }, 600);
+  const [card2Duration, setCard2Duration] = useState<"15m" | "30m" | "45m" | "1h">("15m");
+
+  const [card3Overlay, setCard3Overlay] = useState<boolean>(true);
+  const [card3TimeFormat, setCard3TimeFormat] = useState<"12h" | "24h">("12h");
+
+  const [card4ToastFired, setCard4ToastFired] = useState<boolean>(false);
+  const handleTriggerToast = () => {
+    setCard4ToastFired(true);
+    setTimeout(() => setCard4ToastFired(false), 4000);
   };
-
-  const workflowPresets = {
-    school: {
-      title: "School Morning Assembly & Recess Protocol",
-      trigger: "Cron: Every Morning at 05:45 AM IST",
-      condition: "Lodhi Road CPCB Inversion Sensor AQI > Threshold",
-      primaryAction: "Dispatch emergency SMS to 2,400 parents via Amazon SNS",
-      secondaryAction: "Lock outdoor sports grounds; route assembly to auditorium",
-      tertiaryAction: "Spin up classroom HEPA filtration bank (99.97% CADR)",
-      institutions: "48 Campuses Active",
-      lastFired: "Today at 05:45 AM (Threshold Breached at 168 AQI)",
-    },
-    patient: {
-      title: "Chronic Asthmatic & Elderly Personal Sentinel",
-      trigger: "EventBridge: Hyperlocal PM2.5 Micro-Spike (>120 µg/m³)",
-      condition: "Patient Profile: Severe Bronchial Hyperreactivity",
-      primaryAction: "Push high-priority alert: Inhale prophylactic bronchodilator",
-      secondaryAction: "Suggest rescheduling commute to 02:00 PM clean window",
-      tertiaryAction: "Log particulate dose into AWS DynamoDB Health Ledger",
-      institutions: "1,420 Patients Guarded",
-      lastFired: "Yesterday at 08:15 AM (Pre-emptive alert delivered)",
-    },
-    hvac: {
-      title: "Enterprise Commercial Building Damper Lockout",
-      trigger: "Continuous 60s Telemetry Ingest from 1,024 Stations",
-      condition: "Boundary Layer Mixing Depth < 250m & Ambient PM2.5 > Threshold",
-      primaryAction: "Send BACnet / Modbus command to close fresh-air intake dampers",
-      secondaryAction: "Recirculate 100% conditioned air through MERV-13 pre-filters",
-      tertiaryAction: "Generate hourly compliance report in Amazon S3 bucket",
-      institutions: "16 Commercial Towers",
-      lastFired: "06:00 AM - 08:30 AM (Inversion window auto-sealed)",
-    },
-  };
-
-  // =========================================================================
-  // INTERACTIVE BIOMETRIC EXPOSURE ENGINE (Wispr Flow Bio-Mechanics Style)
-  // =========================================================================
-  const [bioActivity, setBioActivity] = useState<"rest" | "walk" | "run" | "cycle">("walk");
-  const [bioMask, setBioMask] = useState<"none" | "cloth" | "surgical" | "n95">("n95");
-  const [bioMinutes, setBioMinutes] = useState<number>(30);
-
-  // Ventilation rates in liters per minute (clinical pulmonology standards)
-  const ventilationRates = {
-    rest: 6,
-    walk: 18,
-    run: 42,
-    cycle: 55,
-  };
-
-  // Filtration efficiency percentages
-  const maskEfficiencies = {
-    none: 0,
-    cloth: 0.20,
-    surgical: 0.50,
-    n95: 0.95,
-  };
-
-  const totalVolumeLiters = ventilationRates[bioActivity] * bioMinutes;
-  const totalVolumeM3 = totalVolumeLiters / 1000;
-  const unshieldedDoseUg = totalVolumeM3 * 168;
-  const filterEff = maskEfficiencies[bioMask];
-  const depositedDoseUg = unshieldedDoseUg * (1 - filterEff);
-  const dosePreventedUg = unshieldedDoseUg - depositedDoseUg;
-  const dosePercentSaved = Math.round(filterEff * 100);
 
   // =========================================================================
   // FAQ ACCORDION STATE
@@ -824,467 +762,384 @@ export default function Home() {
       </section>
 
       {/* =========================================================================
-          SECTION: CAL.COM WORKFLOWS ENGINE (Atmospheric Automation Platform)
-          Replaces generic 4-box feature grid with Cal.com Workflows builder
+          SECTION: CAL.COM 4-CARD FEATURE MATRIX (Exact match to Cal.com Images 1 & 2)
+          Card 1: Notice and buffers | Card 2: Custom clean-air link
+          Card 3: Calendar schedule overlay | Card 4: Automated alert notification toast
           ========================================================================= */}
       <section className="py-24 border-b border-[#e5e5e0] bg-[#fbfbf9]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="max-w-2xl mb-14">
-            <span className="text-xs font-mono font-semibold uppercase tracking-wider text-[#73736c]">
-              AUTOMATED WORKFLOWS
-            </span>
-            <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#111110] mt-2 mb-3">
-              Automate every atmospheric protocol.
-            </h2>
-            <p className="text-[#575752] text-sm sm:text-base leading-relaxed">
-              Connect raw CPCB sensor streams directly to parent SMS alerts, campus air dampers, and clinical warnings without human delay.
-            </p>
-          </div>
-
-          {/* Workflow Workbench Container */}
-          <div className="bg-white border border-[#e5e5e0] rounded-2xl shadow-sm overflow-hidden">
-            {/* Top Workflow Tab Selector (Cal.com pill style) */}
-            <div className="p-4 sm:p-5 bg-[#fafafa] border-b border-[#e5e5e0] flex flex-wrap items-center justify-between gap-3">
-              <div className="flex flex-wrap items-center gap-2">
-                {[
-                  { id: "school" as const, label: "School Morning Assembly", icon: "🏫" },
-                  { id: "patient" as const, label: "Asthmatic Sentinel", icon: "🫁" },
-                  { id: "hvac" as const, label: "Enterprise HVAC Damper", icon: "🏢" },
-                ].map((tab) => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setWorkflowTab(tab.id)}
-                    className={`px-3.5 py-1.5 rounded-full text-xs font-semibold flex items-center gap-2 transition-all ${
-                      workflowTab === tab.id
-                        ? "bg-[#111110] text-white shadow-xs"
-                        : "bg-white text-[#575752] border border-[#e5e5e0] hover:bg-[#f0f0eb]"
-                    }`}
-                  >
-                    <span>{tab.icon}</span>
-                    <span>{tab.label}</span>
-                  </button>
-                ))}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* -------------------------------------------------------------
+                CARD 1: AVOID TOXIC EXPOSURE OVERLOAD (Cal.com Image 1 Left)
+                ------------------------------------------------------------- */}
+            <div className="cal-card p-8 sm:p-10 flex flex-col justify-between">
+              <div>
+                <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111110] mb-3">
+                  Avoid toxic exposure overload
+                </h3>
+                <p className="text-sm sm:text-base text-[#575752] leading-relaxed mb-8">
+                  Only get exposed when atmospheric dispersion is high. Set daily exposure caps and add buffers around morning inversion hours to allow your family to breathe safe.
+                </p>
               </div>
 
-              <div className="flex items-center gap-2 text-[11px] font-mono text-[#73736c]">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span>AWS Step Functions Engine Active</span>
+              {/* Inner Settings Widget (Notice and buffers) */}
+              <div className="bg-[#fbfbf9] border border-[#e5e5e0] rounded-2xl p-6 shadow-2xs space-y-4">
+                <div className="text-sm font-bold text-[#111110]">Notice and buffers</div>
+
+                {/* Minimum notice */}
+                <div>
+                  <label className="text-xs font-semibold text-[#575752] block mb-1.5">
+                    Minimum notice before outdoor transit
+                  </label>
+                  <div className="flex items-center justify-between p-3 rounded-xl border border-[#e5e5e0] bg-white text-xs sm:text-sm text-[#111110] font-medium shadow-2xs">
+                    <span>{card1Notice}</span>
+                    <ChevronDown className="w-4 h-4 text-[#73736c]" />
+                  </div>
+                </div>
+
+                {/* Buffer before / after event */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-xs font-semibold text-[#575752] block mb-1.5">
+                      Buffer before exposure
+                    </label>
+                    <div className="flex items-center justify-between p-3 rounded-xl border border-[#e5e5e0] bg-white text-xs sm:text-sm text-[#111110] font-medium shadow-2xs">
+                      <span>{card1BufferBefore}</span>
+                      <ChevronDown className="w-4 h-4 text-[#73736c]" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-semibold text-[#575752] block mb-1.5">
+                      Buffer after exposure
+                    </label>
+                    <div className="flex items-center justify-between p-3 rounded-xl border border-[#e5e5e0] bg-white text-xs sm:text-sm text-[#111110] font-medium shadow-2xs">
+                      <span>{card1BufferAfter}</span>
+                      <ChevronDown className="w-4 h-4 text-[#73736c]" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Time-slot intervals */}
+                <div>
+                  <label className="text-xs font-semibold text-[#575752] block mb-1.5">
+                    HEPA Purifier pre-activation interval
+                  </label>
+                  <div className="flex items-center justify-between p-3 rounded-xl border border-[#e5e5e0] bg-white text-xs sm:text-sm text-[#111110] font-medium shadow-2xs">
+                    <span>{card1Interval}</span>
+                    <ChevronDown className="w-4 h-4 text-[#73736c]" />
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Workflow Canvas */}
-            <div className="p-6 sm:p-8 space-y-8">
-              {/* Pipeline Nodes Flow */}
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-                {/* NODE 1: TRIGGER */}
-                <div className="lg:col-span-4 p-5 rounded-xl bg-[#fbfbf9] border border-[#e5e5e0] space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#73736c] bg-white px-2 py-0.5 rounded border border-[#e5e5e0]">
-                      STEP 01 &bull; TRIGGER
-                    </span>
-                    <Clock className="w-3.5 h-3.5 text-[#73736c]" />
-                  </div>
-                  <div>
-                    <div className="text-sm font-bold text-[#111110]">
-                      {workflowPresets[workflowTab].trigger}
-                    </div>
-                    <div className="text-xs text-[#575752] mt-1">
-                      Continuous telemetry stream via AWS EventBridge
-                    </div>
-                  </div>
-                  <div className="pt-2 border-t border-[#e5e5e0] flex items-center justify-between text-[11px] font-mono text-[#73736c]">
-                    <span>Current Sensor:</span>
-                    <span className="font-bold text-[#111110]">Lodhi Rd (168 AQI)</span>
-                  </div>
+            {/* -------------------------------------------------------------
+                CARD 2: STAND OUT WITH A CUSTOM LINK (Cal.com Image 1 Right)
+                ------------------------------------------------------------- */}
+            <div className="cal-card p-8 sm:p-10 flex flex-col justify-between">
+              <div>
+                <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111110] mb-3">
+                  Stand out with a verified clean-air link
+                </h3>
+                <p className="text-sm sm:text-base text-[#575752] leading-relaxed mb-8">
+                  Customize your campus or clinic link so it's short and easy to remember for parents. Clean, verified, unforgeable.
+                </p>
+              </div>
+
+              {/* Inner Booking Card with Floating Pill */}
+              <div className="relative pt-6">
+                {/* Floating Black Pill (cal.com/bailey style) */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 z-10 px-4 py-1.5 rounded-full bg-[#111110] text-white text-xs font-mono font-medium shadow-md flex items-center gap-2">
+                  <span>vayudrishti.in/dps-rkpuram</span>
+                  <ExternalLink className="w-3.5 h-3.5 text-[#a3a399]" />
                 </div>
 
-                {/* ARROW 1 */}
-                <div className="hidden lg:flex lg:col-span-1 items-center justify-center text-[#a3a399]">
-                  <ArrowRight className="w-5 h-5" />
-                </div>
+                <div className="bg-[#fbfbf9] border border-[#e5e5e0] rounded-2xl p-6 shadow-2xs space-y-4">
+                  {/* Avatar Row */}
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center font-bold text-emerald-800 text-xs">
+                      DPS
+                    </div>
+                    <div>
+                      <div className="text-xs text-[#73736c] font-medium">Delhi Public School &bull; R.K. Puram</div>
+                      <div className="text-base font-bold text-[#111110]">Morning Air Safety Sentinel</div>
+                    </div>
+                  </div>
 
-                {/* NODE 2: LOGIC THRESHOLD GATE */}
-                <div className="lg:col-span-7 p-5 rounded-xl bg-[#fbfbf9] border border-[#e5e5e0] space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#73736c] bg-white px-2 py-0.5 rounded border border-[#e5e5e0]">
-                      STEP 02 &bull; LOGIC RULE
+                  <p className="text-xs sm:text-sm text-[#575752] leading-relaxed">
+                    Automated real-time CPCB sensor stream & classroom HEPA filtration status for 2,400 students. Safe air verified daily at 05:45 AM.
+                  </p>
+
+                  {/* Clickable Duration Pills */}
+                  <div className="flex items-center gap-2 pt-1">
+                    <Clock className="w-4 h-4 text-[#73736c]" />
+                    <div className="flex items-center gap-1.5">
+                      {(["15m", "30m", "45m", "1h"] as const).map((dur) => (
+                        <button
+                          key={dur}
+                          onClick={() => setCard2Duration(dur)}
+                          className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${
+                            card2Duration === dur
+                              ? "bg-[#111110] text-white shadow-xs"
+                              : "bg-white text-[#575752] border border-[#e5e5e0] hover:bg-[#f0f0eb]"
+                          }`}
+                        >
+                          {dur}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Location & Timezone info */}
+                  <div className="pt-3 border-t border-[#e5e5e0] flex flex-wrap items-center justify-between gap-2 text-xs text-[#575752]">
+                    <span className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                      Classroom HEPA Active (42 AQI)
                     </span>
-                    <Sliders className="w-3.5 h-3.5 text-[#73736c]" />
+                    <span className="font-mono text-[#73736c]">📍 Lodhi Road Telemetry ▾</span>
                   </div>
+                </div>
+              </div>
+            </div>
 
-                  <div>
-                    <div className="flex items-center justify-between text-xs mb-2">
-                      <span className="font-semibold text-[#111110]">AQI Dispatch Threshold</span>
-                      <span className="font-mono font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">
-                        &gt; {workflowThreshold} AQI
-                      </span>
-                    </div>
+            {/* -------------------------------------------------------------
+                CARD 3: STREAMLINE YOUR BOOKERS' EXPERIENCE (Cal.com Image 2 Left)
+                ------------------------------------------------------------- */}
+            <div className="cal-card p-8 sm:p-10 flex flex-col justify-between">
+              <div>
+                <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111110] mb-3">
+                  Streamline your campus directives
+                </h3>
+                <p className="text-sm sm:text-base text-[#575752] leading-relaxed mb-8">
+                  Let faculty overlay live particulate curves, receive automated morning directives via text, and reschedule outdoor sports with ease.
+                </p>
+              </div>
 
-                    <input
-                      type="range"
-                      min={100}
-                      max={220}
-                      step={5}
-                      value={workflowThreshold}
-                      onChange={(e) => setWorkflowThreshold(Number(e.target.value))}
-                      className="w-full accent-[#111110] cursor-pointer"
-                    />
-
-                    <div className="flex items-center justify-between text-[10px] font-mono text-[#73736c] mt-1">
-                      <span>100 AQI (Sensitive)</span>
-                      <span>160 AQI (Moderate)</span>
-                      <span>220 AQI (Hazardous)</span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between pt-2 border-t border-[#e5e5e0]">
-                    <span className="text-xs text-[#575752]">Rule Evaluation:</span>
-                    <span
-                      className={`text-xs font-semibold px-2.5 py-0.5 rounded-full border ${
-                        168 >= workflowThreshold
-                          ? "bg-rose-50 text-rose-800 border-rose-200"
-                          : "bg-emerald-50 text-emerald-800 border-emerald-200"
+              {/* Inner Calendar Schedule Overlay Widget */}
+              <div className="bg-[#fbfbf9] border border-[#e5e5e0] rounded-2xl p-5 shadow-2xs space-y-4">
+                {/* Header Controls */}
+                <div className="flex items-center justify-between pb-3 border-b border-[#e5e5e0]">
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setCard3Overlay(!card3Overlay)}
+                      className={`w-9 h-5 flex items-center rounded-full p-0.5 transition-colors ${
+                        card3Overlay ? "bg-[#111110]" : "bg-[#d1d1c7]"
                       }`}
                     >
-                      {168 >= workflowThreshold
-                        ? "🚨 THRESHOLD BREACHED (ACTION ACTIVE)"
-                        : "✅ WITHIN TOLERANCE (STANDBY)"}
+                      <div
+                        className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform ${
+                          card3Overlay ? "translate-x-4" : "translate-x-0"
+                        }`}
+                      />
+                    </button>
+                    <span className="text-xs font-semibold text-[#111110]">Overlay particulate curve</span>
+                  </div>
+
+                  <div className="inline-flex rounded-full bg-[#f0f0eb] p-0.5 border border-[#e5e5e0] text-[11px] font-medium">
+                    <button
+                      onClick={() => setCard3TimeFormat("12h")}
+                      className={`px-2.5 py-0.5 rounded-full transition-all ${
+                        card3TimeFormat === "12h" ? "bg-white text-[#111110] shadow-xs" : "text-[#73736c]"
+                      }`}
+                    >
+                      12h
+                    </button>
+                    <button
+                      onClick={() => setCard3TimeFormat("24h")}
+                      className={`px-2.5 py-0.5 rounded-full transition-all ${
+                        card3TimeFormat === "24h" ? "bg-white text-[#111110] shadow-xs" : "text-[#73736c]"
+                      }`}
+                    >
+                      24h
+                    </button>
+                  </div>
+                </div>
+
+                {/* 5-Column Calendar Days */}
+                <div className="grid grid-cols-5 gap-2 text-center text-xs font-mono text-[#73736c] pb-2">
+                  <span>Wed 06</span>
+                  <span>Thu 07</span>
+                  <span>Fri 08</span>
+                  <span>Sat 09</span>
+                  <span>Sun 10</span>
+                </div>
+
+                {/* Pastel Event Badges (Exact match to Cal.com image) */}
+                <div className="space-y-2">
+                  <div className="p-2.5 rounded-xl bg-[#eedffb] border border-[#e1c7f7] flex items-center justify-between text-xs">
+                    <div>
+                      <span className="font-semibold text-[#6b21a8] block">Morning Assembly</span>
+                      <span className="text-[11px] text-[#7e22ce]">08:00 AM - 08:45 AM</span>
+                    </div>
+                    <span className="text-[10px] font-mono bg-white/80 px-2 py-0.5 rounded text-[#6b21a8] font-bold">
+                      Moved Indoors
                     </span>
                   </div>
-                </div>
-              </div>
 
-              {/* NODE 3: DISPATCHED ACTIONS GRID */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#73736c]">
-                    STEP 03 &bull; DISPATCHED ACTIONS (PARALLEL EXECUTION)
-                  </span>
-
-                  <button
-                    onClick={handleSimulateDispatch}
-                    disabled={isSimulatingDispatch}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#111110] hover:bg-[#2b2b27] text-white text-xs font-medium transition-all shadow-xs"
-                  >
-                    <Zap className="w-3.5 h-3.5 text-amber-400" />
-                    <span>{isSimulatingDispatch ? "Simulating..." : "Test Dispatch Rule"}</span>
-                  </button>
-                </div>
-
-                {/* Dispatch Toast Confirmation */}
-                <AnimatePresence>
-                  {dispatchConfirmed && (
-                    <motion.div
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-900 flex items-center justify-between"
-                    >
-                      <div className="flex items-center gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                        <span>
-                          <strong>AWS Step Functions Executed:</strong> Dispatched 2,400 emergency SMS via Amazon SNS in 24ms (Region: ap-south-1).
-                        </span>
-                      </div>
-                      <span className="font-mono text-[10px] text-emerald-700">HTTP 200 OK</span>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {/* Action 1 */}
-                  <div className="p-4 rounded-xl bg-white border border-[#e5e5e0] shadow-2xs space-y-2">
-                    <div className="flex items-center gap-2 text-xs font-bold text-[#111110]">
-                      <Bell className="w-3.5 h-3.5 text-blue-600" />
-                      <span>{workflowPresets[workflowTab].primaryAction}</span>
+                  <div className="p-2.5 rounded-xl bg-[#dbeafe] border border-[#bfdbfe] flex items-center justify-between text-xs">
+                    <div>
+                      <span className="font-semibold text-[#1e40af] block">Recess & Outdoor Play</span>
+                      <span className="text-[11px] text-[#1d4ed8]">10:30 AM - 11:15 AM</span>
                     </div>
-                    <p className="text-xs text-[#575752] leading-relaxed">
-                      Instant multi-carrier SMS gateway broadcast with sub-second delivery confirmation.
-                    </p>
-                    <div className="pt-2 flex items-center justify-between text-[10px] font-mono text-[#73736c] border-t border-[#f0f0eb]">
-                      <span>Service:</span>
-                      <span className="font-semibold text-[#111110]">Amazon SNS</span>
-                    </div>
+                    <span className="text-[10px] font-mono bg-white/80 px-2 py-0.5 rounded text-[#1e40af] font-bold">
+                      Cleared &bull; 62 AQI
+                    </span>
                   </div>
 
-                  {/* Action 2 */}
-                  <div className="p-4 rounded-xl bg-white border border-[#e5e5e0] shadow-2xs space-y-2">
-                    <div className="flex items-center gap-2 text-xs font-bold text-[#111110]">
-                      <Shield className="w-3.5 h-3.5 text-emerald-600" />
-                      <span>{workflowPresets[workflowTab].secondaryAction}</span>
+                  <div className="p-2.5 rounded-xl bg-[#ffe4e6] border border-[#fecdd3] flex items-center justify-between text-xs">
+                    <div>
+                      <span className="font-semibold text-[#9f1239] block">Athletic Meet</span>
+                      <span className="text-[11px] text-[#be123c]">12:30 PM - 02:00 PM</span>
                     </div>
-                    <p className="text-xs text-[#575752] leading-relaxed">
-                      Automated campus calendar reallocation & physical gate access notification.
-                    </p>
-                    <div className="pt-2 flex items-center justify-between text-[10px] font-mono text-[#73736c] border-t border-[#f0f0eb]">
-                      <span>Latency:</span>
-                      <span className="font-semibold text-emerald-700">&lt; 15ms</span>
-                    </div>
-                  </div>
-
-                  {/* Action 3 */}
-                  <div className="p-4 rounded-xl bg-white border border-[#e5e5e0] shadow-2xs space-y-2">
-                    <div className="flex items-center gap-2 text-xs font-bold text-[#111110]">
-                      <Wind className="w-3.5 h-3.5 text-purple-600" />
-                      <span>{workflowPresets[workflowTab].tertiaryAction}</span>
-                    </div>
-                    <p className="text-xs text-[#575752] leading-relaxed">
-                      Building automation protocol triggering high-CADR HEPA pre-activation.
-                    </p>
-                    <div className="pt-2 flex items-center justify-between text-[10px] font-mono text-[#73736c] border-t border-[#f0f0eb]">
-                      <span>Audit Trail:</span>
-                      <span className="font-semibold text-[#111110]">Amazon S3</span>
-                    </div>
+                    <span className="text-[10px] font-mono bg-white/80 px-2 py-0.5 rounded text-[#9f1239] font-bold">
+                      Rescheduled to Gym
+                    </span>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Workbench Footer */}
-            <div className="px-6 py-4 bg-[#fbfbf9] border-t border-[#e5e5e0] flex flex-wrap items-center justify-between gap-3 text-xs">
-              <div className="flex items-center gap-2 text-[#575752]">
-                <Building className="w-3.5 h-3.5 text-[#73736c]" />
-                <span>{workflowPresets[workflowTab].institutions} &bull; {workflowPresets[workflowTab].lastFired}</span>
+            {/* -------------------------------------------------------------
+                CARD 4: REDUCE NO-SHOWS (Cal.com Image 2 Right)
+                ------------------------------------------------------------- */}
+            <div className="cal-card p-8 sm:p-10 flex flex-col justify-between">
+              <div>
+                <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#111110] mb-3">
+                  Reduce health emergencies with automated alerts
+                </h3>
+                <p className="text-sm sm:text-base text-[#575752] leading-relaxed mb-8">
+                  Easily send SMS or push alerts about particulate spikes, and send automated directives to gather any relevant exposure information before morning bells.
+                </p>
               </div>
 
-              <Link
-                href="/schools"
-                className="font-semibold text-[#111110] hover:underline flex items-center gap-1"
-              >
-                <span>Deploy to Your Campus</span>
-                <ChevronRight className="w-3.5 h-3.5 text-[#73736c]" />
-              </Link>
+              {/* Floating iOS / macOS Notification Card (Exact match to Cal.com) */}
+              <div className="bg-[#fbfbf9] border border-[#e5e5e0] rounded-2xl p-8 flex flex-col items-center justify-center min-h-[220px] space-y-4">
+                <div className="bg-white border border-[#e5e5e0] rounded-2xl p-4 shadow-xl flex items-center gap-3.5 max-w-sm w-full transition-transform hover:scale-[1.02]">
+                  <div className="w-10 h-10 rounded-xl bg-[#111110] text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
+                    Vayu
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-xs font-bold text-[#111110]">Inversion spike alert dispatched</div>
+                    <div className="text-[11px] text-[#575752] truncate">
+                      Anand Vihar surged to 294 AQI &bull; Sent to 2,400 parents
+                    </div>
+                  </div>
+                  <span className="text-[10px] font-mono text-[#a3a399] shrink-0">Just now</span>
+                </div>
+
+                <button
+                  onClick={handleTriggerToast}
+                  className="text-xs font-semibold text-[#73736c] hover:text-[#111110] flex items-center gap-1.5 transition-colors"
+                >
+                  <Zap className="w-3.5 h-3.5 text-amber-500" />
+                  <span>{card4ToastFired ? "✓ Dispatched via Amazon SNS" : "Simulate Automated Trigger"}</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* =========================================================================
-          SECTION: WISPR FLOW BIOMETRIC PULMONARY DEPOSITION ENGINE
-          High-craft bio-mechanic simulator replacing the black code terminal
+          SECTION: "...AND SO MUCH MORE!" (Exact match to Cal.com Image 3)
+          8 squircle feature tiles with embossed minimalist icons
+          ========================================================================= */}
+      <section className="py-24 border-b border-[#e5e5e0] bg-[#fbfbf9]">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <h2 className="text-4xl sm:text-6xl font-bold tracking-tight text-[#111110] text-center mb-16">
+            ...and so much more!
+          </h2>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-5">
+            {[
+              { label: "Real-time CPCB telemetry", icon: Wind },
+              { label: "Diurnal inversion model", icon: Layers },
+              { label: "School sentinel mode", icon: Building },
+              { label: "AWS Bedrock clinical AI", icon: Bot },
+              { label: "Personal dose ledger", icon: Activity },
+              { label: "Satellite fire verification", icon: Shield },
+              { label: "Instant SMS via Amazon SNS", icon: Bell },
+              { label: "Simple customization", icon: Sliders },
+            ].map((tile, i) => {
+              const Icon = tile.icon;
+              return (
+                <div
+                  key={i}
+                  className="bg-white border border-[#e5e5e0] rounded-2xl p-6 flex flex-col items-center justify-center text-center shadow-2xs hover:shadow-md hover:-translate-y-1 transition-all"
+                >
+                  <div className="w-12 h-12 rounded-xl bg-[#f7f7f5] border border-[#e5e5e0] flex items-center justify-center text-[#111110] mb-4">
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  <span className="text-xs sm:text-sm font-bold text-[#111110] leading-snug">
+                    {tile.label}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          SECTION: ALL YOUR KEY DATA IN SYNC (Exact match to Cal.com Image 4)
+          Split card showing integrations with CPCB, SAFAR, AWS Cloud, etc.
           ========================================================================= */}
       <section className="py-24 border-b border-[#e5e5e0] bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
-          <div className="max-w-2xl mb-14">
-            <span className="text-xs font-mono font-semibold uppercase tracking-wider text-[#73736c]">
-              BIOMETRIC PULMONARY DEPOSITION
-            </span>
-            <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#111110] mt-2 mb-3">
-              Your lungs aren't an air filter.
-            </h2>
-            <p className="text-[#575752] text-sm sm:text-base leading-relaxed">
-              Raw AQI tells you what is in the ambient sky. VayuDrishti calculates the microscopic particulate mass deposited into your bronchial alveoli based on your physiological minute ventilation and mask barrier.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-            {/* LEFT COLUMN: INTERACTIVE BIOMETRIC CONTROLS */}
-            <div className="lg:col-span-5 bg-[#fbfbf9] border border-[#e5e5e0] rounded-2xl p-6 sm:p-7 space-y-6 flex flex-col justify-between">
-              <div className="space-y-6">
-                {/* Parameter 1: Activity Exertion */}
-                <div>
-                  <div className="flex items-center justify-between text-xs mb-2.5">
-                    <span className="font-semibold text-[#111110]">Physical Exertion Level</span>
-                    <span className="font-mono text-[#73736c]">
-                      {ventilationRates[bioActivity]} L/min ventilation
-                    </span>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-2">
-                    {[
-                      { id: "rest" as const, label: "Resting", rate: "6 L/min" },
-                      { id: "walk" as const, label: "Brisk Walk", rate: "18 L/min" },
-                      { id: "run" as const, label: "Cardio Run", rate: "42 L/min" },
-                      { id: "cycle" as const, label: "Fast Cycling", rate: "55 L/min" },
-                    ].map((item) => (
-                      <button
-                        key={item.id}
-                        onClick={() => setBioActivity(item.id)}
-                        className={`p-2.5 rounded-xl text-left border transition-all ${
-                          bioActivity === item.id
-                            ? "bg-[#111110] text-white border-[#111110] shadow-xs"
-                            : "bg-white text-[#575752] border-[#e2e2dc] hover:bg-[#f4f4f2]"
-                        }`}
-                      >
-                        <div className="text-xs font-bold">{item.label}</div>
-                        <div className={`text-[10px] font-mono ${bioActivity === item.id ? "text-[#a3a399]" : "text-[#73736c]"}`}>
-                          {item.rate}
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Parameter 2: Respiratory Barrier */}
-                <div>
-                  <div className="flex items-center justify-between text-xs mb-2.5">
-                    <span className="font-semibold text-[#111110]">Respiratory Protection</span>
-                    <span className="font-mono text-emerald-700 font-bold">
-                      {Math.round(maskEfficiencies[bioMask] * 100)}% filtration
-                    </span>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-2">
-                    {[
-                      { id: "none" as const, label: "Unshielded", eff: "0% Filter" },
-                      { id: "cloth" as const, label: "Cloth Mask", eff: "20% Filter" },
-                      { id: "surgical" as const, label: "Surgical Mask", eff: "50% Filter" },
-                      { id: "n95" as const, label: "N95 Respirator", eff: "95% Filter" },
-                    ].map((m) => (
-                      <button
-                        key={m.id}
-                        onClick={() => setBioMask(m.id)}
-                        className={`p-2.5 rounded-xl text-left border transition-all ${
-                          bioMask === m.id
-                            ? "bg-[#111110] text-white border-[#111110] shadow-xs"
-                            : "bg-white text-[#575752] border-[#e2e2dc] hover:bg-[#f4f4f2]"
-                        }`}
-                      >
-                        <div className="text-xs font-bold">{m.label}</div>
-                        <div className={`text-[10px] font-mono ${bioMask === m.id ? "text-emerald-400" : "text-[#73736c]"}`}>
-                          {m.eff}
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Parameter 3: Exposure Duration */}
-                <div>
-                  <div className="flex items-center justify-between text-xs mb-2.5">
-                    <span className="font-semibold text-[#111110]">Exposure Duration</span>
-                    <span className="font-mono text-[#73736c]">{bioMinutes} minutes</span>
-                  </div>
-
-                  <div className="grid grid-cols-4 gap-2">
-                    {[15, 30, 45, 60].map((mins) => (
-                      <button
-                        key={mins}
-                        onClick={() => setBioMinutes(mins)}
-                        className={`py-2 text-xs font-semibold rounded-lg border transition-all ${
-                          bioMinutes === mins
-                            ? "bg-[#111110] text-white border-[#111110]"
-                            : "bg-white text-[#575752] border-[#e2e2dc] hover:bg-[#f4f4f2]"
-                        }`}
-                      >
-                        {mins}m
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Volume summary badge */}
-              <div className="pt-4 border-t border-[#e5e5e0] flex items-center justify-between text-xs text-[#73736c]">
-                <span>Tidal Ventilation Volume:</span>
-                <span className="font-mono font-bold text-[#111110]">
-                  {totalVolumeLiters} Liters ({totalVolumeM3.toFixed(2)} m³)
-                </span>
-              </div>
-            </div>
-
-            {/* RIGHT COLUMN: HIGH-PRECISION DEPOSITION READOUT & PARTICLE INTERCEPTOR */}
-            <div className="lg:col-span-7 bg-[#fbfbf9] border border-[#e5e5e0] rounded-2xl p-6 sm:p-8 flex flex-col justify-between space-y-6">
-              {/* Big Metric Card */}
-              <div>
-                <span className="text-xs font-mono uppercase tracking-wider text-[#73736c]">
-                  ESTIMATED ALVEOLAR PARTICULATE DEPOSITION
+          <div className="cal-card p-8 sm:p-14 bg-[#fbfbf9]">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+              {/* Left narrative */}
+              <div className="lg:col-span-6 space-y-5">
+                <span className="text-xs font-mono font-semibold uppercase tracking-wider text-[#73736c] bg-white px-2.5 py-1 rounded-full border border-[#e5e5e0] inline-block">
+                  INTEGRATIONS & TELEMETRY
                 </span>
 
-                <div className="mt-3 flex flex-wrap items-baseline gap-4">
-                  <span className="text-6xl sm:text-7xl font-mono font-bold text-[#111110] tracking-tight">
-                    {depositedDoseUg.toFixed(1)}
-                  </span>
-                  <div>
-                    <span className="text-xl font-mono font-bold text-[#111110]">µg PM2.5</span>
-                    <span className="block text-xs text-[#73736c]">
-                      deposited in deep lung tissue (ambient: 168 µg/m³)
-                    </span>
-                  </div>
-                </div>
+                <h3 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#111110] leading-tight">
+                  All your key telemetry in sync with your health
+                </h3>
 
-                <div className="mt-4 p-3 bg-white border border-[#e5e5e0] rounded-xl flex items-center justify-between text-xs">
-                  <span className="text-[#575752]">Without Barrier:</span>
-                  <span className="font-mono line-through text-[#a3a399] font-medium">
-                    {unshieldedDoseUg.toFixed(1)} µg PM2.5
-                  </span>
-                  <span className="font-mono font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
-                    -{dosePreventedUg.toFixed(1)} µg blocked
-                  </span>
-                </div>
-              </div>
-
-              {/* Filtration Efficiency Progress Bar */}
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-semibold text-[#111110]">Particulate Interception Rate</span>
-                  <span className="font-mono font-bold text-emerald-700">{dosePercentSaved}%</span>
-                </div>
-
-                <div className="w-full h-3 bg-[#e5e5e0] rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-emerald-600 rounded-full transition-all duration-500 ease-out"
-                    style={{ width: `${dosePercentSaved}%` }}
-                  />
-                </div>
-              </div>
-
-              {/* LIVING PARTICLE DEFLECTION VISUALIZER */}
-              <div className="relative h-28 bg-white border border-[#e5e5e0] rounded-xl p-3 overflow-hidden flex items-center justify-between">
-                <div className="text-xs space-y-1 z-10">
-                  <div className="font-semibold text-[#111110] flex items-center gap-1.5">
-                    <Activity className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>Electrostatic Fiber Mesh Simulation</span>
-                  </div>
-                  <div className="text-[11px] text-[#73736c]">
-                    {bioMask === "n95"
-                      ? "Melt-blown polypropylene fibers trapping 0.3µm aerosol particles"
-                      : bioMask === "none"
-                      ? "Zero barrier — direct mucosal and capillary penetration"
-                      : "Partial inertial impaction on woven fabric threads"}
-                  </div>
-                </div>
-
-                {/* Animated Particles SVG */}
-                <div className="w-40 h-full relative shrink-0">
-                  {/* Central filter barrier line */}
-                  <div
-                    className={`absolute top-0 bottom-0 left-1/2 w-1 -translate-x-1/2 ${
-                      bioMask === "n95"
-                        ? "bg-emerald-500"
-                        : bioMask === "none"
-                        ? "bg-transparent border-r border-dashed border-[#d1d1c7]"
-                        : "bg-amber-400"
-                    }`}
-                  />
-
-                  {/* Flowing simulated particle dots */}
-                  <div className="absolute inset-0 flex items-center justify-around pointer-events-none">
-                    <div className="w-2 h-2 rounded-full bg-rose-500 animate-ping opacity-60" />
-                    <div className="w-1.5 h-1.5 rounded-full bg-neutral-400 animate-pulse" />
-                    <div
-                      className={`w-2 h-2 rounded-full transition-colors ${
-                        bioMask === "n95" ? "bg-emerald-500" : "bg-rose-500"
-                      }`}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* AWS Bedrock Clinical Guidance Box */}
-              <div className="p-4 bg-white border border-[#e5e5e0] rounded-xl text-xs space-y-1.5">
-                <div className="flex items-center gap-2 font-mono text-[11px] text-[#73736c]">
-                  <Bot className="w-3.5 h-3.5 text-purple-600" />
-                  <span className="font-bold text-[#111110]">AWS Bedrock Clinical Evaluation</span>
-                  <span className="text-emerald-700 font-semibold ml-auto">Claude 3.5 Sonnet</span>
-                </div>
-                <p className="text-[#575752] leading-relaxed">
-                  {bioMask === "n95"
-                    ? `Optimal airway defense. With 95% particulate filtration, your deposited dose (${depositedDoseUg.toFixed(1)} µg) remains safely under the 25 µg/day inflammation threshold, making this ${bioActivity} session clinically safe.`
-                    : bioMask === "none"
-                    ? `Critical exposure alert: Without protection during ${bioActivity}, you will inhale ${unshieldedDoseUg.toFixed(1)} µg of toxic particulate. We strongly recommend equipping an N95 respirator or postponing activity.`
-                    : `Moderate filtration: Your barrier blocks ${dosePercentSaved}% of aerosols, but ${depositedDoseUg.toFixed(1)} µg still enters pulmonary circulation. Consider upgrading to an N95 respirator for rigorous cardio.`}
+                <p className="text-sm sm:text-base text-[#575752] leading-relaxed max-w-lg">
+                  Connects to CPCB, SAFAR, NASA FIRMS, and AWS Cloud. Clean air intelligence everywhere your family works, learns, and breathes.
                 </p>
+
+                <div className="pt-2 flex flex-wrap items-center gap-3">
+                  <Link
+                    href="/map"
+                    className="bg-[#111110] hover:bg-[#2b2b27] text-white text-xs font-semibold px-5 py-3 rounded-full inline-flex items-center gap-2 shadow-xs transition-transform hover:-translate-y-0.5"
+                  >
+                    <span>Explore Live Map</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+
+                  <Link
+                    href="/breathe"
+                    className="bg-white hover:bg-[#f7f7f3] text-[#111110] border border-[#e2e2dc] text-xs font-semibold px-5 py-3 rounded-full inline-flex items-center gap-2 shadow-2xs transition-transform hover:-translate-y-0.5"
+                  >
+                    <span>Check Breath Score</span>
+                    <ChevronRight className="w-3.5 h-3.5 text-[#73736c]" />
+                  </Link>
+                </div>
+              </div>
+
+              {/* Right 2x4 logo grid with hairline dividers (Exact match to Cal.com Image 4) */}
+              <div className="lg:col-span-6 bg-white border border-[#e5e5e0] rounded-2xl shadow-sm overflow-hidden">
+                <div className="grid grid-cols-2 divide-x divide-y divide-[#e5e5e0]">
+                  {[
+                    { name: "CPCB India", desc: "1,024 Stations" },
+                    { name: "SAFAR Ministry", desc: "Forecast Engine" },
+                    { name: "Amazon Bedrock", desc: "Claude 3.5 Sonnet" },
+                    { name: "AWS Lambda", desc: "Serverless Streams" },
+                    { name: "Amazon DynamoDB", desc: "Time-series Store" },
+                    { name: "OpenAQ Global", desc: "Micro-sensor Hub" },
+                    { name: "NASA FIRMS", desc: "Thermal Anomalies" },
+                    { name: "Amazon SNS", desc: "Emergency Alerts" },
+                  ].map((item, idx) => (
+                    <div key={idx} className="p-5 flex flex-col justify-center hover:bg-[#fbfbf9] transition-colors">
+                      <div className="text-xs sm:text-sm font-bold text-[#111110]">{item.name}</div>
+                      <div className="text-[11px] font-mono text-[#73736c] mt-0.5">{item.desc}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
