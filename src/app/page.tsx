@@ -37,6 +37,7 @@ import {
   Info,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import Logo, { LogoMark } from "@/components/Logo";
 
 export default function Home() {
   const router = useRouter();
@@ -348,9 +349,7 @@ export default function Home() {
                 <div className="p-6 border-b border-[#f0f0eb] flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="relative">
-                      <div className="w-11 h-11 rounded-full bg-[#111110] flex items-center justify-center text-white font-bold text-sm">
-                        <Wind className="w-5 h-5 text-emerald-400" />
-                      </div>
+                      <LogoMark size={44} />
                       <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-500 border-2 border-white" />
                     </div>
                     <div>
@@ -535,8 +534,8 @@ export default function Home() {
                 <div className="absolute w-24 h-24 rounded-full border border-[#e5e5e0]" />
 
                 {/* Central Pill */}
-                <div className="relative z-10 px-3.5 py-1.5 rounded-full bg-white border border-[#e2e2dc] shadow-sm text-xs font-semibold text-[#111110] flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <div className="relative z-10 px-3.5 py-1.5 rounded-full bg-white border border-[#e2e2dc] shadow-sm text-xs font-bold text-[#111110] flex items-center gap-2">
+                  <LogoMark size={20} />
                   <span>VayuDrishti</span>
                 </div>
 
@@ -792,7 +791,7 @@ export default function Home() {
                 </svg>
 
                 <div className="absolute w-20 h-20 rounded-full bg-white border border-[#e2e2dc] flex items-center justify-center shadow-inner">
-                  <Wind className="w-8 h-8 text-[#111110] animate-pulse" />
+                  <LogoMark size={44} />
                 </div>
               </div>
 
@@ -1094,9 +1093,7 @@ export default function Home() {
               {/* Floating iOS / macOS Notification Card */}
               <div className="bg-[#fbfbf9] border border-[#e5e5e0] rounded-2xl p-8 flex flex-col items-center justify-center min-h-[220px] space-y-4">
                 <div className="bg-white border border-[#e5e5e0] rounded-2xl p-4 shadow-xl flex items-center gap-3.5 max-w-sm w-full transition-transform hover:scale-[1.02]">
-                  <div className="w-10 h-10 rounded-xl bg-[#111110] text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
-                    Vayu
-                  </div>
+                  <LogoMark size={38} className="shrink-0" />
                   <div className="flex-1 min-w-0">
                     <div className="text-xs font-bold text-[#111110]">Inversion spike alert dispatched</div>
                     <div className="text-[11px] text-[#575752] truncate">
@@ -1383,11 +1380,8 @@ export default function Home() {
         <footer className="py-12 border-t border-[#e5e5e0] px-4 sm:px-8 bg-[#fbfbf9]">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-3">
-              <div className="w-6 h-6 rounded-md bg-[#111110] flex items-center justify-center text-white">
-                <Wind className="w-3.5 h-3.5 text-emerald-400" />
-              </div>
-              <span className="text-sm font-semibold text-[#111110]">VayuDrishti</span>
-              <span className="text-xs text-[#a3a399]">&copy; 2026 WeMakeDevs &times; AWS Hackathon</span>
+              <Logo size="sm" showBadge={false} />
+              <span className="text-xs text-[#a3a399] ml-1">&copy; 2026 WeMakeDevs &times; AWS Hackathon</span>
             </div>
 
             <div className="flex items-center gap-2 text-xs font-mono text-[#73736c]">

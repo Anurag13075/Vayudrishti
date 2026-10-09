@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import Logo from "@/components/Logo";
 import {
   Wind,
   Map,
@@ -48,19 +49,7 @@ export default function Navbar() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between h-16">
             {/* Brand Logo */}
-            <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="w-8 h-8 rounded-lg bg-neutral-900 flex items-center justify-center text-white transition-transform group-hover:scale-105">
-                <Wind className="w-4 h-4 text-emerald-400" />
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-base font-semibold tracking-tight text-neutral-900">
-                  VayuDrishti
-                </span>
-                <span className="hidden sm:inline-block text-[11px] font-medium text-neutral-500 bg-neutral-100 border border-neutral-200 px-2 py-0.5 rounded-full">
-                  AWS Tour '26
-                </span>
-              </div>
-            </Link>
+            <Logo size="sm" showBadge={true} href="/" />
 
             {/* Desktop Center Navigation */}
             <nav className="hidden md:flex items-center gap-1 bg-neutral-100/70 border border-neutral-200/80 p-1 rounded-full">

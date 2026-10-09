@@ -36,10 +36,19 @@ export const metadata: Metadata = {
     "PM2.5",
     "AWS Bedrock",
   ],
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
+  },
   openGraph: {
     title: "VayuDrishti — Hyperlocal Air Quality Intelligence",
     description: "Real-time personal respiratory defense platform powered by AWS Cloud.",
     type: "website",
+    images: [{ url: "/icon.svg", width: 512, height: 512, alt: "VayuDrishti Logo" }],
   },
 };
 
@@ -54,6 +63,9 @@ export default function RootLayout({
       className={`${inter.variable} ${spaceGrotesk.variable} ${newsreader.variable}`}
     >
       <head>
+        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+        <link rel="shortcut icon" href="/icon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/icon.svg" />
         <link
           rel="stylesheet"
           href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
