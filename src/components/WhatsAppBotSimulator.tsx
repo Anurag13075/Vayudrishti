@@ -47,6 +47,8 @@ export default function WhatsAppBotSimulator() {
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [unreadCount, setUnreadCount] = useState(1);
+  const [realPhone, setRealPhone] = useState("");
+  const [showPhoneInput, setShowPhoneInput] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -79,16 +81,23 @@ export default function WhatsAppBotSimulator() {
       const res = await fetch("/api/whatsapp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: query }),
+        body: JSON.stringify({
+          message: query,
+          from: realPhone.trim() || undefined,
+        }),
       });
 
       const data = await res.json();
       setTimeout(() => {
         setIsTyping(false);
+        let replyText = data.reply || "I am currently monitoring atmospheric inversion. Please ask again shortly.";
+        if (data.outboundDispatch?.success) {
+          replyText += `\n\n🟢 *[Real Device Sent]* Dispatched to ${realPhone} via ${data.outboundDispatch.provider}`;
+        }
         const botMsg: Message = {
           id: `b-${Date.now()}`,
           sender: "bot",
-          text: data.reply || "I am currently monitoring atmospheric inversion. Please ask again shortly.",
+          text: replyText,
           time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         };
         setMessages((prev) => [...prev, botMsg]);
@@ -176,17 +185,29 @@ export default function WhatsAppBotSimulator() {
             {/* Notification Banner */}
             <div className="bg-[#e2f7cb] border-b border-[#c2e29e] px-3 py-1.5 text-[11px] text-[#2b5314] flex items-center justify-between">
               <span className="flex items-center gap-1">
-                🔒 End-to-end encrypted • Zero API key setup required
+                🔒 Live Webhook &bull; Twilio &amp; Meta Cloud Ready
               </span>
-              <a
-                href="https://api.whatsapp.com/send?text=Check%20VayuDrishti%20Air%20Defense%20Platform"
-                target="_blank"
-                rel="noreferrer"
-                className="text-[10px] font-semibold underline flex items-center gap-0.5 hover:text-black"
+              <button
+                onClick={() => setShowPhoneInput(!showPhoneInput)}
+                className="text-[10px] font-semibold underline flex items-center gap-0.5 hover:text-black cursor-pointer"
               >
-                Share <ExternalLink className="w-2.5 h-2.5" />
-              </a>
+                {showPhoneInput ? "Hide Phone" : "📱 Real Phone Sync"}
+              </button>
             </div>
+
+            {/* Optional Real Phone Number Input Bar */}
+            {showPhoneInput && (
+              <div className="bg-[#f7f5f0] border-b border-neutral-300 px-3 py-2 text-xs flex items-center gap-2">
+                <span className="text-[10px] font-semibold text-[#575752] shrink-0">Your WhatsApp:</span>
+                <input
+                  type="text"
+                  value={realPhone}
+                  onChange={(e) => setRealPhone(e.target.value)}
+                  placeholder="+919876543210"
+                  className="flex-1 bg-white border border-neutral-300 rounded px-2 py-1 text-xs text-[#111b21] placeholder-neutral-400 font-mono"
+                />
+              </div>
+            )}
 
             {/* Messages Chat Area */}
             <div className="flex-1 overflow-y-auto p-4 space-y-3">
