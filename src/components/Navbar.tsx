@@ -6,22 +6,15 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Logo from "@/components/Logo";
 import {
-  Wind,
-  Map,
-  Brain,
-  GraduationCap,
-  AlertTriangle,
   Menu,
   X,
   ArrowUpRight,
 } from "lucide-react";
 
 const navItems = [
-  { label: "Live Map", href: "/map" },
-  { label: "Breath Score", href: "/breathe" },
-  { label: "AI Advisor", href: "/advisor" },
+  { label: "BreatheClean Map", href: "/map" },
+  { label: "Hardware Bio-Sync", href: "/breathe" },
   { label: "School Sentinel", href: "/schools" },
-  { label: "Community Watch", href: "/report" },
 ];
 
 export default function Navbar() {

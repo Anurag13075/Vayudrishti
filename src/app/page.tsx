@@ -35,6 +35,10 @@ import {
   Radio,
   Send,
   Info,
+  Navigation,
+  Watch,
+  Smartphone,
+  Camera,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Logo, { LogoMark } from "@/components/Logo";
@@ -219,8 +223,8 @@ export default function Home() {
       a: "Yes. Campus administrators receive an automated morning directive at 05:45 AM evaluating surface thermal inversion and particulate concentrations. If AQI exceeds 140, the system triggers alerts to staff to move assemblies and athletic training indoors to HEPA-filtered facilities.",
     },
     {
-      q: "How are crowdsourced community reports verified?",
-      a: "When a citizen reports stubble burning, construction dust, or illegal waste burning, the report is geotagged and cross-referenced against nearby satellite thermal anomaly feeds (MODIS/VIIRS) and nearby sensor spikes before escalating to municipal feeds.",
+      q: "How does VayuDrishti connect to smartwatches and smartphones without extra apps?",
+      a: "Using the open W3C Web Bluetooth GATT API (0x180D) and standard browser DeviceMotion accelerometer sensors, VayuDrishti pairs with Apple Watch, WearOS, Garmin, and any smartphone right inside the browser. It reads real-time heart rate and step cadence to calculate minute-ventilation (VE) with zero proprietary app stores or paid API keys required.",
     },
   ];
 
@@ -1174,44 +1178,44 @@ export default function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {[
               {
-                label: "Real-time CPCB telemetry",
-                desc: "1,024 ground stations ingested every 60s across all 28 Indian states.",
+                label: "BreatheClean™ Route Engine",
+                desc: "Reroutes daily commute through green corridors, cutting toxic PM2.5 load by up to 71%.",
+                icon: Navigation,
+              },
+              {
+                label: "Smartwatch Bluetooth GATT",
+                desc: "Pairs live with Apple Watch and WearOS devices via W3C Web Bluetooth (0x180D).",
+                icon: Watch,
+              },
+              {
+                label: "Phone Motion Pedometer",
+                desc: "Uses device accelerometer to measure live step cadence and calculate physical minute volume.",
+                icon: Smartphone,
+              },
+              {
+                label: "Phone Camera Pulse (PPG)",
+                desc: "Optical capillary blood flow measurement using your phone camera flash—zero watch required.",
+                icon: Camera,
+              },
+              {
+                label: "Real-time CPCB Telemetry",
+                desc: "1,024 national ground stations ingested every 60s with boundary layer validation.",
                 icon: Wind,
               },
               {
-                label: "Diurnal inversion model",
-                desc: "Physics-based solar boundary layer calculations to detect ground haze.",
+                label: "Diurnal Inversion Physics",
+                desc: "Solar boundary layer mixing algorithms calculating optimal daily outdoor windows.",
                 icon: Layers,
               },
               {
-                label: "School sentinel mode",
-                desc: "Zero-friction morning assembly and outdoor recess safety verdicts.",
+                label: "School Sentinel Mode",
+                desc: "Zero-friction morning assembly and outdoor recess safety verdicts for campus principals.",
                 icon: Building,
               },
               {
-                label: "AWS Bedrock clinical AI",
-                desc: "Claude 3.5 Sonnet tailoring actionable advice to individual health profiles.",
-                icon: Bot,
-              },
-              {
-                label: "Personal dose ledger",
-                desc: "Quantifies microgram-level cumulative PM2.5 inhalation throughout the day.",
-                icon: Activity,
-              },
-              {
-                label: "Satellite fire verification",
-                desc: "NASA FIRMS MODIS/VIIRS thermal anomaly cross-correlation for smoke alerts.",
-                icon: Shield,
-              },
-              {
                 label: "Instant SMS via Amazon SNS",
-                desc: "Sub-second emergency warnings triggered when localized spikes breach safe caps.",
+                desc: "Sub-second emergency warnings triggered to parents when localized particulate spikes breach caps.",
                 icon: Bell,
-              },
-              {
-                label: "Simple customization",
-                desc: "Configure custom sensitivity caps for asthma, pregnancy, or cardiovascular care.",
-                icon: Sliders,
               },
             ].map((tile, i) => {
               const Icon = tile.icon;
@@ -1431,19 +1435,13 @@ export default function Home() {
 
             <div className="flex items-center gap-6 text-xs text-[#575752]">
               <Link href="/map" className="hover:text-[#111110] transition-colors">
-                Live Map
+                BreatheClean Map
               </Link>
               <Link href="/breathe" className="hover:text-[#111110] transition-colors">
-                Breath Score
-              </Link>
-              <Link href="/advisor" className="hover:text-[#111110] transition-colors">
-                AI Advisor
+                Hardware Bio-Sync
               </Link>
               <Link href="/schools" className="hover:text-[#111110] transition-colors">
                 School Sentinel
-              </Link>
-              <Link href="/report" className="hover:text-[#111110] transition-colors">
-                Report Incident
               </Link>
             </div>
           </div>

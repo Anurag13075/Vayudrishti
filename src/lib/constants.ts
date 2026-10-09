@@ -137,32 +137,32 @@ export const FEATURES = [
     href: "/breathe",
   },
   {
-    title: "AI Health Advisor",
-    description: "Get personalized health recommendations powered by AI. Based on current AQI, your health profile, and local conditions — not generic advice.",
-    icon: "Brain",
-    gradient: "from-violet-500 to-purple-500",
-    href: "/advisor",
+    title: "BreatheClean™ Route Engine",
+    description: "Real-time green canopy corridors vs diesel highways. Route comparison cuts inhaled toxic particulate burden by up to 71% with zero paid routing keys.",
+    icon: "Navigation",
+    gradient: "from-emerald-500 to-teal-500",
+    href: "/map",
   },
   {
-    title: "School Safety Dashboard",
-    description: "Should your kids play outside today? Real-time safety alerts for schools with clear YES/NO decisions and alternative indoor activity suggestions.",
-    icon: "GraduationCap",
-    gradient: "from-orange-500 to-amber-500",
-    href: "/schools",
-  },
-  {
-    title: "Smart Day Planner",
-    description: "AI predicts AQI for the next 24 hours and suggests the best windows for outdoor exercise, commuting, and activities. Plan your day around clean air.",
-    icon: "Calendar",
-    gradient: "from-pink-500 to-rose-500",
+    title: "Smartwatch & Phone Bio-Telemetry",
+    description: "Live W3C Bluetooth GATT heartbeat sync, smartphone accelerometer cadence, and camera optical PPG pulse calculate real minute-ventilation (VE) in liters.",
+    icon: "Watch",
+    gradient: "from-blue-500 to-cyan-500",
     href: "/breathe",
   },
   {
-    title: "Community Reports",
-    description: "Report pollution sources — stubble burning, construction dust, factory emissions. Crowdsourced data creates accountability and drives local action.",
-    icon: "Users",
-    gradient: "from-red-500 to-orange-500",
-    href: "/report",
+    title: "School Sentinel Shield",
+    description: "Autonomous morning assembly and recess bio-clearance. Instant algorithmic green/red safety verdict based on child alveolar ventilation models.",
+    icon: "GraduationCap",
+    gradient: "from-amber-500 to-orange-500",
+    href: "/schools",
+  },
+  {
+    title: "Cigarette Inhalation Ticker",
+    description: "Quantifies micrograms of PM2.5 absorbed into your bloodstream converted to real cigarette smoke equivalents based on WHO ambient toxicology metrics.",
+    icon: "Activity",
+    gradient: "from-rose-500 to-red-500",
+    href: "/breathe",
   },
 ];
 
@@ -220,9 +220,7 @@ export const HEALTH_RECOMMENDATIONS = {
 
 // Navigation Items
 export const NAV_ITEMS = [
-  { label: "Live Map", href: "/map", icon: "Map" },
-  { label: "Breath Score", href: "/breathe", icon: "Wind" },
-  { label: "AI Advisor", href: "/advisor", icon: "Brain" },
-  { label: "Schools", href: "/schools", icon: "GraduationCap" },
-  { label: "Report", href: "/report", icon: "AlertTriangle" },
+  { label: "BreatheClean Map", href: "/map", icon: "Map" },
+  { label: "Hardware Bio-Sync", href: "/breathe", icon: "Watch" },
+  { label: "School Sentinel", href: "/schools", icon: "GraduationCap" },
 ];
