@@ -75,9 +75,10 @@ export default function Navbar() {
             <div className="hidden md:flex items-center gap-3">
               <Link
                 href="/map"
-                className="inline-flex items-center gap-1.5 text-xs font-medium text-white bg-neutral-900 hover:bg-neutral-800 px-4 py-2 rounded-full transition-all hover:shadow-sm"
+                className="inline-flex items-center gap-2 text-xs font-semibold text-white bg-[#111110] hover:bg-[#2b2b27] px-4 py-2 rounded-full transition-all hover:shadow-sm"
               >
-                <span>Live Intelligence</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span>Live Map & Routes</span>
                 <ArrowUpRight className="w-3.5 h-3.5 text-neutral-400" />
               </Link>
             </div>

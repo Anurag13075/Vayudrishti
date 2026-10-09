@@ -3,8 +3,9 @@
 import React, { useState, useEffect, useMemo } from "react";
 import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, MapPin, Wind, ArrowLeft, Activity, Info, ExternalLink } from "lucide-react";
+import { Search, MapPin, Wind, ArrowLeft, Activity, Info, ExternalLink, Navigation, X } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import CleanRouteNavigator from "@/components/CleanRouteNavigator";
 import { INDIAN_CITIES, AQI_LEVELS } from "@/lib/constants";
 import { simulateAqi, getAqiLevel, getAqiColor, generateForecast } from "@/lib/utils";
 import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer } from "recharts";
@@ -31,6 +32,7 @@ export default function InteractiveMapPage() {
   const [selectedCity, setSelectedCity] = useState<(typeof INDIAN_CITIES)[0] | null>(null);
   const [citiesData, setCitiesData] = useState<any[]>([]);
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+  const [showRouteNavigator, setShowRouteNavigator] = useState<boolean>(false);
 
   useEffect(() => {
     setIsClient(true);
@@ -146,7 +148,7 @@ export default function InteractiveMapPage() {
               />
             </div>
 
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-1.5 mb-3">
               {filters.map((f) => (
                 <button
                   key={f}
@@ -161,6 +163,20 @@ export default function InteractiveMapPage() {
                 </button>
               ))}
             </div>
+
+            {/* BreatheClean Navigation Quick Button */}
+            <button
+              onClick={() => setShowRouteNavigator(true)}
+              className="w-full bg-[#111110] hover:bg-[#2b2b27] text-white text-xs font-semibold py-2.5 px-3 rounded-xl flex items-center justify-between shadow-2xs transition-all hover:-translate-y-0.5 group"
+            >
+              <div className="flex items-center gap-2">
+                <Navigation className="w-3.5 h-3.5 text-emerald-400 group-hover:rotate-12 transition-transform" />
+                <span>BreatheClean™ Route Engine</span>
+              </div>
+              <span className="font-mono text-[10px] bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-800">
+                -71% dose
+              </span>
+            </button>
           </div>
 
           {/* City Station List */}
@@ -336,6 +352,20 @@ export default function InteractiveMapPage() {
             ))}
           </MapContainer>
 
+          {/* Floating Center Route Engine Button */}
+          <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-10">
+            <button
+              onClick={() => setShowRouteNavigator(true)}
+              className="bg-[#111110] hover:bg-[#2b2b27] text-white px-5 py-2.5 rounded-full shadow-2xl border border-neutral-700 flex items-center gap-2.5 text-xs font-semibold transition-all hover:scale-105"
+            >
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span>BreatheClean™ Route Engine</span>
+              <span className="font-mono text-[10px] bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-800">
+                -71% toxic dose
+              </span>
+            </button>
+          </div>
+
           {/* Scale Legend */}
           <div className="absolute bottom-5 right-5 z-10 bg-white/95 backdrop-blur-md p-3.5 rounded-xl border border-[#e5e5e0] shadow-sm hidden sm:block">
             <div className="text-[11px] font-semibold text-[#111110] mb-2 uppercase tracking-wider">
@@ -355,6 +385,31 @@ export default function InteractiveMapPage() {
           </div>
         </div>
       </div>
+
+      {/* BreatheClean Navigation Modal Popup */}
+      <AnimatePresence>
+        {showRouteNavigator && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-sm">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto"
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setShowRouteNavigator(false)}
+                className="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-white border border-[#e5e5e0] text-[#111110] flex items-center justify-center shadow-md hover:bg-neutral-100 transition-colors"
+                aria-label="Close Navigator"
+              >
+                <X className="w-4 h-4" />
+              </button>
+
+              <CleanRouteNavigator />
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

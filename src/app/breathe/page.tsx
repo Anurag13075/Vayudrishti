@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
+import BiometricWatchSync from "@/components/BiometricWatchSync";
 import {
   AreaChart,
   Area,
@@ -302,6 +303,13 @@ export default function BreathePage() {
               </div>
             ))}
           </div>
+        </div>
+
+        {/* =======================================================================
+            HARDWARE BIO-TELEMETRY: SMARTWATCH LIVE HEART RATE & MINUTE VENTILATION
+            ======================================================================= */}
+        <div className="mb-12">
+          <BiometricWatchSync currentAqi={liveAqi} cityName={city.toUpperCase()} />
         </div>
 
         {/* Bottom Section: 24h AreaChart & Daily Action Schedule */}

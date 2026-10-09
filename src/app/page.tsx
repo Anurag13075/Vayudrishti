@@ -38,6 +38,8 @@ import {
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Logo, { LogoMark } from "@/components/Logo";
+import BiometricWatchSync from "@/components/BiometricWatchSync";
+import CleanRouteNavigator from "@/components/CleanRouteNavigator";
 
 export default function Home() {
   const router = useRouter();
@@ -855,6 +857,44 @@ export default function Home() {
               </div>
             </div>
           </div>
+        </section>
+
+        {/* =======================================================================
+            SECTION 4B: SMARTWATCH BIO-TELEMETRY ENGINE (Living Wearable Sync)
+            ======================================================================= */}
+        <section className="py-24 border-b border-[#e5e5e0] px-4 sm:px-8 bg-white">
+          <div className="max-w-2xl mb-12">
+            <span className="text-xs font-mono font-semibold uppercase tracking-wider text-[#73736c]">
+              HARDWARE BIO-TELEMETRY &bull; WEB BLUETOOTH GATT
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#111110] mt-2 mb-3">
+              Your heart rate determines your dose.
+            </h2>
+            <p className="text-[#575752] text-sm leading-relaxed">
+              Standard apps assume you breathe the same sitting in a car as you do jogging. VayuDrishti connects directly to your smartwatch via Web Bluetooth, correlating live heart rate with respiratory tidal volume to compute your true alveolar particulate dose.
+            </p>
+          </div>
+
+          <BiometricWatchSync currentAqi={168} cityName="Delhi NCR" />
+        </section>
+
+        {/* =======================================================================
+            SECTION 4C: BREATHECLEAN™ ROUTE ENGINE (Green Canopies vs Highway Diesel)
+            ======================================================================= */}
+        <section className="py-24 border-b border-[#e5e5e0] px-4 sm:px-8 bg-[#fbfbf9]">
+          <div className="max-w-2xl mb-12">
+            <span className="text-xs font-mono font-semibold uppercase tracking-wider text-[#73736c]">
+              CLEAN NAVIGATION ALGORITHM
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#111110] mt-2 mb-3">
+              Navigate by clean air, not just speed.
+            </h2>
+            <p className="text-[#575752] text-sm leading-relaxed">
+              Google Maps routes you down congested arterial ring roads with extreme diesel soot. BreatheClean redirects commuters through natural tree canopies and green corridors—saving your cardiovascular health by trading just 3 extra minutes of travel.
+            </p>
+          </div>
+
+          <CleanRouteNavigator />
         </section>
 
         {/* =======================================================================
