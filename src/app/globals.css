@@ -1,12 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* ==========================================================================
    VAYUDRISHTI — World-Class Living Product Design System
-   Inspired by Cal.com, Wispr Flow, and Beside.com
-   Living, interactive widgets, revolving SVG orbits, live soundwaves,
-   authentic editorial typography, and high-craft UI micro-interactions.
+   Powered by Geist (Manu Arora / Aceternity UI style)
+   Clean modern typography with blur-fade transitions and soft radial masks.
    ========================================================================== */
 
 @layer base {
@@ -41,7 +42,8 @@
   body {
     background-color: var(--bg-page);
     color: var(--text-primary);
-    font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: 'Geist', var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    letter-spacing: -0.015em;
   }
 
   ::selection {
@@ -218,3 +220,39 @@
 .animate-wave-5 { animation: soundwave 1.1s ease-in-out infinite 0.45s; }
 .animate-wave-6 { animation: soundwave 1.1s ease-in-out infinite 0.15s; }
 .animate-wave-7 { animation: soundwave 1.1s ease-in-out infinite 0.5s; }
+
+/* Aceternity UI Signature Blur-Fade and Mask Utilities */
+@keyframes blur-fade-in {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0px);
+    transform: translateY(0);
+  }
+}
+
+.animate-blur-fade {
+  animation: blur-fade-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.manu-link {
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 4px;
+  text-decoration-color: #a3a3a3;
+  transition: all 0.2s ease;
+}
+
+.manu-link:hover {
+  text-decoration-color: #111110;
+  color: #111110;
+}
+
+.ambient-fade-mask {
+  mask-image: radial-gradient(ellipse 80% 50% at 50% 0%, #000 70%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 50% at 50% 0%, #000 70%, transparent 100%);
+}

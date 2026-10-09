@@ -32,8 +32,9 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
-        display: ["var(--font-space-grotesk)", "system-ui", "sans-serif"],
+        sans: ["Geist", "var(--font-inter)", "system-ui", "-apple-system", "sans-serif"],
+        display: ["Geist", "var(--font-space-grotesk)", "system-ui", "sans-serif"],
+        mono: ["Geist Mono", "ui-monospace", "SFMono-Regular", "monospace"],
         serif: ["var(--font-newsreader)", "Georgia", "serif"],
       },
       animation: {
