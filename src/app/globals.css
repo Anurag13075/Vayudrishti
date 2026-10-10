@@ -4,11 +4,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ==========================================================================
-   VAYUDRISHTI — World-Class Living Product Design System
-   Powered by Geist (Manu Arora / Aceternity UI style)
-   Clean modern typography with blur-fade transitions and soft radial masks.
-   ========================================================================== */
+
 
 @layer base {
   :root {
@@ -146,9 +142,6 @@
   }
 }
 
-/* ==========================================================================
-   LIVING ANIMATIONS: Revolving Orbits, Waveforms, Text-spin
-   ========================================================================== */
 
 @keyframes orbit-cw {
   from {

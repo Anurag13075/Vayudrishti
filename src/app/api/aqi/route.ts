@@ -15,7 +15,7 @@ export async function GET(request: Request) {
   const lat = latParam ? parseFloat(latParam) : cityData.lat;
   const lng = lngParam ? parseFloat(lngParam) : cityData.lng;
 
-  // 1. Try real Open-Meteo Air Quality API (100% Free, Live CAMS & CPCB Ingest, No Key Required)
+
   try {
     const url = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lng}&current=pm2_5,pm10,european_aqi,us_aqi,carbon_monoxide,nitrogen_dioxide,sulphur_dioxide,ozone&hourly=pm2_5,us_aqi&timezone=Asia%2FKolkata&forecast_days=2`;
     const res = await fetch(url, { next: { revalidate: 300 } });

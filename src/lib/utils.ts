@@ -152,8 +152,6 @@ export async function fetchAqiData(city: string): Promise<number | null> {
   }
 }
 
-
-
 export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
   wait: number
