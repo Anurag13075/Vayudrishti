@@ -13,7 +13,7 @@ import {
 
 const navItems = [
   { label: "BreatheClean Map", href: "/map" },
-  { label: "Hardware Bio-Sync", href: "/breathe" },
+  { label: "SpiroVision™ & Bio-Sync", href: "/breathe" },
   { label: "School Sentinel", href: "/schools" },
 ];
 

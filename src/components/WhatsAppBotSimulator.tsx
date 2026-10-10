@@ -34,6 +34,7 @@ const INITIAL_MESSAGES: Message[] = [
 ];
 
 const SUGGESTED_QUERIES = [
+  "🫁 How do I test my lungs (SpiroVision)?",
   "🏃 Can I jog outside right now?",
   "🏫 School assembly status for tomorrow?",
   "🗺️ Cleanest route from Noida to CP?",

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import BiometricWatchSync from "@/components/BiometricWatchSync";
+import SpiroVision from "@/components/SpiroVision";
 import {
   AreaChart,
   Area,
@@ -78,6 +79,7 @@ export default function BreathePage() {
   // Mask status
   const [hasMask, setHasMask] = useState(true);
   const [liveAqi, setLiveAqi] = useState<number>(168);
+  const [activeBioModule, setActiveBioModule] = useState<"spiro" | "watch">("spiro");
 
   useEffect(() => {
     let active = true;
@@ -306,10 +308,51 @@ export default function BreathePage() {
         </div>
 
         {/* =======================================================================
-            HARDWARE BIO-TELEMETRY: SMARTWATCH LIVE HEART RATE & MINUTE VENTILATION
+            CLINICAL PULMONARY & BIO-TELEMETRY SUITE: SPIROVISION & WATCH SYNC
             ======================================================================= */}
         <div className="mb-12">
-          <BiometricWatchSync currentAqi={liveAqi} cityName={city.toUpperCase()} />
+          {/* Module Selector Pill Bar */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 pb-3 border-b border-[#e5e5e0] gap-3">
+            <div>
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#73736c]">
+                CLINICAL PULMONARY &amp; BIO-TELEMETRY SUITE
+              </span>
+              <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-[#111110]">
+                {activeBioModule === "spiro"
+                  ? "SpiroVision™ AI Acoustic Spirometry"
+                  : "Smartwatch & Phone Bio-Telemetry Sync"}
+              </h2>
+            </div>
+
+            <div className="flex items-center gap-1.5 bg-neutral-100 p-1 rounded-full border border-neutral-200 shrink-0">
+              <button
+                onClick={() => setActiveBioModule("spiro")}
+                className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all ${
+                  activeBioModule === "spiro"
+                    ? "bg-[#111110] text-white shadow-xs"
+                    : "text-neutral-600 hover:text-black"
+                }`}
+              >
+                🫁 AI Lung Test (Mic)
+              </button>
+              <button
+                onClick={() => setActiveBioModule("watch")}
+                className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all ${
+                  activeBioModule === "watch"
+                    ? "bg-[#111110] text-white shadow-xs"
+                    : "text-neutral-600 hover:text-black"
+                }`}
+              >
+                ⌚ Hardware Watch Sync
+              </button>
+            </div>
+          </div>
+
+          {activeBioModule === "spiro" ? (
+            <SpiroVision currentAqi={liveAqi} cityName={city.toUpperCase()} />
+          ) : (
+            <BiometricWatchSync currentAqi={liveAqi} cityName={city.toUpperCase()} />
+          )}
         </div>
 
         {/* Bottom Section: 24h AreaChart & Daily Action Schedule */}

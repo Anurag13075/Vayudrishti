@@ -44,6 +44,7 @@ import Navbar from "@/components/Navbar";
 import Logo, { LogoMark } from "@/components/Logo";
 import BiometricWatchSync from "@/components/BiometricWatchSync";
 import CleanRouteNavigator from "@/components/CleanRouteNavigator";
+import SpiroVision from "@/components/SpiroVision";
 
 export default function Home() {
   const router = useRouter();
@@ -861,6 +862,25 @@ export default function Home() {
               </div>
             </div>
           </div>
+        </section>
+
+        {/* =======================================================================
+            SECTION 4A: SPIROVISION™ AI ACOUSTIC SPIROMETRY (Zero-Hardware Lung Test)
+            ======================================================================= */}
+        <section className="py-24 border-b border-[#e5e5e0] px-4 sm:px-8 bg-[#fbfbf9]">
+          <div className="max-w-2xl mb-12">
+            <span className="text-xs font-mono font-semibold uppercase tracking-wider text-cyan-800 bg-cyan-50 px-2.5 py-1 rounded-full border border-cyan-200">
+              CLINICAL INNOVATION &bull; ZERO SENSORS NEEDED
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-bold tracking-tight text-[#111110] mt-3 mb-3">
+              Test your clinical lung capacity using just your microphone.
+            </h2>
+            <p className="text-[#575752] text-sm leading-relaxed">
+              In hospitals, Spirometry tests cost ₹2,000+ and require a ₹50,000 lab sensor. SpiroVision uses acoustic turbulence analysis right in your browser to compute Forced Expiratory Volume (FEV1), vital capacity (FVC), and detect acute smog bronchospasms in 10 seconds.
+            </p>
+          </div>
+
+          <SpiroVision currentAqi={184} cityName="Delhi NCR" />
         </section>
 
         {/* =======================================================================

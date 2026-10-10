@@ -129,7 +129,7 @@ export function generateForecast(currentAqi: number): { hour: string; aqi: numbe
       hour: hour.toLocaleTimeString("en-IN", { hour: "2-digit", hour12: true }),
       aqi,
     });
-  }
+  } 
 
   return forecast;
 }
@@ -152,7 +152,8 @@ export async function fetchAqiData(city: string): Promise<number | null> {
   }
 }
 
-/** Debounce function */
+
+
 export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
   wait: number

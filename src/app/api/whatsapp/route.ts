@@ -98,6 +98,29 @@ function generateBotReply(message: string): { reply: string; action?: string } {
     };
   }
 
+  // Lung Test / Spirometry Query
+  if (
+    query.includes("spiro") ||
+    query.includes("lung") ||
+    query.includes("fev1") ||
+    query.includes("capacity") ||
+    query.includes("asthma") ||
+    query.includes("breath test")
+  ) {
+    return {
+      reply:
+        `🫁 *SpiroVision™ AI Acoustic Spirometry*\n\n` +
+        `You can test your clinical lung function right now with *zero hardware* using your device's microphone!\n\n` +
+        `📊 *What It Measures:*\n` +
+        `• *FEV1:* Forced Expiratory Volume in 1 second (in Liters)\n` +
+        `• *FVC:* Total Forced Vital Capacity\n` +
+        `• *FEV1/FVC Ratio:* Pulmonology benchmark for airway constriction\n` +
+        `• *PEF:* Peak Expiratory Flow (L/min)\n\n` +
+        `👉 Hold your phone 10cm away and take the 10-second test at *vayudrishti.in/breathe*!`,
+      action: "spiro_test",
+    };
+  }
+
   // City AQI query
   const cityMatch = [
     "delhi",
