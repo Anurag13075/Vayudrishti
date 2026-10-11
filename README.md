@@ -1,8 +1,10 @@
 # 🌿 VayuDrishti (वायुदृष्टि) — AI-Powered Hyperlocal Air Quality Intelligence
 
+  ![Vayudrishti](vayudrishti.png)
+
 > **Track 01: Air** — Environmental Hacks by WeMakeDevs × AWS  
 > *"Every Breath You Take Is Counted."*
-
+>
 ---
 
 ## 🏆 Executive Summary: Why This Wins
