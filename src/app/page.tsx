@@ -295,21 +295,21 @@ export default function Home() {
             SECTION 1: HERO (Clean Sky & Wildflower Atmospheric Canvas)
             ======================================================================= */}
         <section
-          className="relative pt-14 pb-16 md:pt-20 md:pb-24 border-b border-[#e5e5e0] px-4 sm:px-8 overflow-hidden bg-cover bg-no-repeat bg-[center_bottom]"
+          className="relative pt-16 pb-20 md:pt-24 md:pb-28 border-b border-[#e5e5e0] px-4 sm:px-8 overflow-hidden bg-cover bg-no-repeat bg-bottom"
           style={{
             backgroundImage: "url('/clean-sky-bg.png')",
           }}
         >
-          {/* Subtle light atmospheric veil to preserve crisp Cal.com contrast and text readability */}
+          {/* Transparent soft radial gradient so the blue sky and wildflower horizon shine through clearly while keeping text crisp */}
           <div
-            className="absolute inset-0 bg-gradient-to-b from-white/70 via-white/50 to-white/75 pointer-events-none backdrop-blur-[0.5px]"
+            className="absolute inset-0 bg-gradient-to-r from-white/40 via-transparent to-white/30 pointer-events-none"
             aria-hidden="true"
           />
 
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             {/* Left Narrative */}
             <div className="lg:col-span-6 space-y-6">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-[#e2e2dc] shadow-2xs text-xs font-medium text-[#575752]">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/95 backdrop-blur-md border border-[#e2e2dc] shadow-2xs text-xs font-medium text-[#575752]">
                 <span className="font-semibold text-[#111110]">VayuDrishti v2.0</span>
                 <span className="text-[#a3a399]">&bull;</span>
                 <span className="text-emerald-700 font-medium">Track 01: Air</span>
