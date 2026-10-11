@@ -292,13 +292,24 @@ export default function Home() {
           ========================================================================= */}
       <main className="max-w-6xl mx-auto border-x border-[#e5e5e0] bg-[#fbfbf9] relative">
         {/* =======================================================================
-            SECTION 1: HERO (Cal.com Booking Widget Style)
+            SECTION 1: HERO (Clean Sky & Wildflower Atmospheric Canvas)
             ======================================================================= */}
-        <section className="pt-14 pb-16 md:pt-20 md:pb-24 border-b border-[#e5e5e0] px-4 sm:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+        <section
+          className="relative pt-14 pb-16 md:pt-20 md:pb-24 border-b border-[#e5e5e0] px-4 sm:px-8 overflow-hidden bg-cover bg-no-repeat bg-[center_bottom]"
+          style={{
+            backgroundImage: "url('/clean-sky-bg.png')",
+          }}
+        >
+          {/* Subtle light atmospheric veil to preserve crisp Cal.com contrast and text readability */}
+          <div
+            className="absolute inset-0 bg-gradient-to-b from-white/70 via-white/50 to-white/75 pointer-events-none backdrop-blur-[0.5px]"
+            aria-hidden="true"
+          />
+
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             {/* Left Narrative */}
             <div className="lg:col-span-6 space-y-6">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-[#e2e2dc] shadow-2xs text-xs font-medium text-[#575752]">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 backdrop-blur-md border border-[#e2e2dc] shadow-2xs text-xs font-medium text-[#575752]">
                 <span className="font-semibold text-[#111110]">VayuDrishti v2.0</span>
                 <span className="text-[#a3a399]">&bull;</span>
                 <span className="text-emerald-700 font-medium">Track 01: Air</span>
@@ -340,7 +351,7 @@ export default function Home() {
 
             {/* Right Widget: REAL LIVING INTERACTIVE CALENDAR WIDGET */}
             <div className="lg:col-span-6">
-              <div className="bg-white border border-[#e5e5e0] rounded-2xl shadow-[0_20px_45px_-12px_rgba(0,0,0,0.08)] overflow-hidden transition-all">
+              <div className="bg-white/95 backdrop-blur-md border border-[#e5e5e0] rounded-2xl shadow-[0_20px_45px_-12px_rgba(0,0,0,0.08)] overflow-hidden transition-all">
                 {/* Widget Header: Station Avatar */}
                 <div className="p-6 border-b border-[#f0f0eb] flex items-center justify-between">
                   <div className="flex items-center gap-3">
