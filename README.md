@@ -160,16 +160,4 @@ npm run dev
 
 Visit `http://localhost:3000` to explore VayuDrishti.
 
----
-
-## 🎙️ 3-Minute Demo Video Pitch Script
-
-1. **0:00 - 0:30 (The Hook)**: Introduce Delhi / Indian winter air. Mention 2.18M deaths annually. Show why traditional AQI apps fail because raw numbers don't tell citizens what actions to take.
-2. **0:30 - 1:15 (The Solution - Breath Score & Map)**: Show the Live Map with pulsing hotspots. Jump to the **Breath Score** gauge — showing how it calculates personal biological burden and safe outdoor windows.
-3. **1:15 - 2:00 (AWS Bedrock AI Health Advisor & Schools)**: Run the AI Advisor for an asthmatic child in Delhi vs. an adult in Mumbai. Highlight the AWS Bedrock integration. Show the School Safety YES/NO engine.
-4. **2:00 - 2:35 (Community Action Feed)**: File a live report on stubble burning; watch it immediately appear in the feed with upvotes.
-5. **2:35 - 3:00 (AWS Architecture & Close)**: Show the AWS serverless architecture (Bedrock, Lambda, DynamoDB, Amplify). Close with: *"VayuDrishti transforms invisible toxic air into actionable intelligence for 1.4 billion Indians."*
-
----
-
 *Built with 💚 for Bharat | VayuDrishti © 2026 | Environmental Hacks by WeMakeDevs × AWS*
