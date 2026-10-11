@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+
 import {
   Wind,
   MapPin,
@@ -49,9 +50,6 @@ import SpiroVision from "@/components/SpiroVision";
 export default function Home() {
   const router = useRouter();
 
-  // =========================================================================
-  // 1. HERO RESERVATION WIDGET STATE (Cal.com Booking Card Paradigm)
-  // =========================================================================
   const [selectedDuration, setSelectedDuration] = useState<"15m" | "30m" | "45m" | "1h">("30m");
   const [selectedDate, setSelectedDate] = useState<number>(21);
   const [selectedSlot, setSelectedSlot] = useState<string>("07:30 AM");
@@ -63,27 +61,21 @@ export default function Home() {
     "1h": { dose: "56.8 µg", reserve: "0.8 hrs", safe: false },
   };
 
-  // =========================================================================
-  // 2. WORKFLOW STEP 2: AVAILABILITY TOGGLES (Cal.com Step 2 Widget)
-  // =========================================================================
+  
   const [scheduleToggles, setScheduleToggles] = useState({
     mon: true,
     tue: false,
     wed: true,
   });
 
-  // =========================================================================
-  // 3. WORKFLOW STEP 3: DEFENSE TOGGLES (Cal.com Video Meet Style)
-  // =========================================================================
+ 
   const [defenseToggles, setDefenseToggles] = useState({
     mask: true,
     purifier: true,
     windows: false,
   });
 
-  // =========================================================================
-  // 4. DIURNAL ATMOSPHERIC INVERSION SCRUBBER (Live Time Scrub Tool)
-  // =========================================================================
+
   const [scrubberHour, setScrubberHour] = useState<number>(14); // 2:00 PM default
   const hourData = {
     6: {
@@ -125,9 +117,6 @@ export default function Home() {
       note: "Maintain standard outdoor vigilance",
     };
 
-  // =========================================================================
-  // 5. AWS BEDROCK REAL-TIME CLINICAL TRIAGE CONSOLE (Cal.ai / Wispr Flow)
-  // =========================================================================
   const clinicalScenarios = [
     {
       id: "asthma",
@@ -260,7 +249,7 @@ export default function Home() {
             <span className="text-[#73736c] hidden sm:inline">&bull;</span>
             <span className="text-[#a3a399] hidden sm:inline">ap-south-1 &bull; 1,024 CPCB Stations Ingesting</span>
           </div>
-
+  
           <div className="flex items-center gap-4 text-[#a3a399]">
             <span className="flex items-center gap-1.5">
               <Bot className="w-3.5 h-3.5 text-purple-400" />

@@ -21,6 +21,7 @@
 
     --brand-black: #111110;
     --brand-emerald: #059669;
+
   }
 
   * {
@@ -40,6 +41,8 @@
     color: var(--text-primary);
     font-family: 'Geist', var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     letter-spacing: -0.015em;
+
+    
   }
 
   ::selection {
@@ -152,6 +155,16 @@
   }
 }
 
+
+@keyframes movescale {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(3);
+  }
+}
+
 @keyframes orbit-ccw {
   from {
     transform: rotate(0deg);
@@ -171,6 +184,8 @@
     opacity: 1;
   }
 }
+
+
 
 @keyframes text-rotate-slow {
   from {
@@ -193,6 +208,10 @@
 .animate-orbit {
   animation: orbit-cw 22s linear infinite;
 }
+
+
+
+
 
 .animate-counter-orbit {
   animation: orbit-ccw 22s linear infinite;

@@ -1,13 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { simulateAqi, getAqiLevel } from "@/lib/utils";
 
-// =============================================================================
-// 1. INTELLIGENT RESPIRATORY ADVISORY ENGINE
-// =============================================================================
+
 function generateBotReply(message: string): { reply: string; action?: string } {
   const query = message.toLowerCase().trim();
 
-  // School Assembly / Kids
+  
   if (
     query.includes("school") ||
     query.includes("assembly") ||
@@ -166,11 +164,7 @@ function generateBotReply(message: string): { reply: string; action?: string } {
   };
 }
 
-// =============================================================================
-// 2. DISPATCH HELPERS (TWILIO & META WHATSAPP CLOUD API)
-// =============================================================================
 
-// Send WhatsApp message via Twilio REST API
 async function sendViaTwilio(to: string, messageText: string) {
   const accountSid = process.env.TWILIO_ACCOUNT_SID;
   const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -260,9 +254,7 @@ async function dispatchOutboundWhatsApp(to: string, messageText: string) {
   };
 }
 
-// =============================================================================
-// 3. GET HANDLER: META WEBHOOK VERIFICATION (CHALLENGE HANDSHAKE)
-// =============================================================================
+
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const mode = searchParams.get("hub.mode");
@@ -295,16 +287,13 @@ export async function GET(req: NextRequest) {
   });
 }
 
-// =============================================================================
-// 4. POST HANDLER: INBOUND WEBHOOK (TWILIO & META) + OUTBOUND DIRECT DISPATCH
-// =============================================================================
+
 export async function POST(req: NextRequest) {
   try {
     const contentType = req.headers.get("content-type") || "";
 
-    // -------------------------------------------------------------------------
-    // Case A: Form-URL-Encoded Inbound (Standard Twilio WhatsApp Webhook)
-    // -------------------------------------------------------------------------
+  
+    
     if (contentType.includes("application/x-www-form-urlencoded")) {
       const formData = await req.formData();
       const body = formData.get("Body")?.toString() || "";
